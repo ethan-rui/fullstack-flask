@@ -4,7 +4,7 @@ from datetime import timedelta
 
 """
 timedelta to limit the session duration
-os makes pathing easier, if theres any file that needs pathing please use os.getcwd()
+os makes pathing easier, if theres any file that needs pathing please use os.getcwd(), it gets the path leading up to this working directory
 """
 
 localpath = os.getcwd()
@@ -29,7 +29,7 @@ i dont want to mald over this shit
 
 app.register_blueprint(EP_Common, url_prefix="/")
 """
-give your endpoint an endpoint a label, eg for admin shit it may be /admin
+give your endpoint an endpoint a prefix, eg for admin shit it may be /admin
 """
 ##########
 
