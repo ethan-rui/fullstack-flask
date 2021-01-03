@@ -9,4 +9,4 @@ blueprint endpoint
 
 @endpoint.route("/")
 def page_home():
-    return "hello this is the home page"
+    return "home"
