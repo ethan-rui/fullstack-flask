@@ -55,5 +55,9 @@
   {% endblock js %}
   <script src="{{url_for('static', filename='js/admin.js')}}"></script>
 </body>
-
+<script>
+  setTimeout(function () {
+      $("#flashed_messages").hide()
+  }, 1000);
+</script>
 </html>

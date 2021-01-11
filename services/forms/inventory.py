@@ -13,21 +13,21 @@ class AddProduct(Form):
     centprice = IntegerField(
         "Price",
         [
-            validators.DataRequired(message="Please enter a valid integer value."),
+            validators.InputRequired(message="Please enter a valid integer value."),
             validators.NumberRange(min=0, max=999999999),
         ],
     )
     discount = IntegerField(
         "Discount",
         validators=[
-            validators.DataRequired(message="Please enter a valid integer value."),
+            validators.InputRequired(message="Please enter a valid integer value."),
             validators.NumberRange(min=0, max=100),
         ],
     )
     stock = IntegerField(
         "Stock",
         [
-            validators.DataRequired(message="Please enter a valid integer value."),
+            validators.InputRequired(message="Please enter a valid integer value."),
             validators.NumberRange(min=0, max=999999999),
         ],
     )

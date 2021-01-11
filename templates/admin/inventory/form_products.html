@@ -6,6 +6,22 @@ Add Products
 <div class="row">
     <div class="col-lg-2"></div>
     <div class="col-lg-8">
+        {% block flashed %}
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+    
+        <div class="container" id="flashed_messages">
+            <div class="row">
+                <div class="col-lg-4"></div>
+                {% for message in get_flashed_messages() %}
+                <p class="alert alert-success col-lg-4" role="alert">{{ message }}</p>
+                <div class="col-lg-4"></div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% endwith %}
+        {% endblock flashed %}
         <h3>Add Product</h3>
         {% from '_formhelpers.html' import render_field %}
         <form action="" method="POST" enctype="multipart/form-data">
@@ -41,6 +57,5 @@ Add Products
     </div>
     <div class="col-lg-2"></div>
 </div>
-
 
 {% endblock content %}

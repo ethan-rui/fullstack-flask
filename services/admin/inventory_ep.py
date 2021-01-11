@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, Blueprint, session, url_for
+from flask import render_template, redirect, request, Blueprint, session, url_for, flash
 from flask_login.utils import login_required, current_user
 from flask_uploads import UploadSet, IMAGES
 from data.products import Product, TableProduct, Brand, Category, TableBC
@@ -109,6 +109,7 @@ def page_products_add():
         db = TableProduct()
         db.insert(product)
         db.close()
+        flash(f"{form.name.data} has been added!")
     return render_template(
         "admin/inventory/form_products.html",
         form=form,
