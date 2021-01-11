@@ -1,0 +1,35 @@
+{% extends 'layouts/base.html' %}
+{% block title %}
+Inventory
+{% endblock title %}
+{% block content %}
+<div class="container">
+    <p style="font-size:2rem">Products</p>
+    <div class="md-form mt-0 mb-5">
+        <div class="input-group" style="width: 20%;"><i class="fa fa-fw fa-search mt-2"></i><input class="form-control"
+                type="text" placeholder="Search" aria-label="Search"></div>
+    </div>
+    <div class="container">
+        <div class="row">
+            {% for entry in products %}
+                <div class="col-md-3 mt-3">
+                    <div class="card">
+                        <img src="{{url_for('static', filename='media/'+entry.images[0])}}" alt="{{entry.name}}" class="card-img-top"
+                            height="200">
+                        <div class="card-body">
+                            <h5 class="text-center"> {{entry.name}}</h5>
+                            <p class="text-center">Price : ${{entry.centprice}}</p>
+                        </div>
+                        <div class="card-footer">
+                            <h5
+                                style="text_shadow : 1px 1px 2px #000000; color : red; transform:rotate(-15deg); position:absolute; top:20%; left:20%">
+                                Discount {{entry.discount}}%</h5>
+                            <a href="{{url_for('base.page_info_product', uid=entry.uuid)}}" class="float-left btn btn-sm btn-primary">details</a>
+                            <a href="#" class="float-left btn btn-sm btn-warning">Add to cart</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+    </div>
+</div>
+{% endblock content %}
