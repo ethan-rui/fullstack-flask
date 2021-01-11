@@ -21,11 +21,11 @@ def check_perms():
 @endpoint.route("users")
 def page_table_users():
     db = TableUser()
-    entries = db.list_objects()
+    entries = db.objects()
     db.close()
     """
-    .list_objects() returns all the objects
-    .list_keys() returns all the key value pairs {uuid:entry}
+    .objects() returns all the objects
+    .dict() returns all the key value pairs {uuid:entry}
     """
     return render_template(
         "admin/users/users.html", users=entries, page_title="User Management"

@@ -15,8 +15,8 @@ def page_register():
         db = TableUser()
         """unique username & email"""
         if form.username.data not in [
-            x.username for x in db.list_objects()
-        ] and form.email.data not in [x.email for x in db.list_objects()]:
+            x.username for x in db.objects()
+        ] and form.email.data not in [x.email for x in db.objects()]:
             user = User(
                 username=form.username.data,
                 password=form.password.data,

@@ -25,14 +25,14 @@ def check_perms():
 def page_update_promo():
     db = Database()
     db.set_table("products")
-    products = db.list_objects()
-    product_keys = db.list_keys()
+    products = db.objects()
+    product_keys = db.dict()
 
     db.set_table("brands_categories")
-    bc = db.list_keys()
+    bc = db.dict()
 
     db.set_table("user_pages")
-    promo = db.list_keys()["promo_products"]
+    promo = db.dict()["promo_products"]
 
     db.close()
 
@@ -57,7 +57,7 @@ def page_update_promo():
 def page_update_carousel():
     form = UpdateCarousel()
     db = TableUserPages()
-    data_carousel = db.list_keys()["carousel"]
+    data_carousel = db.dict()["carousel"]
     db.close()
     return render_template(
         "admin/user_pages/carousel.html",

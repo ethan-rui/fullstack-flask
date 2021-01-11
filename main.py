@@ -29,7 +29,7 @@ login_manager.init_app(app)
 def load_user(user_id):
     db = TableUser()
     try:
-        user = db.list_keys()[user_id]
+        user = db.dict()[user_id]
     except KeyError:
         return redirect("/")
     db.close()

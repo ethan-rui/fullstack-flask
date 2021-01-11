@@ -46,7 +46,7 @@ def page_table_categories():
         db.insert(cat)
         db.close()
     db = TableBC()
-    entries = [x for x in db.list_objects() if x.role == "cat"]
+    entries = [x for x in db.objects() if x.role == "cat"]
     db.close()
     return render_template(
         "admin/inventory/categories.html",
@@ -65,7 +65,7 @@ def page_table_brands():
         db.insert(brand)
         db.close()
     db = TableBC()
-    entries = [x for x in db.list_objects() if x.role == "brand"]
+    entries = [x for x in db.objects() if x.role == "brand"]
     db.close()
     return render_template(
         "admin/inventory/brands.html",
@@ -81,7 +81,7 @@ def page_products_add():
     get brands and categories for the product
     """
     db = TableBC()
-    items = db.list_objects()
+    items = db.objects()
     brands = [x for x in items if x.role == "brand"]
     categories = [x for x in items if x.role == "cat"]
     db.close()
@@ -122,10 +122,10 @@ def page_products_add():
 @endpoint.route("/inventory")
 def page_table_products():
     db_products = TableProduct()
-    products = db_products.list_objects()
+    products = db_products.objects()
     db_products.close()
     db_bc = TableBC()
-    bc = db_bc.list_keys()
+    bc = db_bc.dict()
     db_bc.close()
     return render_template(
         "admin/inventory/table_products.html",

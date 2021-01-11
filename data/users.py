@@ -61,7 +61,7 @@ class TableUser(Database):
         self.label = label
 
     def authenticate(self, username: str, password: str):
-        for x in self.list_objects():
+        for x in self.objects():
             if x.username == username:
                 if check_password_hash(pwhash=x.password, password=password):
                     return True, x
