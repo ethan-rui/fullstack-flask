@@ -1,0 +1,20 @@
+database
+    User Table -> dict{uuid: products}
+        basic CRUD
+    Product Table -> dict{uuid: products}
+        basic CRUD
+    User Pages (carousel, promo items, etc) -> dict{carousel: items inside}
+        promo items are done
+        carousel havent been done yet
+    Brands & Categories Table -> dict{uuid: brand}
+        basic CRUD done
+
+tables not added yet
+    Inquiry messages -> dict{user.uuid: message}
+    # for the contact us messages
+
+    transaction records, data types = numpy ndarray? pandas?
+    # this is need to generate sales reports
+    # may use a separate table for this
+    dict{user.uuid: {item.uuid:{quantity:int, price:int, data_purchased: dd/mm/yy}}}
+
