@@ -78,6 +78,7 @@ def page_logout():
 def page_profile():
     return render_template("auth/profile.html")
 
+
 @endpoint.route("/profile/edit", methods=["GET", "POST"])
 @login_required
 def page_update_profile():
@@ -97,6 +98,7 @@ def page_update_profile():
         return render_template("auth/update/address.html", form=form)
     return render_template("auth/update/address.html", form=form)
 
+
 @endpoint.route("/profile/password", methods=["GET", "POST"])
 @login_required
 def page_update_password():
@@ -110,8 +112,10 @@ def page_update_password():
             db.insert(user)
             db.close()
             flash("Password updated successfully!")
-            return redirect(url_for("auth.page_profile"))
+            return redirect(url_for("auth.page_profile"), alert_cat="success")
 
         flash("Wrong password!")
-        return render_template("auth/update/password.html", form=form)
+        return render_template(
+            "auth/update/password.html", form=form, alert_cat="danger"
+        )
     return render_template("auth/update/password.html", form=form)

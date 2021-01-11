@@ -11,7 +11,7 @@ Register
         <div class="col-lg-4">
             {% with messages = get_flashed_messages() %}
             {% if messages %}
-        
+
             <div class="col-12" id="flashed_messages">
                 <div class="row">
                     {% for message in get_flashed_messages() %}
@@ -21,16 +21,20 @@ Register
             </div>
             {% endif %}
             {% endwith %}
-            <h3>Register</h3>
-            <form method=post enctype="multipart/form-data">
-                <div>
-                    {{ render_field(form.username, class="form-control") }}
-                    {{ render_field(form.email, class="form-control") }}
-                    {{ render_field(form.password, class="form-control") }}
-                    {{ render_field(form.confirm, class="form-control") }}
+            <div class="card bg-secondary shadow">
+                <div class="card-body">
+                    <h3>Register</h3>
+                    <form method=post enctype="multipart/form-data">
+                        <div>
+                            {{ render_field(form.username, class="form-control") }}
+                            {{ render_field(form.email, class="form-control") }}
+                            {{ render_field(form.password, class="form-control") }}
+                            {{ render_field(form.confirm, class="form-control") }}
+                        </div>
+                        <p><input type=submit value="Register" class="btn btn-dark mt-2"></p>
+                    </form>
                 </div>
-                <p><input type=submit value="Register" class="btn btn-dark mt-2"></p>
-            </form>
+            </div>
         </div>
         <div class="col-lg-4"></div>
     </div>
