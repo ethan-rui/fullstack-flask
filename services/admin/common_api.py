@@ -41,17 +41,30 @@ def api_delete(table, uid):
             return redirect(url_for(f"admin_userpages.page_update_promo"))
 
         if len(uid) == 36:
+            # setting the brands & categories of other products to default
+            if keys[table] == "brands_categories":
+                db_products = Database(label="products")
+                for x in db_products.objects():
+                    if x.brand == uid:
+                        x.brand == 0
+                        db_products.insert(x)
+                    if x.cat == uid:
+                        x.cat == 1
+                        db_products.insert(x)
+                db_products.close()
+
+            # deleting the images of products
             db = Database(label=keys[table])
+
             target = db.retrieve(uid)
-            """
-            deleting images of the products
-            """
             if keys[table] == "products":
                 for x in list((target.images).values()):
                     if x != "img_products/default_img.png":
                         os.remove(f"{basedir}/static/media/{x}")
+
             db.delete(uid)
             db.close()
+
         if keys[table] != "users":
             return redirect(url_for(f"admin_inventory.page_table_{table}"))
         else:

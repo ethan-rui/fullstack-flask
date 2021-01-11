@@ -35,6 +35,14 @@ Update Product
                         <tr>
                             <td>Desc</td>
                             <td>{{target.desc}}</td>
+                        <tr>
+                            <td>Brand</td>
+                            <td>{{bc[target.brand].name}}</td>
+                        <tr>
+                            <td>Category</td>
+                            <td>{{bc[target.cat].name}}</td>
+                        </tr>
+                        </tr>
                         </tr>
                     </tbody>
                 </table>
@@ -88,14 +96,12 @@ Update Product
 
             <label for="brands"><b>Brand</b></label>
             <select name="brand" id="brand" class="form-control">
-                <option value="0">Default Brand</option>
                 {% for brand in brands %}
                 <option value="{{brand.uuid}}">{{brand.name}}</option>
                 {% endfor %}
             </select>
             <label for="brands" class="mt-2"><b>Category</b></label>
             <select name="category" id="category" class="form-control">
-                <option value="1">Default Category</option>
                 {% for cat in categories %}
                 <option value="{{cat.uuid}}">{{cat.name}}</option>
                 {% endfor %}

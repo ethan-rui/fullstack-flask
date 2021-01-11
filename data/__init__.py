@@ -85,10 +85,10 @@ class Database:
     def __len__(self) -> int:
         return len(self.table)
 
-    def list_objects(self) -> list:
+    def objects(self) -> list:
         return list(self.table.values())
 
-    def list_keys(self):
+    def dict(self):
         return self.table
 
     def close(self):

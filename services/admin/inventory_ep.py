@@ -123,10 +123,21 @@ def page_products_add():
 def page_table_products():
     db_products = TableProduct()
     products = db_products.objects()
-    db_products.close()
     db_bc = TableBC()
     bc = db_bc.dict()
     db_bc.close()
+    for x in products:
+        try:
+            bc[x.brand]
+        except:
+            x.brand = "0"
+            db_products.insert(x)
+        try:
+            bc[x.cat]
+        except:
+            x.cat = "1"
+            db_products.insert(x)
+    db_products.close()
     return render_template(
         "admin/inventory/table_products.html",
         products=products,
@@ -150,9 +161,15 @@ def page_update_products(uid):
                 pass
         return True
 
-    db = TableProduct()
-    target = db.retrieve(uid)
-    db.close()
+    db_products = TableProduct()
+    target = db_products.retrieve(uid)
+    db_products.close()
+
+    db_bc = TableBC()
+    bc = db_bc.dict()
+    db_bc.close()
+    brands = [bc[x] for x in bc if bc[x].role == "brand"]
+    categories = [bc[x] for x in bc if bc[x].role == "cat"]
 
     if request.method == "POST" and form.validate_on_submit():
         db = TableProduct()
@@ -188,5 +205,10 @@ def page_update_products(uid):
         db.insert(target)
         db.close()
     return render_template(
-        "admin/inventory/update/products.html", form=form, target=target
+        "admin/inventory/update/products.html",
+        form=form,
+        target=target,
+        bc=bc,
+        brands=brands,
+        categories=categories,
     )
