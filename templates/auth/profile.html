@@ -10,11 +10,29 @@
             <div class="card bg-secondary shadow">
                 <div class="card-header bg-white border-0">
                     <div class="row align-items-center">
+                        <div class="col-12">
+                            {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                            {% for msg in messages %}
+                            <p class="alert alert-success">{{msg}}</p>
+                            {% endfor %}
+                            {% endif %}
+                            {% endwith %}
+                        </div>
                         <div class="col-8">
                             <h3 class="mb-0">My account</h3>
                         </div>
                         <div class="col-4 text-right">
-                            <a href="#!" class="btn btn-sm btn-primary">Settings</a>
+<div class="dropdown">
+                            <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Settings
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <a class="dropdown-item" href="{{url_for('auth.page_update_profile')}}">Edit Address</a>
+                              <a class="dropdown-item" href="#">Change Password</a>
+                              <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                    </div>
                         </div>
                     </div>
                 </div>
@@ -37,24 +55,6 @@
                                         <input readonly type="email" id="input-email"
                                             class="form-control form-control-alternative"
                                             placeholder="{{current_user.email}}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group focused">
-                                        <label class="form-control-label" for="input-first-name">First name</label>
-                                        <input readonly type="text" id="input-first-name"
-                                            class="form-control form-control-alternative" placeholder="First name"
-                                            value="{{current_user.fname}}">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group focused">
-                                        <label class="form-control-label" for="input-last-name">Last name</label>
-                                        <input readonly type="text" id="input-last-name"
-                                            class="form-control form-control-alternative" placeholder="Last name"
-                                            value="{{current_user.lname}}">
                                     </div>
                                 </div>
                             </div>

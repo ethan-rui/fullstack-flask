@@ -1,6 +1,6 @@
 from flask import render_template, session, request, redirect, url_for, Blueprint, flash
 from flask_login.utils import login_required, login_user, logout_user, current_user
-from .forms.auth import RegistrationForm, LoginForm
+from .forms.auth import RegistrationForm, LoginForm, ProfileForm
 from data.users import User, TableUser
 
 endpoint = Blueprint("auth", __name__)
@@ -77,3 +77,22 @@ def page_logout():
 @login_required
 def page_profile():
     return render_template("auth/profile.html")
+
+@endpoint.route("/profile/edit", methods=["GET", "POST"])
+@login_required
+def page_update_profile():
+    form = ProfileForm(request.form)
+    if form.validate():
+        db = TableUser()
+        user = db.retrieve(current_user.uuid)
+        user.set_full_address(key="city", value=form.city.data)
+        user.set_full_address(key="country", value=form.country.data)
+        user.set_full_address(key="pcode", value=form.pcode.data)
+        print(user.full_address)
+        db.insert(user)
+        db.close()
+        flash("Your address have been updated!")
+        return render_template("auth/profile.html")
+    else:
+        return render_template("auth/update/address.html", form=form)
+    return render_template("auth/update/address.html", form=form)

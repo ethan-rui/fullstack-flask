@@ -1,0 +1,61 @@
+{% extends 'layouts/base.html' %}
+{% block title %}
+{{current_user.username}}
+{% endblock title %}
+{% block content %}
+<div class="container-fluid mt-7">
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8 order-lg-1">
+            <div class="card bg-secondary shadow">
+                <div class="card-header bg-white border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">My account</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method=post enctype="multipart/form-data">
+                        <div class="pl-lg-4">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group focused">
+                                        <label class="form-control-label" for="input-address">Current Address</label>
+                                        <input readonly id="input-address" class="form-control form-control-alternative"
+                                            placeholder="Home Address" value="{{current_user.full_address('all')}}"
+                                            type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                {% from '_formhelpers.html' import render_field %}
+                                <div class="col-lg-4">
+                                    <div class="form-group focused">
+                                            {{ render_field(form.city, class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group focused">
+                                            {{ render_field(form.country, class="form-control") }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                            {{ render_field(form.pcode, class="form-control") }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-4">
+                        <!-- Description -->
+                        <div class="col-12 text-right">
+                            <p><input type=submit value="Save" class="btn btn-dark mt-2"></p>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+{% endblock content %}

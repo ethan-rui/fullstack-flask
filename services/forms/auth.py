@@ -19,3 +19,9 @@ class RegistrationForm(Form):
 class LoginForm(Form):
     username = StringField("Username", [validators.Length(min=4, max=25)])
     password = PasswordField("Password", [validators.DataRequired()])
+
+class ProfileForm(Form):
+    city = StringField("City", [validators.DataRequired(), validators.Length(min=4, max=25)])
+    country = StringField("Country", [validators.DataRequired(), validators.Length(min=4, max=25)])
+    pcode = StringField("Postal code", [validators.DataRequired(), validators.Length(min=4, max=25)])
+    
