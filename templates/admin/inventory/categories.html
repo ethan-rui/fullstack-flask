@@ -1,0 +1,53 @@
+{% extends 'layouts/admin_base.html' %}
+{% block title %}Categories{% endblock title %}
+{% block content %}
+<div class="container">
+	<div class="row mt-4">
+		<div class="col-lg-3">
+			<h3>Categories</h3>
+			{% from '_formhelpers.html' import render_field %}
+			<form action="" method="POST">
+				{{ form.csrf_token}}
+				{{ render_field(form.name, class="form-control", placeholder="Name of Category") }}
+				{{ render_field(form.desc, class="form-control", placeholder="Short description of Category", rows=4) }}
+				<input value="Add Category" type="submit" name="category" class="btn btn-primary mt-2">
+			</form>
+		</div>
+		<div class="col-9">
+			<h5>Categories</h5>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Name</th>
+						<th scope="col">Description</th>
+						<th scope="col" colspan="2">Actions</th>
+						<!-- <th scope="col">Stock</th> -->
+					</tr>
+				</thead>
+				<tbody>
+					{% for cat in entries %}
+					<tr>
+						{% if cat.uuid == "1" %}
+						<td scope="row"></td>
+						{% else %}
+						<td scope="row">{{loop.index-1}}</td>
+						{% endif %}
+						<td>{{cat.name}}</td>
+						<td>{{cat.desc}}</td>
+						{% if cat.uuid == "1" %}
+						<td></td>
+						<td></td>
+						{% else %}
+						{% from '_macros.html' import delete, edit %}
+						{{ edit(item=cat, site="Category")}}
+						{{ delete(item=cat, table="categories") }}
+						{% endif %}
+						{% endfor %}
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock content %}

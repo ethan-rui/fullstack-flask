@@ -1,0 +1,60 @@
+{% macro delete(item, table) %}
+<td><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_{{item.uuid}}">
+    Delete
+  </button></td>
+<div class="modal fade" id="delete_{{item.uuid}}" tabindex="-1" role="dialog"
+  aria-labelledby="delete_Label_{{item.uuid}}" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="delete_Label_{{item.uuid}}">{{item.name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <span>Are you sure you want to delete item: <b>{{item.name}}</b>?</span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <form action="{{url_for('api.api_delete', uid=item.uuid, table=table)}}" method="POST">
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro edit(item, site) %}
+<td><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#update_{{item.uuid}}">
+    Edit
+  </button></td>
+<div class="modal fade" id="update_{{item.uuid}}" tabindex="-1" role="dialog"
+  aria-labelledby="update_Label_{{item.uuid}}" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="update_Label_{{item.uuid}}">{{item.name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{{url_for('admin_inventory.page_update_bc', uid=item.uuid, site=site)}}" method="POST">
+          <label for="name">{{site}} Name</label>
+          <input type="text" name="name" class="form-control" value="{{item.name}}"
+            placeholder="Existing Name: {{item.name}}">
+          <label for="desc">{{site}} Description</label>
+          <textarea name="desc" class="form-control" rows=3
+            placeholder="Existing Description: {{item.desc}}">{{item.desc}}</textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <input type="submit" class="btn btn-success" name="desc" value="Update" id="">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}

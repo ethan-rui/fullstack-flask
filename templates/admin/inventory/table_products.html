@@ -1,0 +1,47 @@
+{% extends 'layouts/admin_base.html' %}
+{% block title %}
+Inventory
+{% endblock title %}
+{% block content %}
+<div class="container">
+  <p style="font-size:2rem">Products</p>
+  <div class="md-form mt-0 mb-5">
+    <div class="input-group" style="width: 20%;"><i class="fa fa-fw fa-search mt-2"></i><input class="form-control"
+        type="text" placeholder="Search" aria-label="Search"></div>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Price</th>
+        <th scope="col">Stock</th>
+        <th scope="col">Discount</th>
+        <th scope="col">Brand</th>
+        <th scope="col">Category</th>
+        <th scope="col">Images</th>
+        <th colspan="2" scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in products %}
+      <tr>
+        <th scope="row"><b>{{loop.index}}</b></th>
+        <td>{{entry.name}}</td>
+        <td>{{entry.centprice}}</td>
+        <td>{{entry.stock}}</td>
+        <td>{{entry.discount}}%</td>
+        <td>{{bc[entry.brand].name}}</td>
+        <td>{{bc[entry.cat].name}}</td>
+        <td><img width="35" src="{{url_for('static', filename='media/'+entry.images[0])}}" alt="image"></td>
+        <td><a href="{{url_for('admin_inventory.page_update_products', uid=entry.uuid)}}"
+            class="btn btn-sm btn-info">Edit</a>
+        </td>
+        {% from '_macros.html' import delete %}
+        {{ delete(item=entry, table="products") }}
+        {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endblock content %}

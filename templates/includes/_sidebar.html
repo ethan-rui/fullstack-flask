@@ -1,0 +1,108 @@
+<div class="vertical-nav bg-dark" id="sidebar">
+  <div class="py-4 px-3 mb-4 mt-4 bg-dark">
+  </div>
+
+  <p class="text-white font-weight-bold text-uppercase px-3 pb-4 mb-0">Tools</p>
+
+  <ul class="nav flex-column bg-dark mb-0 pl-4">
+    <li class="mb-1">
+      <a href="#" data-toggle="collapse" onclick="dropdown_save(this)" data-target="#submenu-1" class="head"><i
+          class="fa fa-box mr-1"></i><span>Inventory</span><i class="fa fa-fw fa-angle-down pull-right"></i></a>
+      <ul id="submenu-1" class="collapse speed">
+        <li><a href="{{url_for('admin_inventory.page_table_brands')}}"><i class="fa fa-copyright mr-1"></i>Brands</a>
+        </li>
+        <li><a href="{{url_for('admin_inventory.page_table_categories')}}"><i
+              class="fa fa-arrow-to-right mr-1"></i>Categories</a></li>
+        <li><a href="{{url_for('admin_inventory.page_table_products')}}"><i class="fa fa-boxes mr-1"></i>View
+            Products</a></li>
+        <li><a href="{{url_for('admin_inventory.page_products_add')}}"><i class="fa fa-people-carry mr-1"></i>Add
+            Products</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#" data-toggle="collapse" onclick="dropdown_save(this)" data-target="#submenu-2" class="head"><i
+          class="fa fa-fw fa-user-plus mr-1"></i><span>Users</span><i class="fa fa-fw fa-angle-down pull-right"></i></a>
+      <ul id="submenu-2" class="collapse speed">
+        <li><a href="{{url_for('admin_users.page_table_users')}}"><i class="fa fa-user"></i>Users</a>
+        </li>
+        <li><a href="#"><i class="fa fa-angle-double-right"></i>Menu 1</a></li>
+        <li><a href="#"><i class="fa fa-angle-double-right"></i>Menu 2</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#" data-toggle="collapse" onclick="dropdown_save(this)" data-target="#submenu-3" class="head"><i
+          class="fa fa-tablet mr-2"></i><span>User Pages</span><i class="fa fa-fw fa-angle-down pull-right"></i></a>
+      <ul id="submenu-3" class="collapse speed">
+        <li><a href="{{url_for('admin_userpages.page_update_promo')}}"><i class="fa fa-gifts mr-1"></i>Promo
+            Items</a>
+        </li>
+        <li><a href="{{url_for('admin_userpages.page_update_carousel')}}"><i class="fa fa-ring mr-1"></i>Carousel</a>
+        </li>
+        <li><a href="#"><i class="fa fa-angle-double-right"></i> SUBMENU 2.3</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="sugerencias"><i class="fa fa-fw fa-paper-plane-o"></i> MENU 4</a>
+    </li>
+    <li>
+      <a href="faq"><i class="fa fa-fw fa fa-question-circle"></i> MENU 5</a>
+    </li>
+  </ul>
+</div>
+<style>
+  .nav ul li a {
+    font-size: 1.1vw;
+  }
+
+  a span {
+    font-size: 1.2vw;
+  }
+
+  .vertical-nav {
+    min-width: 11rem;
+    width: 11rem;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s;
+  }
+
+  .page-content {
+    width: calc(100% - 14rem);
+    margin-left: 14rem;
+    transition: all 0.2s;
+  }
+
+  /* for toggle behavior */
+
+  #sidebar.active {
+    margin-left: -17rem;
+  }
+
+  #content.active {
+    width: 100%;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    #sidebar {
+      margin-left: -18rem;
+    }
+
+    #sidebar.active {
+      margin-left: 0;
+    }
+
+    #content {
+      width: 100%;
+      margin: 0;
+    }
+
+    #content.active {
+      margin-left: 18rem;
+      width: calc(100% - 18rem);
+    }
+  }
+</style>

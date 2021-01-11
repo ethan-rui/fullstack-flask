@@ -1,0 +1,13 @@
+
+.sidebar-sticky a{
+    font-size: 1rem;
+}
+.sidebar-sticky .head{
+    font-size: 1.2rem;
+}
+
+#sidebar{
+    background-color: black;
+    height: 100vh;
+    width: 15vw;
+}

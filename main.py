@@ -1,11 +1,10 @@
 from flask import Flask
 import os
 from datetime import timedelta
-
-"""
-timedelta to limit the session duration
-os makes pathing easier, if theres any file that needs pathing please use os.getcwd(), it gets the path leading up to this working directory
-"""
+from flask_uploads import IMAGES, UploadSet, configure_uploads, patch_request_class
+from flask_login import LoginManager, current_user
+from werkzeug.utils import redirect
+from data.users import TableUser
 
 basedir = os.getcwd()
 
@@ -16,29 +15,74 @@ app = Flask(
 )
 app.config["SECRET_KEY"] = "1234"
 app.permanent_session_lifetime = timedelta(days=3)
-"""
-saves user profile on browser for 3 days unless logged out.
-Import your endpoints/blueprints below, endpoint first, then you register
-"""
+app.config["UPLOADED_PHOTOS_DEST"] = f"{basedir}/static/media"
+photos = UploadSet("photos", IMAGES)
+configure_uploads(app, photos)
+patch_request_class(app)
+
+"""flask-login config"""
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    db = TableUser()
+    try:
+        user = db.list_keys()[user_id]
+    except KeyError:
+        return redirect("/")
+    db.close()
+    return user
+
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    from services.admin.common_api import authorizer
+
+    return authorizer(current_user)
+
+
+"""other login routes under auth_ep.py"""
+
+
 from services.common_ep import endpoint as EP_Common
-from services.admin_ep import endpoint as EP_Admin
+from services.auth_ep import endpoint as EP_Auth
+from services.admin.inventory_ep import endpoint as EP_Admin_Inv
+from services.admin.users_ep import endpoint as EP_Admin_Users
+from services.admin.statistics_ep import endpoint as EP_Admin_Stats
+from services.admin.common_api import endpoint as EP_Admin_API
+from services.admin.user_pages_ep import endpoint as EP_Admin_FP
 
-
-"""
-import your endpoints from your respective routes file, please give it a name that makes sense
-i dont want to mald over this shit
-"""
+# from services.admin_ep import endpoint as EP_Admin
 
 app.register_blueprint(EP_Common, url_prefix="/")
-app.register_blueprint(EP_Admin, url_prefix="/admin")
-"""
-give your endpoint an endpoint a prefix, eg for admin shit it may be /admin
-"""
-##########
+app.register_blueprint(EP_Auth, url_prefix="/user")
+app.register_blueprint(EP_Admin_Inv, url_prefix="/admin")
+app.register_blueprint(EP_Admin_Users, url_prefix="/admin")
+app.register_blueprint(EP_Admin_Stats, url_prefix="/admin")
+app.register_blueprint(EP_Admin_API, url_prefix="/admin")
+app.register_blueprint(EP_Admin_FP, url_prefix="/admin")
+
 
 if __name__ == "__main__":
+    from data.products import TableBC, Brand, Category
+    from data.users import User, TableUser
+
+    """
+    inserting the default entries to tables before server starts
+    - superuser
+    - brand
+    - categories
+    """
+    # default brands & categories
+    db_bc = TableBC()
+    db_bc.insert(Category(uid="1"))
+    db_bc.insert(Brand(uid="0"))
+    db_bc.close()
+    # default superuser
+    db_users = TableUser()
+    db_users.insert(User(username="admin", password="password", role="admin", uid="0"))
+    db_users.close()
+
     app.run(debug=True)
-"""
-checks if the server is started from this particular file
-debug=True auto applies changes made to flask file, please =False when submitting
-"""

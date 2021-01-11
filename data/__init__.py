@@ -1,69 +1,96 @@
-from uuid import uuid4
-import shelve
 import os
-
-# import your datetime, timezone modules
+import uuid
+from uuid import UUID, uuid4
+import pytz
+import shelve
+from datetime import datetime
 
 basedir = os.getcwd()
+tz = pytz.timezone("Singapore")
 
 
 class Entry:
-    def __init__(self, uid: str = "", name: str = "default_name"):
-        self.name = name
-        self.__uuid = str(uuid4()) if uid == "" else uid
+    def __init__(self, uid: str = None):
+        self.__uuid = str(uuid4()) if uid == None else uid
+        self.__date_created = datetime.now(tz=tz)
+        self.__date_updated = datetime.now(tz=tz)
 
     @property
-    def uuid(self):
-        return f"this is the uuid: {self.__uuid}"
-
-    @uuid.setter
-    def uuid(self, value: str) -> str:
-        self.__uuid = value
-        return value
+    def uuid(self) -> UUID:
+        return self.__uuid
 
     """
-    date created, date updated
-    getter & setter using the property decorator
+    date attributes have no setters because they will be static
     """
+
+    @property
+    def date_created(self):
+        return self.__date_created
+
+    @property
+    def date_updated(self):
+        return self.__date_updated
+
+    def update_timestamp(self):
+        self.__date_updated = datetime.now(tz=tz)
 
 
 class Database:
-    def __init__(self, label: str):
-        labels = ["users", "products", "brands_categories"]
-        if label not in labels:
-            raise KeyError(f"{labels} not accepted")
+    def __init__(self, label: str = ""):
+        self.__db = shelve.open(f"{basedir}/data/db/database", flag="c", writeback=True)
+        if len(self.__db) < 4:
+            self.__db.clear()
+            self.__db["users"] = {}
+            self.__db["brands_categories"] = {}
+            self.__db["products"] = {}
+            self.__db["user_pages"] = {"carousel": {}, "promo_products": []}
+        if label in ["users", "brands_categories", "products", "user_pages"]:
+            self.table = self.__db[label]
+            print(f"-- Accessing {label} table. --")
+        else:
+            print("Table does not exist.")
+        # debugging purposes
 
-        self.__db = shelve.open(
-            f"{basedir}/data/db/database.db", flag="c", writeback=True
-        )
+    def set_table(self, label: str):
         self.table = self.__db[label]
+        print(f"-- Accessing {label} table --")
 
-    def retrieve(self, uuid: str) -> Entry:
-        return self.__table[uuid]
-
-    def insert(self, entry: Entry) -> Entry:
-        self.table[entry.uuid] = entry
-
-    def close(self):
-        self.__db.sync()
-        self.__db.close()
+    def sub_tables(self) -> list:
+        return [x for x in self.__db]
 
     def delete(self, value: str) -> bool:
         try:
             del self.table[value]
             return True
         except KeyError as e:
-            print(e)
+            # debugging purposes
+            print(f"{e}")
             return False
 
-    def clear_all(self):
+    def insert(self, value: Entry) -> Entry:
+        self.table[value.uuid] = value
+        return value
+
+    def clear_self(self):
         self.table = {}
 
-    def __len__(self):
+    def retrieve(self, value: str) -> Entry:
+        return self.table[value]
+
+    def clear_all(self):
+        self.__db.clear()
+        self.__db.sync()
+        self.__db.close()
+
+    def __len__(self) -> int:
         return len(self.table)
 
-    def retrieve_all(self) -> list:
-        return [x for x in self.table]
+    def list_objects(self) -> list:
+        return list(self.table.values())
 
-    def retrieve_all_object(self) -> list:
-        return [x for x in self.table.values()]
+    def list_keys(self):
+        return self.table
+
+    def close(self):
+        self.__db.sync()
+        self.__db.close()

@@ -1,0 +1,53 @@
+{% extends 'layouts/admin_base.html' %}
+{% block title %}Brands{% endblock title %}
+{% block content %}
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-lg-3">
+            <h3>Brands</h3>
+            {% from '_formhelpers.html' import render_field %}
+            <form action="" method="POST">
+                {{ form.csrf_token}}
+                {{ render_field(form.name, class="form-control", placeholder="Name of Brand") }}
+                {{ render_field(form.desc, class="form-control", placeholder="Short description of Brand", rows=4) }}
+                <input value="Add Brand" type="submit" name="brand" class="btn btn-primary mt-2">
+            </form>
+        </div>
+        <div class="col-lg-9">
+            <h5>Brands</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <!-- <th scope="col">Stock</th> -->
+                        <th scope="col" colspan="2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for brand in entries %}
+                    <tr>
+                        {% if brand.uuid == "0" %}
+                        <th scope="row"></th>
+                        {% else %}
+                        <td scope="row">{{loop.index-1}}</td>
+                        {% endif %}
+                        <td>{{brand.name}}</td>
+                        <td>{{brand.desc}}</td>
+                        {% if brand.uuid == "0" %}
+                        <td></td>
+                        <td></td>
+                        {% else %}
+                        {% from '_macros.html' import delete, edit %}
+                        {{ edit(item=brand, site="Brand") }}
+                        {{ delete(item=brand, table="brands") }}
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

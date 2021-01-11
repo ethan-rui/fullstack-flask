@@ -1,0 +1,46 @@
+{% extends 'layouts/base.html' %}
+{% block title %}
+Login
+{% endblock title %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4"></div>
+        {% from '_formhelpers.html' import render_field %}
+        <div class="col-lg-4 row">
+            <div class="col-12">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for msg in messages %}
+                <p class="alert alert-danger">{{msg}}</p>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+            </div>
+            <div class="col-12">
+                <h3>Login</h3>
+                <form method=post enctype="multipart/form-data">
+                    <div>
+                        {{ render_field(form.username, class="form-control") }}
+                        {{ render_field(form.password, class="form-control") }}
+                    </div>
+                    <p><input type=submit value="Login" class="btn btn-dark mt-2"></p>
+                </form>
+            </div>
+            <div class="col-12">
+                Don't have an account? <a href="{{url_for('auth.page_register')}}" class="text-info">Sign Up!</a>
+            </div>
+        </div>
+        <div class="col-lg-4"></div>
+    </div>
+</div>
+{% endblock content %}
+{% block footer %}
+{% endblock footer %}
+{% block flashed %}
+{% endblock flashed %}
+<style>
+    body {
+        overflow: hidden;
+    }
+</style>
