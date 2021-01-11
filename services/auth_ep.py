@@ -1,6 +1,6 @@
 from flask import render_template, session, request, redirect, url_for, Blueprint, flash
 from flask_login.utils import login_required, login_user, logout_user, current_user
-from .forms.auth import RegistrationForm, LoginForm, ProfileForm
+from .forms.auth import RegistrationForm, LoginForm, ProfileForm, PswUpdateForm
 from data.users import User, TableUser
 
 endpoint = Blueprint("auth", __name__)
@@ -96,3 +96,22 @@ def page_update_profile():
     else:
         return render_template("auth/update/address.html", form=form)
     return render_template("auth/update/address.html", form=form)
+
+@endpoint.route("/profile/password", methods=["GET", "POST"])
+@login_required
+def page_update_password():
+    form = PswUpdateForm(request.form)
+    if request.method == "POST" and form.validate():
+        db = TableUser()
+        user = db.retrieve(current_user.uuid)
+        oldpassword = form.oldpassword.data
+        password = form.password.data
+        if user.password_change(password_old=oldpassword, password_new=password):
+            db.insert(user)
+            db.close()
+            flash("Password updated successfully!")
+            return redirect(url_for("auth.page_profile"))
+
+        flash("Wrong password!")
+        return render_template("auth/update/password.html", form=form)
+    return render_template("auth/update/password.html", form=form)

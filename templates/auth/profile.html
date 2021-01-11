@@ -11,13 +11,6 @@
                 <div class="card-header bg-white border-0">
                     <div class="row align-items-center">
                         <div class="col-12">
-                            {% with messages = get_flashed_messages() %}
-                            {% if messages %}
-                            {% for msg in messages %}
-                            <p class="alert alert-success">{{msg}}</p>
-                            {% endfor %}
-                            {% endif %}
-                            {% endwith %}
                         </div>
                         <div class="col-8">
                             <h3 class="mb-0">My account</h3>
@@ -29,7 +22,7 @@
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                               <a class="dropdown-item" href="{{url_for('auth.page_update_profile')}}">Edit Address</a>
-                              <a class="dropdown-item" href="#">Change Password</a>
+                              <a class="dropdown-item" href="{{url_for('auth.page_update_password')}}">Change Password</a>
                               <a class="dropdown-item" href="#">Something else here</a>
                             </div>
                     </div>

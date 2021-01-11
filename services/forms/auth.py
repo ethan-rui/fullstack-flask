@@ -25,3 +25,14 @@ class ProfileForm(Form):
     country = StringField("Country", [validators.DataRequired(), validators.Length(min=4, max=25)])
     pcode = StringField("Postal code", [validators.DataRequired(), validators.Length(min=4, max=25)])
     
+class PswUpdateForm(Form):
+    oldpassword = PasswordField("Old Password", [validators.DataRequired()])
+
+    password = PasswordField(
+        "New Password",
+        [
+            validators.DataRequired(),
+            validators.EqualTo("confirm", message="Passwords must match"),
+        ]
+    )
+    confirm = PasswordField("Repeat Password")
