@@ -9,7 +9,7 @@ Add Products
         {% block flashed %}
         {% with messages = get_flashed_messages() %}
         {% if messages %}
-    
+
         <div class="container" id="flashed_messages">
             <div class="row">
                 <div class="col-lg-4"></div>
@@ -57,5 +57,16 @@ Add Products
     </div>
     <div class="col-lg-2"></div>
 </div>
+
+
+<!-- image cropping -->
+<!-- imports -->
+<script src="{{url_for('static', filename='js/croppie.js')}}"></script>
+<link rel="stylesheet" href="{{url_for('static', filename='css/croppie.css')}}">
+<!-- main file -->
+<script src="{{url_for('static', filename='js/img_crop.js')}}"></script>
+<script>
+    CropImage.init()
+</script>
 
 {% endblock content %}

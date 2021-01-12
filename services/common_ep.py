@@ -3,6 +3,7 @@ from data.user_pages import TableUserPages
 from data.products import TableBC, TableProduct
 from data.inquiries import TableInquiry
 from services.forms.inquiry import InquiryForm
+
 endpoint = Blueprint("base", __name__)
 
 
@@ -24,11 +25,12 @@ def page_home():
     categories = [x for x in db_bc.objects() if x.role == "category"]
     db_bc.close()
 
-    return render_template("common/home.html", 
-    products=promo_products_data, 
-    cats=categories, brands=brands)
+    return render_template(
+        "common/home.html", products=promo_products_data, cats=categories, brands=brands
+    )
 
-@endpoint.route('/products/')
+
+@endpoint.route("/products")
 def page_display_products():
     db_products = TableProduct()
     products = db_products.objects()
@@ -36,33 +38,28 @@ def page_display_products():
     bc = db_bc.dict()
     db_bc.close()
     db_products.close()
-    return render_template(
-        "common/display_products.html",
-        products=products,
-        bc=bc
-    )
+    return render_template("common/display_products.html", products=products, bc=bc)
 
-@endpoint.route('/info_product/<uid>')
+
+@endpoint.route("/info_product/<uid>")
 def page_info_product(uid):
     db_products = TableProduct()
     products = db_products.retrieve(uid)
     db_products.close()
-    return render_template(
-        "common/info_product.html",
-        products=products
-    )  
+    return render_template("common/info_product.html", products=products)
 
-@endpoint.route('/inquiry/', methods=['GET', 'POST'])
+
+@endpoint.route("/inquiry/", methods=["GET", "POST"])
 def page_inquiry():
     inquiry = InquiryForm(request.form)
     if inquiry.validate():
         db = TableInquiry()
         inquiry = Inquiry(
-                    name=inquiry.name.data,
-                    email=inquiry.email.data,
-                    subject=inquiry.subject.data,
-                    msg=inquiry.msg.data,
-                )
+            name=inquiry.name.data,
+            email=inquiry.email.data,
+            subject=inquiry.subject.data,
+            msg=inquiry.msg.data,
+        )
         db.insert(inquiry)
         db.close()
         flash("Your inquiry has been submitted!")

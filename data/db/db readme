@@ -10,7 +10,7 @@ database
         basic CRUD done
 
 tables not added yet
-    Inquiry messages -> dict{user.uuid: message}
+    Inquiry messages -> dict{user.uuid: {message: ,category: }}
     # for the contact us messages
 
     transaction records, data types = numpy ndarray? pandas?
