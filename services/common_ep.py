@@ -1,7 +1,7 @@
-from flask import render_template, redirect, url_for, Blueprint, request
+from flask import render_template, redirect, url_for, Blueprint, request, flash
 from data.user_pages import TableUserPages
 from data.products import TableBC, TableProduct
-from data.inquiries import TableInquiry
+from data.inquiries import TableInquiry, Inquiry
 from services.forms.inquiry import InquiryForm
 
 endpoint = Blueprint("base", __name__)
@@ -51,18 +51,18 @@ def page_info_product(uid):
 
 @endpoint.route("/inquiry/", methods=["GET", "POST"])
 def page_inquiry():
-    inquiry = InquiryForm(request.form)
-    if inquiry.validate():
+    form = InquiryForm(request.form)
+    if form.validate() and request.method == "POST":
+        print("---hello__")
         db = TableInquiry()
         inquiry = Inquiry(
-            name=inquiry.name.data,
-            email=inquiry.email.data,
-            subject=inquiry.subject.data,
-            msg=inquiry.msg.data,
+            sender_name=form.sender_name.data,
+            sender_email=form.sender_email.data,
+            subject=form.subject.data,
+            content=form.content.data,
         )
         db.insert(inquiry)
-        db.close()
         flash("Your inquiry has been submitted!")
-        return redirect(url_for("base.page_home"))
         db.close()
-    return render_template("common/inquiry.html", inquiry=inquiry)
+        return redirect(url_for("base.page_home"))
+    return render_template("common/inquiry.html", form=form)

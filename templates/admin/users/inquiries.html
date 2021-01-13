@@ -1,14 +1,14 @@
 {% extends 'layouts/admin_base.html' %}
 {% block title %}
-User Management
+Inquiries
 {% endblock title %}
 {% block content %}
 <div class="row">
     <div class="col-lg-1"></div>
     <div class="col-lg-10">
-        <p style="font-size:2rem">Users</p>
+        <p style="font-size:2rem">Inquiries</p>
         <div class="md-form mt-0 mb-5">
-            <div class="input-group" style="width: 200px"><i class="fa fa-fw fa-search mt-2 mr-2"></i><input
+            <div class="input-group" style="width: 200px;"><i class="fa fa-fw fa-search mt-2 mr-2"></i><input
                     class="form-control" type="text" placeholder="Search" aria-label="Search"></div>
         </div>
         <table class="table table-striped">
@@ -17,35 +17,30 @@ User Management
                     <th scope="col">#</th>
                     <th scope="col">Username</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Role</th>
+                    <th scope="col">Subject</th>
                     <th colspan="2" scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                {% for entry in users %}
+                {% for entry in inquiries %}
                 <tr>
                     {% if entry.role == "admin" %}
                     <td></td>
                     {% else %}
                     <th scope="row">{{loop.index-1}}</th>
                     {% endif %}
-                    <td>{{entry.username}}</td>
-                    <td>{{entry.email}}</td>
-                    <td>{{entry.role}}</td>
-                    {% if entry.role == "admin" %}
-                    <td></td>
-                    <td></td>
-                    {% else %}
+                    <td>{{entry.sender_name}}</td>
+                    <td>{{entry.sender_email}}</td>
+                    <td>{{entry.subject}}</td>
                     <td><a class="btn btn-sm btn-info">Edit</a>
                     </td>
                     {% from '_macros.html' import delete %}
-                    {{ delete(item=entry, table='users') }}
-                    {% endif %}
+                    {{ delete(item=entry, table='inquiries') }}
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    <div class="col-lg-1"></div>
 </div>
+
 {% endblock content %}

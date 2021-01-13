@@ -20,6 +20,7 @@ def api_delete(table, uid):
             "products": "products",
             "users": "users",
             "user_pages": "user_pages",
+            "inquiries": "inquiries",
         }
         """
         uuid4() generates string of len 36,
@@ -68,7 +69,7 @@ def api_delete(table, uid):
         if keys[table] != "users":
             return redirect(url_for(f"admin_inventory.page_table_{table}"))
         else:
-            return redirect(url_for(f"admin_users.page_table_users"))
+            return redirect(url_for(f"admin_users.page_table_{keys[table]}"))
 
 
 def authorizer(user):

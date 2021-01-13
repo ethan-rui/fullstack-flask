@@ -3,8 +3,8 @@ from flask_uploads import UploadSet, IMAGES
 import os
 from flask_login import login_required, current_user
 import data
-from data.products import TableProduct, TableBC
 from data import Database
+from data import inquiries
 from data.user_pages import TableUserPages, FrontPage
 from ..forms.front_page import UpdateCarousel, UpdatePromoProducts
 
