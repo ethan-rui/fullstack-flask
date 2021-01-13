@@ -1,3 +1,8 @@
+<style>
+    #lineChart {
+        font-weight: bold
+    }
+</style>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -8,8 +13,9 @@
 Dashboard
 {% endblock title %}
 {% block content %}
-<h1>&nbsp&nbsp&nbspDashboard Page</h1>
-<div class="container">
+<div class="container-fluid">
+<h1>Dashboard Page</h1>
+<div class="container-fluid">
 <canvas id="lineChart">
 </div>
     <script>
@@ -17,10 +23,10 @@ Dashboard
     var lineChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['A', 'B', 'C', 'D', 'E', 'F'],
+            labels: {{labels|safe}},
             datasets: [{
                 label: 'Number of products',
-                data: [2, 3, 6, 7, 1, 10],
+                data: {{datasets|safe}},
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -45,6 +51,15 @@ Dashboard
             scales: {
                 yAxes: [{
                     ticks: {
+                        fontSize: 16,
+                        fontColor: '#000',
+                        beginAtZero: true
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontSize: 16,
+                        fontColor: '#000',
                         beginAtZero: true
                     }
                 }]
@@ -53,4 +68,12 @@ Dashboard
     });
     </script>
     </canvas>
+    <div class="row">
+        <form action="" method="POST">
+        <div class="col-lg-6"><label for="brand">Filter by brand</label><input required type="text" name="brand" placeholder="Enter brand name"></div>
+        <div class="col-lg-6"><label for="product">Filter by product</label><input required type="text" name="product" placeholder="Enter product name"></div>
+        <input type="submit" class="btn btn-md btn-success">
+        </form>
+    </div>
+</div>
 {% endblock content %}
