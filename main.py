@@ -82,7 +82,15 @@ if __name__ == "__main__":
     db_bc.close()
     # default superuser
     db_users = TableUser()
-    db_users.insert(User(username="admin", password="password", role="admin", uid="0"))
+    db_users.insert(
+        User(
+            username="admin",
+            password="password",
+            role="admin",
+            uid="0",
+            email="admin@admin.com",
+        )
+    )
     db_users.close()
 
     app.run(debug=True)

@@ -7,7 +7,6 @@ Inquiries
 <div class="container">
     <div class="row">
         <div class="col-lg-4"></div>
-        {% from '_formhelpers.html' import render_field %}
         <div class="col-lg-4">
             {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -22,14 +21,13 @@ Inquiries
             {% endif %}
             {% endwith %}
             <h3>Inquiries</h3>
-            <form method=post enctype="multipart/form-data">
-                <div>
-                    {{ render_field(inquiry.name, class="form-control") }}
-                    {{ render_field(inquiry.email, class="form-control") }}
-                    {{ render_field(inquiry.subject, class="form-control") }}
-                    {{ render_field(inquiry.msg, class="form-control") }}
-                </div>
-                <p><input type=submit value="Submit" class="btn btn-dark mt-2"></p>
+            {% from '_formhelpers.html' import render_field %}
+            <form method="POST" enctype="multipart/form-data">
+                {{ render_field(form.sender_name, class="form-control", value=current_user.username) }}
+                {{ render_field(form.sender_email, class="form-control", value=current_user.email) }}
+                {{ render_field(form.subject, class="form-control", placeholder="Topic")}}
+                {{ render_field(form.content, class="form-control", rows=5, placeholder="Describe your problem.")}}
+                <input type="submit" value="Submit" class="btn btn-dark mt-2">
             </form>
         </div>
         <div class="col-lg-4"></div>

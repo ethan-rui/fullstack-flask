@@ -2,7 +2,7 @@ from flask import render_template, redirect, request, Blueprint, session, url_fo
 from flask_uploads import UploadSet, IMAGES
 import os
 from flask_login import login_required, current_user
-
+from data.inquiries import TableInquiry, Inquiry
 from data.users import User, TableUser
 
 endpoint = Blueprint("admin_users", __name__)
@@ -30,3 +30,11 @@ def page_table_users():
     return render_template(
         "admin/users/users.html", users=entries, page_title="User Management"
     )
+
+
+@endpoint.route("/user_pages/inquiries", methods=["GET", "POST"])
+def page_table_inquiries():
+    db = TableInquiry()
+    inquiries = db.objects()
+    db.close()
+    return render_template("admin/users/inquiries.html", inquiries=inquiries)

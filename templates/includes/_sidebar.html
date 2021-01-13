@@ -23,9 +23,10 @@
       <a href="#" data-toggle="collapse" onclick="dropdown_save(this)" data-target="#submenu-2" class="head"><i
           class="fa fa-fw fa-user-plus mr-1"></i><span>Users</span><i class="fa fa-fw fa-angle-down pull-right"></i></a>
       <ul id="submenu-2" class="collapse speed">
-        <li><a href="{{url_for('admin_users.page_table_users')}}"><i class="fa fa-user"></i>Users</a>
+        <li><a href="{{url_for('admin_users.page_table_users')}}"><i class="fa fa-user mr-1"></i>Users</a>
         </li>
-        <li><a href="#"><i class="fa fa-angle-double-right"></i>Menu 1</a></li>
+        <li><a href="{{url_for('admin_users.page_table_inquiries')}}"><i class="fa fas fa-book mr-1"></i>Inquries</a>
+        </li>
         <li><a href="#"><i class="fa fa-angle-double-right"></i>Menu 2</a></li>
       </ul>
     </li>
@@ -104,5 +105,9 @@
       margin-left: 18rem;
       width: calc(100% - 18rem);
     }
+  }
+
+  .head {
+    color: lightcyan;
   }
 </style>
