@@ -8,13 +8,13 @@
 Dashboard
 {% endblock title %}
 {% block content %}
-<h1>Dashboard Page</h1>
+<h1>&nbsp&nbsp&nbspDashboard Page</h1>
 <div class="container">
-    <canvas id="myChart">
-    </div>
+<canvas id="lineChart">
+</div>
     <script>
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
+    var ctx = document.getElementById('lineChart').getContext('2d');
+    var lineChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: ['A', 'B', 'C', 'D', 'E', 'F'],
