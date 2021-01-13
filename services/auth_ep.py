@@ -2,6 +2,7 @@ from flask import render_template, session, request, redirect, url_for, Blueprin
 from flask_login.utils import login_required, login_user, logout_user, current_user
 from .forms.auth import RegistrationForm, LoginForm, ProfileForm, PswUpdateForm
 from data.users import User, TableUser
+from data.products import TableProduct
 
 endpoint = Blueprint("auth", __name__)
 
@@ -120,3 +121,29 @@ def page_update_password():
                 "auth/update/password.html", form=form
             )
     return render_template("auth/update/password.html", form=form)
+
+@endpoint.route("/add_cart", methods=["POST"])
+@login_required
+def add_cart():
+    product_id = request.form.get('product_id')
+    quantity = int(request.form.get("quantity"))
+    db = TableUser()
+    user = db.retrieve(current_user.uuid)
+    user.set_products_cart(product_id, quantity)
+    db.insert(user)
+    db.close()
+    return redirect(request.referrer)
+
+@endpoint.route("/cart", methods=["GET", "POST"])
+@login_required
+def page_cart():
+    db = TableUser()
+    user = db.retrieve(current_user.uuid)
+    db.close
+    db_products = TableProduct()
+    products = []
+    for product_id in user.cart.keys():
+        products.append(db_products.retrieve(product_id))
+
+    db_products.close()
+    return render_template("auth/cart.html", products=products)

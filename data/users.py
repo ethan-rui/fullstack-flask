@@ -15,6 +15,7 @@ class User(Entry, UserMixin):
         email: str = "",
         uid: str = None,
         full_address={"city": "-", "country": "-", "pcode": "-"},
+        cart={},
     ):
         try:
             Entry.__init__(self, uid=uid)
@@ -23,6 +24,7 @@ class User(Entry, UserMixin):
             self.password = generate_password_hash(password)
             self.__full_address = full_address
             self.role = role
+            self.cart = cart
             print(f"Username: {self.username}")
             print(f"Password: {self.password}")
             print(f"Role: {self.role}")
@@ -52,6 +54,9 @@ class User(Entry, UserMixin):
             return True
         else:
             return False
+
+    def set_products_cart(self, key, value=1):
+            self.cart[key] = value
 
 
 class TableUser(Database):

@@ -28,8 +28,12 @@ Products
                             <div class="price text-success">
                                 <h5 class="">${{product.centprice/100}}</h5>
                             </div>
-                            <a href="#" class="btn btn-danger btn-sm"><i class="fas fa-shopping-cart"></i> Add to
-                                Cart</a>
+                            <form action="{{url_for('auth.add_cart')}}" method="POST">
+                                <input type="hidden" name="product_id" value="{{product.uuid}}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button class="btn btn-danger btn-sm" ><i class="fas fa-shopping-cart"></i>Add</button>
+                            </form>
+                            
                         </div>
                     </div>
                 </div>
