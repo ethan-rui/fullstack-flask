@@ -112,10 +112,11 @@ def page_update_password():
             db.insert(user)
             db.close()
             flash("Password updated successfully!")
-            return redirect(url_for("auth.page_profile"), alert_cat="success")
+            return redirect(url_for("auth.page_profile"))
 
-        flash("Wrong password!")
-        return render_template(
-            "auth/update/password.html", form=form, alert_cat="danger"
-        )
+        else:
+            flash("Wrong password!")
+            return render_template(
+                "auth/update/password.html", form=form
+            )
     return render_template("auth/update/password.html", form=form)
