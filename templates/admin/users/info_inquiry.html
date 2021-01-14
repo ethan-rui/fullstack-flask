@@ -1,0 +1,34 @@
+-{% extends 'layouts/admin_base.html' %}
+{% block title %}
+User Inquiry 
+{% endblock title %}
+{% block content %}
+<div class="container"></div>
+    <h1>Individual Inquiry</h1>
+    <br>
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <td><b>Name</b></td>
+                <td><b>{{inquiries.sender_name}}</b></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{inquiries.sender_email}}</td>
+            </tr>
+            <tr>
+                <td>Subject</td>
+                <td>{{inquiries.subject}}</td>
+            </tr>
+            <tr>
+                <td>Content</td>
+                <td>{{inquiries.content}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <h2 class="mt-2"> Actions </h2>
+    <a href="{{url_for('admin_users.page_table_inquiries')}}" class="btn btn-sm btn-info">Return to Previous Page</a>
+    <a class="btn btn-sm btn-danger">Delete</a>
+</div>
+{% endblock content %}

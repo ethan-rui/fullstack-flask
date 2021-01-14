@@ -38,3 +38,10 @@ def page_table_inquiries():
     inquiries = db.objects()
     db.close()
     return render_template("admin/users/inquiries.html", inquiries=inquiries)
+
+@endpoint.route("/user_pages/inquiry/<uid>")
+def page_info_inquiry(uid):
+    db = TableInquiry()
+    inquiries = db.retrieve(uid)
+    db.close()
+    return render_template("admin/users/info_inquiry.html", inquiries=inquiries)

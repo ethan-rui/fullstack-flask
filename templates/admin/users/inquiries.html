@@ -32,7 +32,7 @@ Inquiries
                     <td>{{entry.sender_name}}</td>
                     <td>{{entry.sender_email}}</td>
                     <td>{{entry.subject}}</td>
-                    <td><a class="btn btn-sm btn-info">Edit</a>
+                    <td><a href="{{url_for('admin_users.page_info_inquiry',uid=entry.uuid)}}" class="btn btn-sm btn-info">View More</a>
                     </td>
                     {% from '_macros.html' import delete %}
                     {{ delete(item=entry, table='inquiries') }}
