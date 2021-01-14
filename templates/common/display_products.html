@@ -27,13 +27,17 @@ Products
                         <div class="buy d-flex justify-content-between align-items-center">
                             <div class="price text-success">
                                 <h5 class="">${{product.centprice/100}}</h5>
+                                <hr>
                             </div>
+                        <div class="buy d-flex justify-content-between align-items-center"></div>
                             <form action="{{url_for('auth.add_cart')}}" method="POST">
                                 <input type="hidden" name="product_id" value="{{product.uuid}}">
                                 <input type="hidden" name="quantity" value="1">
+                                <br>
+                                <a href="{{url_for('base.page_info_product', uid=product.uuid)}}" class="float-left btn btn-sm btn-primary">details</a>
                                 <button class="btn btn-danger btn-sm" ><i class="fas fa-shopping-cart"></i>Add</button>
                             </form>
-                            
+  
                         </div>
                     </div>
                 </div>
