@@ -2,6 +2,7 @@ from flask.signals import message_flashed
 from flask.templating import render_template
 from flask.wrappers import Request
 from data.user_pages import TableUserPages
+from data.inquiries import TableInquiry
 from flask import Blueprint, wrappers, url_for, redirect, request
 from data import Database
 import os
@@ -66,11 +67,12 @@ def api_delete(table, uid):
             db.delete(uid)
             db.close()
 
-        if keys[table] != "users":
-            return redirect(url_for(f"admin_inventory.page_table_{table}"))
+        if keys[table] == "users":
+            return redirect(url_for(f"admin_users.page_table_users"))
+        elif keys[table] == "inquiries":
+            return redirect(url_for(f"admin_users.page_table_inquiries"))
         else:
-            return redirect(url_for(f"admin_users.page_table_{keys[table]}"))
-
+            return redirect(url_for(f"admin_inventory.page_table_{table}"))
 
 def authorizer(user):
     try:

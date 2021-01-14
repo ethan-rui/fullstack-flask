@@ -29,6 +29,7 @@ User Inquiry
     <br>
     <h2 class="mt-2"> Actions </h2>
     <a href="{{url_for('admin_users.page_table_inquiries')}}" class="btn btn-sm btn-info">Return to Previous Page</a>
-    <a class="btn btn-sm btn-danger">Delete</a>
+    {% from '_macros.html' import delete %}
+    {{ delete(item=inquiries, table='inquiries') }}
 </div>
 {% endblock content %}
