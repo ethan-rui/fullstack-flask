@@ -9,7 +9,7 @@ Update Product
             <div class="col-12">
                 <h3>Target Details</h3>
                 <table class="table table-striped">
-                    <thead>
+                    <thead class="thead-dark">
                         <tr>
                             <th>Attribute</th>
                             <th>Value</th>
@@ -84,7 +84,7 @@ Update Product
         </div>
     </div>
     <div class="col-lg-6">
-        <h3>Update Product</h3>
+        <h3>Update Product (Leave blank if unchanged.)</h3>
         {% from '_formhelpers.html' import render_field %}
         <form action="" method="POST" enctype="multipart/form-data">
             {{ form.csrf_token}}

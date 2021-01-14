@@ -17,7 +17,7 @@ def check_perms():
 @endpoint.route("/", methods=["GET", "POST"])
 def page_dashboard():
     datasets = [89, 23, 63, 13, 55, 169]
-    labels = ["Golf", "Hotel", "India", "Juliet", "Kilo", "Lima"]
-    if request.method=="POST":
+    labels = ["Apple", "Orange", "Fish", "Brinjal", "Banana", "Pineapple"]
+    if request.method == "POST":
         print("hello world")
     return render_template("admin/dashboard.html", datasets=datasets, labels=labels)
