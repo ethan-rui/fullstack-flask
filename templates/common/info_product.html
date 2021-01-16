@@ -1,9 +1,18 @@
 {% extends 'layouts/base.html' %}
 {% block title %}
-Product Info
+{{products.name}}
 {% endblock title %}
 
 {% block content %}
+<script>
+    var OriginalPriceCalc1 = {{products.centprice}}*100;
+    var Discount = {{ products.discount }};
+    var OriginalPriceFinal = OriginalPriceCalc1/Discount;
+    function get_original_price() {
+        document.getElementById('Original').textContent = "$" + OriginalPriceFinal/100;
+    };
+</script>
+<body onload="get_original_price()"></body>
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-6" id="b_image">
@@ -11,13 +20,20 @@ Product Info
                 height="400"></img>
         </div>
         <div class="col-md-6">
-            <h4>{{products.name}}</h4>
+            <h3>{{products.name}}</h3>
             <hr>
-            <p>Product price : ${{products.centprice/100}}</p>
             {% if products.discount > 0 %}
-            <p>Product Discount : {{ products.discount }}%</p>
-            <a href="" class="btn btn-warning">Add to Cart</a>
+                <h4 class="font-weight-bold text-danger ">${{products.centprice/100}}</h4>
+                <h4><del id="Original">Original Price</del></h4>
+                <h5> (Save {{products.discount}}%)</h5>
+            {% else %}
+                <h4 class="font-weight-bold text-danger ">${{products.centprice/100}}</h4>
             {% endif %}
+            <form action="{{url_for('auth.add_cart')}}" method="POST">
+                <input type="hidden" name="product_id" value="{{products.uuid}}">
+                <input type="hidden" name="quantity" value="1">
+                <button class="btn btn-danger"><i class="fas fa-shopping-cart"></i> Add To Cart</button>
+            </form>
         </div>
     </div>
 
@@ -41,13 +57,24 @@ Product Info
 <script>
     var b_image = document.getElementById('b_image');
     var s_image = document.getElementById('s_image').getElementsByTagName('img');
-    for (var i = 0; i < s_image, length; i++) {
-        s_image[i].addEventListener('click', full_image);
+    s_image[0].addEventListener('click', full_image_a);
+    s_image[1].addEventListener('click', full_image_b);
+    s_image[2].addEventListener('click', full_image_c);
+
+
+    function full_image_a() {
+        var ImageSRC = this.getAttribute('src');
+        b_image.innerHTML = "<img src= '{{url_for('static', filename ='media/'+products.images[0])}}' width='400' height='400'>"
     }
 
-    function full_image() {
+    function full_image_b() {
         var ImageSRC = this.getAttribute('src');
-        b_image.innerHTML = "<img src=" + ImageSRC + "width='400' height='400'>"
+        b_image.innerHTML = "<img src= '{{url_for('static', filename = 'media/'+products.images[1])}}' width='400' height='400'>"
+    }
+
+    function full_image_c() {
+            var ImageSRC = this.getAttribute('src');
+        b_image.innerHTML = "<img src= '{{url_for('static', filename = 'media/'+products.images[2])}}' width='400' height='400'>"        
     }
 </script>
 {% endblock %}
