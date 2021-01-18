@@ -57,22 +57,22 @@
 <script>
     var b_image = document.getElementById('b_image');
     var s_image = document.getElementById('s_image').getElementsByTagName('img');
-    s_image[0].addEventListener('click', full_image_a);
-    s_image[1].addEventListener('click', full_image_b);
-    s_image[2].addEventListener('click', full_image_c);
+    s_image[0].addEventListener('click', full_image_0);
+    s_image[1].addEventListener('click', full_image_1);
+    s_image[2].addEventListener('click', full_image_2);
 
 
-    function full_image_a() {
+    function full_image_0() {
         var ImageSRC = this.getAttribute('src');
         b_image.innerHTML = "<img src= '{{url_for('static', filename ='media/'+products.images[0])}}' width='400' height='400'>"
     }
 
-    function full_image_b() {
+    function full_image_1() {
         var ImageSRC = this.getAttribute('src');
         b_image.innerHTML = "<img src= '{{url_for('static', filename = 'media/'+products.images[1])}}' width='400' height='400'>"
     }
 
-    function full_image_c() {
+    function full_image_2() {
             var ImageSRC = this.getAttribute('src');
         b_image.innerHTML = "<img src= '{{url_for('static', filename = 'media/'+products.images[2])}}' width='400' height='400'>"        
     }
