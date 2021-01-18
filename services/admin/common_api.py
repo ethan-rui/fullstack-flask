@@ -67,12 +67,8 @@ def api_delete(table, uid):
             db.delete(uid)
             db.close()
 
-        if keys[table] == "users":
-            return redirect(url_for(f"admin_users.page_table_users"))
-        elif keys[table] == "inquiries":
-            return redirect(url_for(f"admin_users.page_table_inquiries"))
-        else:
-            return redirect(url_for(f"admin_inventory.page_table_{table}"))
+            return redirect(request.referrer)
+
 
 def authorizer(user):
     try:
