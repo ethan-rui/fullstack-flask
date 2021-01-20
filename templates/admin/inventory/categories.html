@@ -41,7 +41,7 @@
 						{% else %}
 						{% from '_macros.html' import delete, edit %}
 						{{ edit(item=cat, site="Category")}}
-						{{ delete(item=cat, table="categories") }}
+						{{ delete(item=cat, table="brands_categories") }}
 						{% endif %}
 						{% endfor %}
 					</tr>
