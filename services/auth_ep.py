@@ -97,7 +97,6 @@ def page_update_profile():
         return render_template("auth/profile.html")
     else:
         return render_template("auth/update/address.html", form=form)
-    return render_template("auth/update/address.html", form=form)
 
 
 @endpoint.route("/profile/password", methods=["GET", "POST"])

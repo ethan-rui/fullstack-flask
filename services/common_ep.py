@@ -33,17 +33,11 @@ def page_home():
 
 @endpoint.route("/catalog/")
 def page_catalog():
-    # cant put int:param in url
-    try:
-        no_pg = int(request.args.get("page"))
-        size_pg = int(request.args.get("size"))
-        param_filter = request.args.get("filter_by")
-        param_sort = request.args.get("sort_by")
-    except:
-        no_pg = 0
-        size_pg = 1
-        param_filter = None
-        param_sort = None
+    """pg_index starts from 0"""
+    pg_index = request.args.get("page", type=int, default=0)
+    pg_size = request.args.get("size", type=int, default=10)
+    param_filter = request.args.get("filter_by", type=str, default=None)
+    param_sort = request.args.get("sort_by", type=str, default="popularity")
 
     db_products = TableProduct()
     products = db_products.objects()
@@ -51,24 +45,33 @@ def page_catalog():
     bc = db_bc.dict()
     db_bc.close()
     db_products.close()
-    shown_products = products[(no_pg * size_pg) : (no_pg * size_pg + size_pg)]
-    total_pg = ceil(len(products) / size_pg)
-    return render_template("common/catalog.html", shown_products=shown_products, bc=bc)
+
+    shown_products = products[(pg_index * pg_size) : (pg_index * pg_size + pg_size)]
+    pg_total = ceil(len(products) / pg_size)
+    return render_template(
+        "common/catalog.html",
+        shown_products=shown_products,
+        bc=bc,
+        pg_total=pg_total,
+        param_filter=param_filter,
+        param_sort=param_sort,
+        pg_index=pg_index,
+        pg_size=pg_size,
+    )
 
 
-@endpoint.route("/info_product/<uid>")
+@endpoint.route("/catalog/product/<uid>")
 def page_info_product(uid):
     db_products = TableProduct()
-    products = db_products.retrieve(uid)
+    target = db_products.retrieve(uid)
     db_products.close()
-    return render_template("common/info_product.html", products=products)
+    return render_template("common/info_product.html", target=target)
 
 
-@endpoint.route("/inquiry/", methods=["GET", "POST"])
+@endpoint.route("/inquiry", methods=["GET", "POST"])
 def page_inquiry():
     form = InquiryForm(request.form)
-    if form.validate() and request.method == "POST":
-        print("---hello__")
+    if request.method == "POST" and form.validate():
         db = TableInquiry()
         inquiry = Inquiry(
             sender_name=form.sender_name.data,

@@ -5,6 +5,7 @@ from data.products import Product, TableProduct, Brand, Category, TableBC
 from data import Database
 from ..forms.inventory import AddProduct, AddBrand, AddCategory, UpdateProduct
 import os
+from PIL import Image
 
 endpoint = Blueprint("admin_inventory", __name__)
 photos = UploadSet("photos", IMAGES)
@@ -99,13 +100,13 @@ def page_products_add():
             discount=form.discount.data,
         )
         for x in range(3):
-            product.images = {
-                x: photos.save(
-                    request.files.get(f"image_{x}"),
-                    folder="img_products",
-                    name=f"{product.uuid}_x.",
-                )
-            }
+            image_product = Image.open(request.files.get(f"image_{x}"))
+            image_product = image_product.resize((600, 600))
+            image_product.convert("RGB")
+            image_product.save(
+                f"{basedir}/static/media/img_products/{product.uuid}_{x}.png"
+            )
+            product.images = {x: f"img_products/{product.uuid}_{x}.png"}
         db = TableProduct()
         db.insert(product)
         db.close()

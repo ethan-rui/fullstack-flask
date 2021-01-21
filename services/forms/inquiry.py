@@ -6,7 +6,7 @@ class InquiryForm(Form):
     sender_email = StringField(
         "Email Address",
         [
-            validators.Length(min=6, max=35),
+            validators.Length(min=6, max=80),
             validators.Email(),
             validators.DataRequired(),
         ],

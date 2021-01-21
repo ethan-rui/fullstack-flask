@@ -1,6 +1,7 @@
 from flask import Flask
 import os
 from datetime import timedelta
+from flask.templating import render_template
 from flask_uploads import IMAGES, UploadSet, configure_uploads, patch_request_class
 from flask_login import LoginManager, current_user
 from werkzeug.utils import redirect
@@ -38,9 +39,12 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    from services.admin.common_api import authorizer
+    return render_template("errors/401.html")
 
-    return authorizer(current_user)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("errors/404.html")
 
 
 """other login routes under auth_ep.py"""
