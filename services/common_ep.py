@@ -2,6 +2,7 @@ from flask import render_template, redirect, url_for, Blueprint, request, flash
 from data.user_pages import TableUserPages
 from data.products import TableBC, TableProduct
 from data.inquiries import TableInquiry, Inquiry
+from math import ceil
 from services.forms.inquiry import InquiryForm
 
 endpoint = Blueprint("base", __name__)
@@ -30,15 +31,29 @@ def page_home():
     )
 
 
-@endpoint.route("/products")
-def page_display_products():
+@endpoint.route("/catalog/")
+def page_catalog():
+    # cant put int:param in url
+    try:
+        no_pg = int(request.args.get("page"))
+        size_pg = int(request.args.get("size"))
+        param_filter = request.args.get("filter_by")
+        param_sort = request.args.get("sort_by")
+    except:
+        no_pg = 0
+        size_pg = 1
+        param_filter = None
+        param_sort = None
+
     db_products = TableProduct()
     products = db_products.objects()
     db_bc = TableBC()
     bc = db_bc.dict()
     db_bc.close()
     db_products.close()
-    return render_template("common/display_products.html", products=products, bc=bc)
+    shown_products = products[(no_pg * size_pg) : (no_pg * size_pg + size_pg)]
+    total_pg = ceil(len(products) / size_pg)
+    return render_template("common/catalog.html", shown_products=shown_products, bc=bc)
 
 
 @endpoint.route("/info_product/<uid>")

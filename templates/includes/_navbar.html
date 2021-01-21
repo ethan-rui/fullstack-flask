@@ -11,7 +11,8 @@
   <!-- Breadcrumbs -->
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a class="waves-effect" href="{{url_for('base.page_home')}}">Home</a></li>
-    <li class="breadcrumb-item"><a class="waves-effect" href="{{url_for('base.page_display_products')}}">Products</a>
+    <li class="breadcrumb-item"><a class="waves-effect"
+        href="/catalog/?page=0&size=1&filter_by=None&sort_by=None">Products</a>
     </li>
     {% if current_user.role == "admin" %}
     <li class="breadcrumb-item"><a class="waves-effect" href="{{url_for('admin_statistics.page_dashboard')}}">Admin
