@@ -1,7 +1,7 @@
 {% macro delete(item, table) %}
-<td><button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_{{item.uuid}}">
-    Delete
-  </button></td>
+<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_{{item.uuid}}">
+  Delete
+</button>
 <div class="modal fade" id="delete_{{item.uuid}}" tabindex="-1" role="dialog"
   aria-labelledby="delete_Label_{{item.uuid}}" aria-hidden="true">
   <div class="modal-dialog" role="document">

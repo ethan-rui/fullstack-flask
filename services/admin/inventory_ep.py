@@ -1,4 +1,13 @@
-from flask import render_template, redirect, request, Blueprint, session, url_for, flash
+from flask import (
+    render_template,
+    redirect,
+    request,
+    Blueprint,
+    session,
+    url_for,
+    flash,
+    wrappers,
+)
 from flask_login.utils import login_required, current_user
 from flask_uploads import UploadSet, IMAGES
 from data.products import Product, TableProduct, Brand, Category, TableBC
@@ -6,6 +15,7 @@ from data import Database
 from ..forms.inventory import AddProduct, AddBrand, AddCategory, UpdateProduct
 import os
 from PIL import Image
+import json
 
 endpoint = Blueprint("admin_inventory", __name__)
 photos = UploadSet("photos", IMAGES)
@@ -20,8 +30,8 @@ def check_perms():
     return authorizer(current_user)
 
 
-@endpoint.route("/inventory/<site>/update/<uid>", methods=["POST"])
-def page_update_bc(uid, site):
+@endpoint.route("/inventory/update/brands_categories/<uid>", methods=["POST"])
+def page_update_bc(uid):
     if request.method == "POST":
         db = TableBC()
         target = db.retrieve(uid)
@@ -30,12 +40,7 @@ def page_update_bc(uid, site):
         db.insert(target)
         db.close()
         print("Updated successful!")
-        if site.lower() in ["categories", "category"]:
-            return redirect(url_for("admin_inventory.page_table_categories"))
-        elif site.lower() in ["brands", "brand"]:
-            return redirect(url_for("admin_inventory.page_table_brands"))
-        else:
-            return redirect(url_for("admin_statistics.page_dashboard"))
+        return redirect(request.referrer)
 
 
 @endpoint.route("/inventory/categories", methods=["GET", "POST"])
@@ -60,19 +65,30 @@ def page_table_categories():
 @endpoint.route("/inventory/brands", methods=["GET", "POST"])
 def page_table_brands():
     form = AddBrand(request.form)
+    """inserting brands"""
     if request.method == "POST" and form.validate():
         brand = Brand(name=form.name.data, desc=form.desc.data)
         db = TableBC()
         db.insert(brand)
         db.close()
-    db = TableBC()
-    entries = [x for x in db.objects() if x.role == "brand"]
-    db.close()
     return render_template(
         "admin/inventory/brands.html",
         form=form,
-        entries=entries,
         page_title="Brands Management",
+        table="brands_categories",
+        site="Brand",
+    )
+
+
+@endpoint.route("/inventory/brands/data_table")
+def api_table_brands():
+    db = TableBC()
+    entries = [i.to_json() for i in db.objects() if i.role == "brand"]
+    print(entries)
+    db.close()
+    print("-- Retrieving entries for brands. --")
+    return wrappers.Response(
+        status=200, content_type="application/json", response=json.dumps(entries)
     )
 
 

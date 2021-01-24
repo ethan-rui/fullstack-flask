@@ -1,120 +1,80 @@
-<style>
-    #lineChart {
-        font-weight: bold
-    }
-</style>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 {% extends 'layouts/admin_base.html' %}
 {% block title %}
 Dashboard
 {% endblock title %}
 {% block content %}
-<div class="container-fluid">
-    <h1>Dashboard Page</h1>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<div class="container-fluid p-4">
+    <h3>Dashboard Page</h3>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-3">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">New Orders</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3">
-
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Income</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Expenses</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">New Users</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                    </div>
-                </div>
+            <div class="col-12 col-lg-6">
+                <canvas id="barChart"></canvas>
             </div>
         </div>
-        <canvas id="barChart">
-    </div>
-    <script>
-        var ctx = document.getElementById('barChart').getContext('2d');
-        var barChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: {{ labels| safe}},
-        datasets: [{
-            label: 'Number of products sold',
-            data: {{ datasets| safe}},
-            backgroundColor: [
-            'rgba(128, 0, 0, 1)',
-            'rgba(255, 255, 155, 1)',
-            'rgba(0, 206, 86, 1)',
-            'rgba(0, 0, 155, 1)',
-            'rgba(128, 0, 0, 1)',
-            'rgba(128, 0, 0, 1)',
-        ],
-            borderColor: [
-            'rgba(0, 0, 0, 1)',
-            'rgba(0, 0, 0, 1)',
-            'rgba(0, 0, 0, 1)',
-            'rgba(0, 0, 0, 1)',
-            'rgba(0, 0, 0, 1)',
-        ],
-            borderWidth: 2,
-            lineTension: 0
-            }]
-        },
-        options: {
-            legend: {
-                labels: {
-                    fontSize: 24
-                }
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        fontSize: 16,
-                        fontColor: '#000',
-                        beginAtZero: true
-                    }
-                }],
-                    xAxes: [{
-                        ticks: {
-                            fontSize: 16,
-                            fontColor: '#000',
-                            beginAtZero: true
-                        }
-                    }]
-            }
-        }
-    });
-    </script>
-    </canvas>
-    <br>
-    <div class="row">
-        <form action="" method="POST">
-            <div class="col-lg-6"><label for="brand">Filter by brand</label><input required type="text" name="brand"
-                    placeholder="Enter brand name"></div>
-            <div class="col-lg-6"><label for="product">Filter by product</label><input required type="text"
-                    name="product" placeholder="Enter product name"></div>
-            <br>
-            <div class="col-lg-3">
-            <input type="submit" class="btn btn-md btn-success">
-            </div>
-        </form>
     </div>
 </div>
+
+
+<script>
+    var ctx = document.getElementById('barChart').getContext('2d');
+    var barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ labels| safe}},
+    datasets: [{
+        label: 'Number of products sold',
+        data: {{ datasets| safe}},
+        backgroundColor: [
+        'rgba(128, 0, 0, 1)',
+        'rgba(255, 255, 155, 1)',
+        'rgba(0, 206, 86, 1)',
+        'rgba(0, 0, 155, 1)',
+        'rgba(128, 0, 0, 1)',
+        'rgba(128, 0, 0, 1)',
+    ],
+        borderColor: [
+        'rgba(0, 0, 0, 1)',
+        'rgba(0, 0, 0, 1)',
+        'rgba(0, 0, 0, 1)',
+        'rgba(0, 0, 0, 1)',
+        'rgba(0, 0, 0, 1)',
+    ],
+        borderWidth: 2,
+        lineTension: 0
+        }]
+    },
+    options: {
+        legend: {
+            labels: {
+                fontSize: 24,
+                    fontColor: 'white',
+            }
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    fontSize: 16,
+                    fontColor: 'white',
+                    beginAtZero: true
+                }
+                ,
+                gridLines: {
+                    color: "white"
+                }
+            }],
+                xAxes: [{
+                    ticks: {
+                        fontSize: 16,
+                        fontColor: 'white',
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        color: "white"
+                    }
+                }]
+        }
+    }
+});
+</script>
 {% endblock content %}

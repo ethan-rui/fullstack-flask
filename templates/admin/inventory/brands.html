@@ -1,53 +1,134 @@
 {% extends 'layouts/admin_base.html' %}
 {% block title %}Brands{% endblock title %}
 {% block content %}
-<div class="container">
-    <div class="row mt-4">
-        <div class="col-lg-3">
-            <h3>Brands</h3>
-            {% from '_formhelpers.html' import render_field %}
-            <form action="" method="POST">
-                {{ form.csrf_token}}
-                {{ render_field(form.name, class="form-control", placeholder="Name of Brand") }}
-                {{ render_field(form.desc, class="form-control", placeholder="Short description of Brand", rows=4) }}
-                <input value="Add Brand" type="submit" name="brand" class="btn btn-primary mt-2">
-            </form>
-        </div>
-        <div class="col-lg-9">
-            <h5>Brands</h5>
-            <table class="table table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Description</th>
-                        <!-- <th scope="col">Stock</th> -->
-                        <th scope="col" colspan="2">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for brand in entries %}
-                    <tr>
-                        {% if brand.uuid == "0" %}
-                        <th scope="row"></th>
-                        {% else %}
-                        <td scope="row">{{loop.index-1}}</td>
-                        {% endif %}
-                        <td>{{brand.name}}</td>
-                        <td>{{brand.desc}}</td>
-                        {% if brand.uuid == "0" %}
-                        <td></td>
-                        <td></td>
-                        {% else %}
-                        {% from '_macros.html' import delete, edit %}
-                        {{ edit(item=brand, site="Brand") }}
-                        {{ delete(item=brand, table="brands_categories") }}
-                        {% endif %}
-                        {% endfor %}
-                    </tr>
-                </tbody>
-            </table>
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css">
+<script src="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js"></script>
+
+
+<div class="container-fluid p-4">
+    <h3><b>Brands Management</b></h3>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Add Brand
+    </button>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Brand</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% from '_formhelpers.html' import render_field %}
+                    <form action="" method="POST">
+                        {{ form.csrf_token}}
+                        {{ render_field(form.name, class="form-control", placeholder="Name of Brand") }}
+                        {{ render_field(form.desc, class="form-control", placeholder="Short description of brand",
+                        rows=4) }}
+                        <input value="Add Brand" type="submit" name="brand" class="btn btn-success">
+                        <button type="button" class="btn btn-secondary float-right" data-dismiss="modal">Close</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
+
+
+    <table data-toggle="table" data-show-toggle="true" data-search="true" data-search-align="left" class="table-striped"
+        data-url="/admin/inventory/brands/data_table" data-show-columns="true" data-show-columns-toggle-all="true"
+        data-show-refresh="true" data-pagination="true" data-page-list="[10, 25, 50, 100, all]" data-toggle="table"
+        data-id-field="uuid">
+        <thead>
+            <tr>
+                <th data-field="uuid">UUID</th>
+                <th data-field="name" data-sortable="true">Name</th>
+                <th data-field="desc" data-sortable="true">Description</th>
+                <th data-field="date_created" data-sortable="true">Date Created</th>
+                <th data-field="date_updated" data-sortable="true">Date Updated</th>
+                <th data-formatter="render_edit">Edit</th>
+                <th data-formatter="render_delete">Delete</th>
+            </tr>
+        </thead>
+    </table>
 </div>
+
+
+<script>
+    function render_edit(index, row) {
+        if (!(row.uuid in ["1", "0"])) {
+            return `<div style="max-width: fit-content;">
+                <button type="button" class="btn btn-transparent btn-sm" data-toggle="modal" data-target="#update_${row.uuid}">
+                    <i class="fas fa-edit" style="color: orange;"></i>
+                </button>
+                <div class="modal fade" id="update_${row.uuid}" tabindex="-1" role="dialog"
+                    aria-labelledby="update_Label_${row.uuid}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="update_Label_${row.uuid}">${row.name}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/admin/inventory/update/brands_categories/${row.uuid}" method="POST">
+                                    <label for="name">{{ site }} Name</label>
+                                    <input type="text" name="name" class="form-control" value="${row.name}"
+                                        placeholder="Existing Name: ${row.name}">
+                                        <label for="desc">{{ site }} Description</label>
+                                        <textarea name="desc" class="form-control mb-2" rows=3
+                            placeholder="Existing Description: ${row.desc}">${row.desc}</textarea>
+                                    <input type="submit" class="btn btn-success" name="desc" value="Update" id="">
+                                        <button type="button" class="btn btn-secondary float-right" data-dismiss="modal">Close</button>
+                        </form>
+                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`}
+        else {
+            return
+        }
+    }
+
+    function render_delete(index, row) {
+        if (!(row.uuid in ["1", "0"])) {
+            return `<div style="max-width: fit-content;">
+                    <button type="button" class="btn btn-transparent btn-sm" data-toggle="modal" data-target="#delete_${row.uuid}">
+                        <i class="fas fa-trash" style="color: red;"></i>
+                    </button>
+                    <div class="modal fade" id="delete_${row.uuid}" tabindex="-1" role="dialog"
+                        aria-labelledby="delete_Label_${row.uuid}" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="delete_Label_${row.uuid}">${row.name}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <span>Are you sure you want to delete item: <b>${row.name}</b>?</span>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                    <form action="/admin/delete/{{table}}/${row.uuid}" method="POST">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+        } else {
+            return
+        }
+    }
+
+</script>
+
+
 {% endblock content %}

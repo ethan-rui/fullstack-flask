@@ -34,6 +34,13 @@ class Entry:
     def update_timestamp(self):
         self.__date_updated = datetime.now(tz=tz)
 
+    def to_json(self) -> dict:
+        return {
+            "uuid": self.__uuid,
+            "date_created": self.__date_created.isoformat(),
+            "date_updated": self.__date_updated.isoformat(),
+        }
+
 
 class Database:
     def __init__(self, label: str = ""):

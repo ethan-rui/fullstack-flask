@@ -64,6 +64,9 @@ class Brand(Entry):
         self.link = link
         self.role = "brand"
 
+    def to_json(self) -> dict:
+        return {**(super().to_json()), "name": self.name, "desc": self.desc}
+
 
 class Category(Entry):
     def __init__(
