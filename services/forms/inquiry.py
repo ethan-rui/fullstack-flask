@@ -13,3 +13,6 @@ class InquiryForm(Form):
     )
     subject = StringField("Subject", [validators.DataRequired()])
     content = TextAreaField("Description", [validators.DataRequired()])
+
+class ReplyForm(Form):
+    reply = StringField("Reply", [validators.DataRequired()])

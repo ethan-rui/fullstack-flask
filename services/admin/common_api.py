@@ -38,6 +38,7 @@ def api_delete(table, uid):
             "products": del_products,
             "brands_categories": set_defaults,
             "users": print,
+            "inquiries": print,
         }
 
         if table not in function_delete.keys():
@@ -64,7 +65,11 @@ def api_delete(table, uid):
             """
             db.delete(uid)
             db.close()
-        return redirect(request.referrer)
+        if table == "inquiries":
+            return redirect(url_for(f"admin_users.page_table_inquiries"))
+            # For deletion of entries directly in the individual inquiry page
+        else:
+            return redirect(request.referrer)
 
 
 def authorizer(user):

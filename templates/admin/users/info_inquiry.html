@@ -3,7 +3,7 @@
 User Inquiry 
 {% endblock title %}
 {% block content %}
-<div class="container"></div>
+<div class="container col-lg-10">
     <h1>Individual Inquiry</h1>
     <br>
     <table class="table table-striped">
@@ -11,6 +11,10 @@ User Inquiry
             <tr>
                 <td><b>Name</b></td>
                 <td><b>{{inquiries.sender_name}}</b></td>
+            </tr>
+            <tr>
+                <td>UUID No.</td>
+                <td>{{inquiries.uuid}}</td>
             </tr>
             <tr>
                 <td>Email</td>
@@ -28,8 +32,27 @@ User Inquiry
     </table>
     <br>
     <h2 class="mt-2"> Actions </h2>
-    <a href="{{url_for('admin_users.page_table_inquiries')}}" class="btn btn-sm btn-info">Return to Previous Page</a>
+    <a href="{{url_for('admin_users.page_table_inquiries')}}" class="btn btn-sm btn-primary">Return to Previous Page</a>
     {% from '_macros.html' import delete %}
     {{ delete(item=inquiries, table='inquiries') }}
+    <a id="reply" class="btn btn-sm btn-info">Reply</a>
+    <div id="reply-div" class="card bg-secondary shadow mt-3">
+        <div class="card-header border-0 ">
+            <h5>Reply back to : {{inquiries.sender_name}}</h5>
+            {% from '_formhelpers.html' import render_field %}
+            <form method="POST" enctype="multipart/form-data">
+                {{ render_field(form.reply, class="form-control", placeholder="Reply")}}
+                <input type="submit" value="Submit" class="btn btn-info mt-2">
+            </form>
+        </div>
+    </div>
+
 </div>
+    <script>
+        document.getElementById("reply-div").style.display = "none"
+        function OpenReply() {
+            document.getElementById("reply-div").style.display = "block";
+        }
+        document.getElementById('reply').addEventListener('click', OpenReply);
+    </script>
 {% endblock content %}
