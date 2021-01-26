@@ -4,12 +4,36 @@ Dashboard
 {% endblock title %}
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-<div class="container-fluid p-4">
-    <h3>Dashboard Page</h3>
+<div class="container-fluid p-6">
+    <h2>Dashboard Page</h2>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-12 col-lg-6">
+            <div class="col-12 col-lg-3 row-lg-3"  style="border:1px solid #cecece;">
+                <h3>New Orders</h3>
+            </div>
+            <div class="col-12 col-lg-3 row-lg-3"  style="border:1px solid #cecece;">
+                <h3>Total sales</h3>
+            </div>
+            <div class="col-12 col-lg-3 row-lg-3"  style="border:1px solid #cecece;">
+                <h3>Total expenses</h3>
+            </div>
+            <div class="col-12 col-lg-3 row-lg-3"  style="border:1px solid #cecece;">
+                <h3>New Users</h3>
+            </div>
+            <div class="col-12 col-lg-6"  style="border:1px solid #cecece;">
                 <canvas id="barChart"></canvas>
+            </div>
+            <div class="col-12 col-lg-6"  style="border:1px solid #cecece;">
+                <h3>Top selling products</h3>
+            </div>
+            <div class="col-12 col-lg-4 row-lg-4"  style="border:1px solid #cecece;">
+                <h3>Recent Orders</h3>
+            </div>
+            <div class="col-12 col-lg-4 row-lg-4"  style="border:1px solid #cecece;">
+                <h3>Recently Added Products</h3>
+            </div>
+            <div class="col-12 col-lg-4 row-lg-4"  style="border:1px solid #cecece;">
+                <h3>Recent Buyers</h3>
             </div>
         </div>
     </div>
@@ -34,6 +58,7 @@ Dashboard
         'rgba(128, 0, 0, 1)',
     ],
         borderColor: [
+        'rgba(0, 0, 0, 1)',
         'rgba(0, 0, 0, 1)',
         'rgba(0, 0, 0, 1)',
         'rgba(0, 0, 0, 1)',
