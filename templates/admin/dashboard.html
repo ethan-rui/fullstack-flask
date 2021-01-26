@@ -18,10 +18,10 @@ Dashboard
                 <h3>Total expenses</h3>
             </div>
             <div class="col-12 col-lg-3 row-lg-3"  style="border:1px solid #cecece;">
-                <h3>New Users</h3>
+                <h3>New Users</h3><canvas id="newUserChart"></canvas>
             </div>
             <div class="col-12 col-lg-6"  style="border:1px solid #cecece;">
-                <canvas id="barChart"></canvas>
+                <h3>Overall Best Sellers</h3><canvas id="barChart"></canvas>
             </div>
             <div class="col-12 col-lg-6"  style="border:1px solid #cecece;">
                 <h3>Top selling products</h3>
@@ -41,6 +41,69 @@ Dashboard
 
 
 <script>
+    // New Users
+    var ctx = document.getElementById('newUserChart').getContext('2d');
+    var barChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+    datasets: [{
+        label: 'New User Count',
+        data: [],
+        backgroundColor: [
+        'rgba(128, 0, 0, 1)',
+        'rgba(255, 255, 155, 1)',
+        'rgba(0, 206, 86, 1)',
+        'rgba(0, 0, 155, 1)',
+        'rgba(128, 0, 0, 1)',
+        'rgba(128, 0, 0, 1)',
+    ],
+        borderColor: [
+        'rgba(0, 0, 0, 1)',
+        'rgba(0, 0, 0, 1)',
+        'rgba(0, 0, 0, 1)',
+        'rgba(0, 0, 0, 1)',
+        'rgba(0, 0, 0, 1)',
+        'rgba(0, 0, 0, 1)',
+    ],
+        borderWidth: 2,
+        lineTension: 0
+        }]
+    },
+    options: {
+        legend: {
+            labels: {
+                fontSize: 24,
+                    fontColor: 'white',
+            }
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    fontSize: 16,
+                    fontColor: 'white',
+                    beginAtZero: true
+                }
+                ,
+                gridLines: {
+                    color: "white"
+                }
+            }],
+                xAxes: [{
+                    ticks: {
+                        fontSize: 16,
+                        fontColor: 'white',
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        color: "white"
+                    }
+                }]
+        }
+    }
+});
+
+// Overall Best Sellers Chart
     var ctx = document.getElementById('barChart').getContext('2d');
     var barChart = new Chart(ctx, {
         type: 'bar',
