@@ -26,7 +26,7 @@ class Product(Entry):
         self.desc = desc
         self.discount = discount
         self.role = "products"
-        self.__images = {1: None, 2: None, 3: None}
+        self.__images = {0: None, 1: None, 2: None}
 
     @property
     def images(self) -> dict:
@@ -48,7 +48,7 @@ class Product(Entry):
             "name": self.name,
             "brand": self.brand,
             "cat": self.cat,
-            "image": self.images[1],
+            "image": self.images[0],
         }
 
 

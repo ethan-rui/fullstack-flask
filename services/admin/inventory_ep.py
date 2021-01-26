@@ -9,7 +9,6 @@ from flask import (
     wrappers,
 )
 from flask_login.utils import login_required, current_user
-from flask_uploads import UploadSet, IMAGES
 from data.products import Product, TableProduct, Brand, Category, TableBC
 from data import Database
 from ..forms.inventory import AddProduct, AddBrand, AddCategory, UpdateProduct
@@ -18,7 +17,6 @@ from PIL import Image
 import json
 
 endpoint = Blueprint("admin_inventory", __name__)
-photos = UploadSet("photos", IMAGES)
 basedir = os.getcwd()
 
 
@@ -41,8 +39,8 @@ def page_update_bc(uid):
     finally:
         db_bc.close()
 
-    db_products = TableProduct()
     """param to query to database"""
+    db_products = TableProduct()
     affliated_products = db_products.query({"brand": uid})
     db_products.close()
     len_affliated_products = len(affliated_products)
@@ -54,7 +52,7 @@ def page_update_bc(uid):
     )
 
 
-@endpoint.route("api/update/brands_categories/<uid>", methods=["POST"])
+@endpoint.route("inventory/update/brands_categories/<uid>", methods=["GET", "POST"])
 def api_update_bc(uid):
     if request.method == "POST":
         db = TableBC()
@@ -237,19 +235,28 @@ def page_update_products(uid):
             2: request.files.get("image_2"),
         }
 
+        """
+        checks if form field is blank
+        replaces original if isnt
+        """
         for key, value in attributes.items():
             if check_valid(value):
                 setattr(target, key, value)
 
-        photo_path = f"{basedir}/static/media/img_products/"
-        for key, value in images.items():
-            if value.filename.strip(" ") != "":
-                [
-                    os.remove(f"{photo_path}/{x}")
-                    for x in os.listdir(photo_path)
-                    if x.startswith(f"{target.uuid}_{key}")
-                ]
-                target.images = {key: value}
+        """
+        checks if images field is blank
+        replaces original if isnt
+        """
+        for x in images:
+            if images[x].filename.replace(" ", "") != "":
+                image_product = Image.open(images[x])
+                image_product = image_product.resize((600, 600))
+                image_product.convert("RGB")
+                image_product.save(
+                    f"{basedir}/static/media/img_products/{target.uuid}_{x}.png"
+                )
+                target.images = {x: f"img_products/{target.uuid}_{x}.png"}
+                print("Replaced Completed")
 
         db.insert(target)
         db.close()
