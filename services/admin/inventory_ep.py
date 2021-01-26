@@ -31,7 +31,7 @@ def check_perms():
 
 
 @endpoint.route("/inventory/update/brands_categories/<uid>", methods=["POST"])
-def page_update_bc(uid):
+def api_update_bc(uid):
     if request.method == "POST":
         db = TableBC()
         target = db.retrieve(uid)
@@ -51,14 +51,12 @@ def page_table_categories():
         db = TableBC()
         db.insert(cat)
         db.close()
-    db = TableBC()
-    entries = [x for x in db.objects() if x.role == "cat"]
-    db.close()
     return render_template(
         "admin/inventory/categories.html",
         form=form,
-        entries=entries,
         page_title="Categories Management",
+        table="brands_categories",
+        site="Category",
     )
 
 
@@ -84,9 +82,19 @@ def page_table_brands():
 def api_table_brands():
     db = TableBC()
     entries = [i.to_json() for i in db.objects() if i.role == "brand"]
-    print(entries)
     db.close()
     print("-- Retrieving entries for brands. --")
+    return wrappers.Response(
+        status=200, content_type="application/json", response=json.dumps(entries)
+    )
+
+
+@endpoint.route("/inventory/categories/data_table")
+def api_table_categories():
+    db = TableBC()
+    entries = [i.to_json() for i in db.objects() if i.role == "cat"]
+    db.close()
+    print("-- Retrieving entries for categories --")
     return wrappers.Response(
         status=200, content_type="application/json", response=json.dumps(entries)
     )

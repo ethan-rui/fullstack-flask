@@ -37,10 +37,10 @@
     </div>
 
 
-    <table data-toggle="table" data-show-toggle="true" data-search="true" data-search-align="left" class="table-striped"
-        data-url="/admin/inventory/brands/data_table" data-show-columns="true" data-show-columns-toggle-all="true"
-        data-show-refresh="true" data-pagination="true" data-page-list="[10, 25, 50, 100, all]" data-toggle="table"
-        data-id-field="uuid">
+    <table id="table" data-toggle="table" data-show-toggle="true" data-search="true" data-search-align="left"
+        class="table-striped" data-url="/admin/inventory/brands/data_table" data-show-columns="true"
+        data-show-columns-toggle-all="true" data-show-refresh="true" data-pagination="true"
+        data-page-list="[10, 25, 50, 100, all]" data-toggle="table" data-id-field="uuid">
         <thead>
             <tr>
                 <th data-field="uuid">UUID</th>
@@ -115,9 +115,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                    <form action="/admin/delete/{{table}}/${row.uuid}" method="POST">
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
+                                    <button onclick="fetch_delete('${row.uuid}')" data-dismiss="modal" class="btn btn-danger">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -126,6 +124,23 @@
         } else {
             return
         }
+    }
+
+    function fetch_delete(uuid) {
+        $("#table").bootstrapTable("refresh")
+        console.log(uuid)
+        fetch(`${window.location.origin}/admin/delete/brands_categories/${uuid}`, {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify(uuid),
+            cache: "no-cache",
+            headers: new Headers({
+                "content-type": "application/json"
+            })
+        })
+        $("#table").bootstrapTable("refresh")
+        $('.modal-backdrop').removeClass('modal-backdrop');
+        console.log("completed")
     }
 
 </script>
