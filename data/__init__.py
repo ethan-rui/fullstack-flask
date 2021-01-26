@@ -88,8 +88,8 @@ class Database:
     def clear_self(self):
         self.table = {}
 
-    def retrieve(self, value: str) -> Entry:
-        return self.table[value]
+    def retrieve(self, uid: str) -> Entry:
+        return self.table[uid]
 
     def clear_all(self):
         self.__db.clear()
@@ -108,3 +108,13 @@ class Database:
     def close(self):
         self.__db.sync()
         self.__db.close()
+
+    def query(self, query: dict = {"": ""}) -> list:
+        try:
+            return [
+                x
+                for x in self.objects()
+                if getattr(x, list(query.keys())[0]) == list(query.values())[0]
+            ]
+        except Exception as e:
+            print(e)

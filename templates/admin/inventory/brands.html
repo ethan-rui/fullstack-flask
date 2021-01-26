@@ -48,7 +48,7 @@
                 <th data-field="desc" data-sortable="true">Description</th>
                 <th data-field="date_created" data-sortable="true">Date Created</th>
                 <th data-field="date_updated" data-sortable="true">Date Updated</th>
-                <th data-formatter="render_edit">Edit</th>
+                <th data-formatter="render_edit">View</th>
                 <th data-formatter="render_delete">Delete</th>
             </tr>
         </thead>
@@ -60,35 +60,10 @@
     function render_edit(index, row) {
         if (!(row.uuid in ["1", "0"])) {
             return `<div style="max-width: fit-content;">
-                <button type="button" class="btn btn-transparent btn-sm" data-toggle="modal" data-target="#update_${row.uuid}">
+                <a href="/admin/inventory/update/brands_categories/${row.uuid}" type="button" class="btn btn-transparent btn-sm">
                     <i class="fas fa-edit" style="color: orange;"></i>
-                </button>
-                <div class="modal fade" id="update_${row.uuid}" tabindex="-1" role="dialog"
-                    aria-labelledby="update_Label_${row.uuid}" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="update_Label_${row.uuid}">${row.name}</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="/admin/inventory/update/brands_categories/${row.uuid}" method="POST">
-                                    <label for="name">{{ site }} Name</label>
-                                    <input type="text" name="name" class="form-control" value="${row.name}"
-                                        placeholder="Existing Name: ${row.name}">
-                                        <label for="desc">{{ site }} Description</label>
-                                        <textarea name="desc" class="form-control mb-2" rows=3
-                            placeholder="Existing Description: ${row.desc}">${row.desc}</textarea>
-                                    <input type="submit" class="btn btn-success" name="desc" value="Update" id="">
-                                        <button type="button" class="btn btn-secondary float-right" data-dismiss="modal">Close</button>
-                        </form>
-                    </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`}
+                </a>
+            </div>`}
         else {
             return
         }

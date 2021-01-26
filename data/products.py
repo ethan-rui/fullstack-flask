@@ -42,6 +42,15 @@ class Product(Entry):
         key, value = list(param.items())[0]
         self.__images[key] = value
 
+    def to_json(self) -> dict:
+        return {
+            **(super().to_json()),
+            "name": self.name,
+            "brand": self.brand,
+            "cat": self.cat,
+            "image": self.images[1],
+        }
+
 
 class TableProduct(Database):
     def __init__(self):

@@ -30,7 +30,31 @@ def check_perms():
     return authorizer(current_user)
 
 
-@endpoint.route("/inventory/update/brands_categories/<uid>", methods=["POST"])
+@endpoint.route("/inventory/update/brands_categories/<uid>")
+def page_update_bc(uid):
+    db_bc = TableBC()
+    try:
+        target = db_bc.retrieve(uid)
+    except:
+        flash("UUID does not exists in database.")
+        return redirect(url_for("admin_inventory.page_table_brands"))
+    finally:
+        db_bc.close()
+
+    db_products = TableProduct()
+    """param to query to database"""
+    affliated_products = db_products.query({"brand": uid})
+    db_products.close()
+    len_affliated_products = len(affliated_products)
+
+    return render_template(
+        "admin/inventory/update/brands.html",
+        target=target,
+        len_affliated_products=len_affliated_products,
+    )
+
+
+@endpoint.route("api/update/brands_categories/<uid>", methods=["POST"])
 def api_update_bc(uid):
     if request.method == "POST":
         db = TableBC()
