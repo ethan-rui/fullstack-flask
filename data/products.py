@@ -82,6 +82,9 @@ class Category(Entry):
         self.link = link
         self.role = "cat"
 
+    def to_json(self) -> dict:
+        return {**(super().to_json()), "name": self.name, "desc": self.desc}
+
 
 class TableBC(Database):
     def __init__(self):
