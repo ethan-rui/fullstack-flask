@@ -36,7 +36,7 @@ def page_table_users():
     )
 
 
-@endpoint.route("/user_pages/inquiries", methods=["GET", "POST"])
+@endpoint.route("/inquiries", methods=["GET", "POST"])
 def page_table_inquiries():
     db = TableInquiry()
     inquiries = db.objects()
@@ -44,7 +44,7 @@ def page_table_inquiries():
     return render_template("admin/users/inquiries.html", inquiries=inquiries)
 
 
-@endpoint.route("/user_pages/inquiry/<uid>", methods=["GET", "POST"])
+@endpoint.route("/inquiry/<uid>", methods=["GET", "POST"])
 def page_info_inquiry(uid):
     db = TableInquiry()
     inquiries = db.retrieve(uid)
@@ -84,7 +84,8 @@ def page_info_inquiry(uid):
         "admin/users/info_inquiry.html", inquiries=inquiries, form=form
     )
 
-@endpoint.route("/user_pages/inquiry/update/<uid>", methods=["GET", "POST"])
+
+@endpoint.route("/inquiry/update/<uid>", methods=["GET", "POST"])
 def page_status_update(uid):
     def check_valid(attr):
         if attr is None:
@@ -103,10 +104,10 @@ def page_status_update(uid):
 
     if request.method == "GET":
         dbtwo = TableInquiry()
-        attribute = {"status":False}
+        attribute = {"status": False}
         for key, value in attribute.items():
             if check_valid(value):
                 setattr(target, key, value)
         dbtwo.insert(target)
         dbtwo.close
-    return redirect(url_for(f'admin_users.page_table_inquiries'))
+    return redirect(url_for(f"admin_users.page_table_inquiries"))

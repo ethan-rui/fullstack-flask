@@ -38,11 +38,11 @@ Inquiries
                     {% else %}
                     <td>Open</td>
                     {% endif %}
-                    <td><a href="inquiry/{{entry.uuid}}" class="btn btn-sm btn-info">View More</a>
+                    <td><a href="/admin/inquiry/{{entry.uuid}}" class="btn btn-sm btn-info">View More</a>
                     </td>
                     <td>
-                    {% from '_macros.html' import delete %}
-                    {{ delete(item=entry, table='inquiries') }}</td>
+                        {% from '_macros.html' import delete %}
+                        {{ delete(item=entry, table='inquiries') }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
