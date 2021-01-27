@@ -9,10 +9,10 @@ Dashboard
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 col-lg-3 row-lg-3"  style="border:1px solid #cecece;">
-                <h3>New Orders</h3>
+                <h3>New Orders</h3><canvas id="newOrderChart"></canvas>
             </div>
             <div class="col-12 col-lg-3 row-lg-3"  style="border:1px solid #cecece;">
-                <h3>Total sales</h3>
+                <h3>Total sales</h3><canvas id="totalSalesChart"></canvas>
             </div>
             <div class="col-12 col-lg-3 row-lg-3"  style="border:1px solid #cecece;">
                 <h3>Total expenses</h3>
@@ -41,32 +41,23 @@ Dashboard
 
 
 <script>
-    // New Users
-    var ctx = document.getElementById('newUserChart').getContext('2d');
+    // New Orders
+    var ctx = document.getElementById('newOrderChart').getContext('2d');
     var barChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: [],
-    datasets: [{
-        label: 'New User Count',
-        data: [],
-        backgroundColor: [
-        'rgba(128, 0, 0, 1)',
-        'rgba(255, 255, 155, 1)',
-        'rgba(0, 206, 86, 1)',
-        'rgba(0, 0, 155, 1)',
-        'rgba(128, 0, 0, 1)',
-        'rgba(128, 0, 0, 1)',
-    ],
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        datasets: [{
+            fill: false,
+            label: 'Order Count (Weekly)',
+            data: [1, 0, 0, 2, 0, 5, 21],
+            backgroundColor: [
+            'rgba(255, 0, 34, 1)',
+            ],
         borderColor: [
-        'rgba(0, 0, 0, 1)',
-        'rgba(0, 0, 0, 1)',
-        'rgba(0, 0, 0, 1)',
-        'rgba(0, 0, 0, 1)',
-        'rgba(0, 0, 0, 1)',
-        'rgba(0, 0, 0, 1)',
-    ],
-        borderWidth: 2,
+            'rgba(255, 0, 34, 1)',
+            ],
+        borderWidth: 1,
         lineTension: 0
         }]
     },
@@ -89,16 +80,128 @@ Dashboard
                     color: "white"
                 }
             }],
-                xAxes: [{
-                    ticks: {
-                        fontSize: 16,
-                        fontColor: 'white',
-                        beginAtZero: true
-                    },
-                    gridLines: {
-                        color: "white"
-                    }
-                }]
+            xAxes: [{
+                ticks: {
+                    fontSize: 16,
+                    fontColor: 'white',
+                    beginAtZero: true
+                },
+                gridLines: {
+                    color: "white"
+                }
+            }],                   
+        }
+    }
+});
+
+// New Orders
+var ctx = document.getElementById('totalSalesChart').getContext('2d');
+var barChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    datasets: [{
+        fill: false,
+        label: 'Revenue from Sales (Weekly)',
+        data: [89, 0, 0, 351, 0, 1342, 2542],
+        backgroundColor: [
+        'rgba(255, 0, 34, 1)',
+        'rgba(255, 0, 34, 1)',
+        'rgba(255, 0, 34, 1)',
+        'rgba(255, 0, 34, 1)',
+        'rgba(255, 0, 34, 1)',
+        'rgba(255, 0, 34, 1)',
+        'rgba(255, 0, 34, 1)',
+        ],
+    borderColor: [
+        'rgba(255, 0, 34, 1)',
+        ],
+    borderWidth: 1,
+    lineTension: 0
+    }]
+},
+options: {
+    legend: {
+        labels: {
+            fontSize: 24,
+                fontColor: 'white',
+        }
+    },
+    scales: {
+        yAxes: [{
+            ticks: {
+                fontSize: 16,
+                fontColor: 'white',
+                beginAtZero: true
+            }
+            ,
+            gridLines: {
+                color: "white"
+            }
+        }],
+        xAxes: [{
+            ticks: {
+                fontSize: 16,
+                fontColor: 'white',
+                beginAtZero: true
+            },
+            gridLines: {
+                color: "white"
+            }
+        }],                   
+    }
+}
+});
+
+// New Users
+    var ctx = document.getElementById('newUserChart').getContext('2d');
+    var barChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        datasets: [{
+            fill: false,
+            label: 'User Count (Weekly)',
+            data: [3, 1, 2, 6, 3, 2, 9],
+            backgroundColor: [
+            'rgba(255, 0, 34, 1)',
+            ],
+        borderColor: [
+            'rgba(255, 0, 34, 1)',
+            ],
+        borderWidth: 1,
+        lineTension: 0
+        }]
+    },
+    options: {
+        legend: {
+            labels: {
+                fontSize: 24,
+                    fontColor: 'white',
+            }
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    fontSize: 16,
+                    fontColor: 'white',
+                    beginAtZero: true
+                }
+                ,
+                gridLines: {
+                    color: "white"
+                }
+            }],
+            xAxes: [{
+                ticks: {
+                    fontSize: 16,
+                    fontColor: 'white',
+                    beginAtZero: true
+                },
+                gridLines: {
+                    color: "white"
+                }
+            }],                   
         }
     }
 });
@@ -108,26 +211,26 @@ Dashboard
     var barChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: {{ labels| safe}},
-    datasets: [{
+        labels: {{ labels| safe}},
+        datasets: [{
         label: 'Number of products sold',
         data: {{ datasets| safe}},
         backgroundColor: [
-        'rgba(128, 0, 0, 1)',
-        'rgba(255, 255, 155, 1)',
-        'rgba(0, 206, 86, 1)',
-        'rgba(0, 0, 155, 1)',
-        'rgba(128, 0, 0, 1)',
-        'rgba(128, 0, 0, 1)',
-    ],
+            'rgba(128, 0, 0, 1)',
+            'rgba(255, 255, 155, 1)',
+            'rgba(0, 206, 86, 1)',
+            'rgba(0, 0, 155, 1)',
+            'rgba(128, 0, 0, 1)',
+            'rgba(128, 0, 0, 1)',
+        ],
         borderColor: [
-        'rgba(0, 0, 0, 1)',
-        'rgba(0, 0, 0, 1)',
-        'rgba(0, 0, 0, 1)',
-        'rgba(0, 0, 0, 1)',
-        'rgba(0, 0, 0, 1)',
-        'rgba(0, 0, 0, 1)',
-    ],
+            'rgba(0, 0, 0, 1)',
+            'rgba(0, 0, 0, 1)',
+            'rgba(0, 0, 0, 1)',
+            'rgba(0, 0, 0, 1)',
+            'rgba(0, 0, 0, 1)',
+            'rgba(0, 0, 0, 1)',
+        ],
         borderWidth: 2,
         lineTension: 0
         }]
