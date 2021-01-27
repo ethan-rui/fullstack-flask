@@ -31,10 +31,12 @@ Products
                                 <h5 class="">${{product.centprice/100}}</h5>
                             </div>
                         </div>
-                        <div class="buy d-flex justify-content-center row">
-                            <button class="btn btn-success btn-sm col-10"><i
-                                    class="fas fa-shopping-cart mr-2"></i>Add</button>
-                        </div>
+                            <form class="buy d-flex justify-content-center row" action="{{url_for('auth.add_cart')}}" method="POST">
+                                <input type="hidden" name="product_id" value="{{product.uuid}}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button class="btn btn-success btn-sm col-10"><i
+                                        class="fas fa-shopping-cart mr-2"></i>Add</button>
+                            </form>
                     </div>
                 </div>
             </div>

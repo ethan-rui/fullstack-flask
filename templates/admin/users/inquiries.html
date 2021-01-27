@@ -38,7 +38,7 @@ Inquiries
                     {% else %}
                     <td>Open</td>
                     {% endif %}
-                    <td><a href="{{url_for('admin_users.page_info_inquiry',uid=entry.uuid)}}" class="btn btn-sm btn-info">View More</a>
+                    <td><a href="inquiry/{{entry.uuid}}" class="btn btn-sm btn-info">View More</a>
                     </td>
                     <td>
                     {% from '_macros.html' import delete %}

@@ -38,9 +38,11 @@ User Management
                     {% else %}
                     <td><a class="btn btn-sm btn-info">Edit</a>
                     </td>
+                    <td>
                     {% from '_macros.html' import delete %}
                     {{ delete(item=entry, table='users') }}
                     {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

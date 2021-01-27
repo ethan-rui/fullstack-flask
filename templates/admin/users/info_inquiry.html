@@ -29,25 +29,29 @@ User Inquiry
                 <td>{{inquiries.content}}</td>
             </tr>
             <tr>
+                <td>Date Submitted</td>
+                <td>{{inquiries.date_created.strftime("%d/%m/%Y %H:%M:%S")}}</td>
+            </tr>
+            <tr>
                 <td>Reply Status</td>
                 {% if inquiries.status==False %}
-                <td>Closed</td>
+                <td><b>Closed</b></td>
                 {% else %}
-                <td>Open</td>
+                <td><b>Open</b></td>
                 {% endif %}
             </tr>
         </tbody>
     </table>
     <br>
     <h2 class="mt-2"> Actions </h2>
-    <a href="{{url_for('admin_users.page_table_inquiries')}}" class="btn btn-sm btn-primary">Return to Previous Page</a>
+    <a href="../inquiries" class="btn btn-sm btn-primary mr-2">Return to Previous Page</a>
     {% from '_macros.html' import delete %}
     {{ delete(item=inquiries, table='inquiries') }}
-    <a href="{{url_for('admin_users.page_status_update',uid=inquiries.uuid)}}" class="btn btn-sm btn-warning">Mark as closed</a>
-    <a id="reply" class="btn btn-sm btn-info">Reply</a>
+    <a href="/admin/user_pages/inquiry/update/{{inquiries.uuid}}" class="btn btn-sm btn-warning ml-2">Mark as closed</a>
+    <a id="reply" class="btn btn-sm btn-info ml-2">Reply</a>
     <div id="reply-div" class="card bg-secondary shadow mt-3">
         <div class="card-header border-0 ">
-            <h5>Reply back to : {{inquiries.sender_name}}</h5>
+            <h5 class="mb-3">Reply back to : {{inquiries.sender_name}}</h5>
             {% from '_formhelpers.html' import render_field %}
             <form method="POST" enctype="multipart/form-data">
                 {{ render_field(form.reply, class="form-control", placeholder="Reply")}}
