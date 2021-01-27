@@ -1,47 +1,100 @@
 {% extends 'layouts/admin_base.html' %}
-{% block title %}
-Inventory
-{% endblock title %}
+{% block title %}Products{% endblock title %}
 {% block content %}
-<div class="container">
-  <p style="font-size:2rem">Products</p>
-  <div class="md-form mt-0 mb-5">
-    <div class="input-group" style="width: 20%;"><i class="fa fa-fw fa-search mt-2"></i><input class="form-control"
-        type="text" placeholder="Search" aria-label="Search"></div>
-  </div>
-  <table class="table table-striped">
-    <thead class="thead-dark">
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css">
+<script src="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js"></script>
+
+
+
+<div class="container-fluid p-4">
+  <h3><b>Products</b></h3>
+  <a class="btn btn-primary" href="/admin/inventory/add/products">Add Product</a>
+
+  <table id="table" data-toggle="table" data-show-toggle="true" data-search="true" data-search-align="left"
+    class="table-striped" data-url="/admin/inventory/products/data_table" data-show-columns="true"
+    data-show-columns-toggle-all="true" data-show-refresh="true" data-pagination="true"
+    data-page-list="[10, 25, 50, 100, all]" data-toggle="table" data-id-field="uuid">
+    <thead>
       <tr>
-        <th scope="col">#</th>
-        <th scope="col">Name</th>
-        <th scope="col">Price</th>
-        <th scope="col">Stock</th>
-        <th scope="col">Discount</th>
-        <th scope="col">Brand</th>
-        <th scope="col">Category</th>
-        <th scope="col">Images</th>
-        <th colspan="2" scope="col">Actions</th>
+        <th data-field="uuid">UUID</th>
+        <th data-formatter="render_image">image</th>
+        <th data-field="name" data-sortable="true">Name</th>
+        <th data-field="stock" data-sortable="true">Stock</th>
+        <th data-field="centprice" data-sortable="true">Price (Cents)</th>
+        <th data-field="centprice" data-sortable="true">Discount (%)</th>
+        <th data-field="centprice_final" data-sortable="true">Price (Cents) After Discount</th>
+        <th data-formatter="render_edit">View</th>
+        <th data-formatter="render_delete">Delete</th>
       </tr>
     </thead>
-    <tbody>
-      {% for entry in products %}
-      <tr>
-        <th scope="row"><b>{{loop.index}}</b></th>
-        <td>{{entry.name}}</td>
-        <td>{{entry.centprice}}</td>
-        <td>{{entry.stock}}</td>
-        <td>{{entry.discount}}%</td>
-        <td>{{bc[entry.brand].name}}</td>
-        <td>{{bc[entry.cat].name}}</td>
-        <td><img width="35" src="{{url_for('static', filename='media/'+entry.images[0])}}" alt="image"></td>
-        <td><a href="{{url_for('admin_inventory.page_update_products', uid=entry.uuid)}}"
-            class="btn btn-sm btn-info">Edit</a>
-        </td>
-        {% from '_macros.html' import delete %}
-        {{ delete(item=entry, table="products") }}
-        {% endfor %}
-      </tr>
-    </tbody>
   </table>
 </div>
+
+<script>
+  function render_delete(index, row) {
+    if (!(row.uuid in ["1", "0"])) {
+      return `<div style="max-width: fit-content;">
+                    <button type="button" class="btn btn-transparent btn-sm" data-toggle="modal" data-target="#delete_${row.uuid}">
+                        <i class="fas fa-trash" style="color: red;"></i>
+                    </button>
+                    <div class="modal fade" id="delete_${row.uuid}" tabindex="-1" role="dialog"
+                        aria-labelledby="delete_Label_${row.uuid}" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="delete_Label_${row.uuid}">${row.name}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <span>Are you sure you want to delete item: <b>${row.name}</b>?</span>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                    <button onclick="fetch_delete('${row.uuid}')" data-dismiss="modal" class="btn btn-danger">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+    } else {
+      return
+    }
+  }
+
+  function render_image(index, row) {
+    return `
+      <img class='img-fluid' style="max-width: 13%;" src='../../../static/media/${row.image}'></img>`
+  }
+
+  function render_edit(index, row) {
+    if (!(row.uuid in ["1", "0"])) {
+      return `<div style="max-width: fit-content;">
+                <a href="/admin/inventory/update/${row.uuid}" type="button" class="btn btn-transparent btn-sm">
+                    <i class="fas fa-edit" style="color: orange;"></i>
+                </a>
+            </div>`}
+    else {
+      return
+    }
+  }
+
+  function fetch_delete(uuid) {
+    $("#table").bootstrapTable("refresh")
+    console.log(uuid)
+    fetch(`${window.location.origin}/admin/delete/products/${uuid}`, {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(uuid),
+      cache: "no-cache",
+      headers: new Headers({
+        "content-type": "application/json"
+      })
+    })
+    $("#table").bootstrapTable("refresh")
+    $('.modal-backdrop').removeClass('modal-backdrop');
+    console.log("completed")
+  }
+</script>
 {% endblock content %}

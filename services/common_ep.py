@@ -59,6 +59,7 @@ def page_inquiry():
             sender_email=form.sender_email.data,
             subject=form.subject.data,
             content=form.content.data,
+            status=True,
         )
         db.insert(inquiry)
         flash("Your inquiry has been submitted!")

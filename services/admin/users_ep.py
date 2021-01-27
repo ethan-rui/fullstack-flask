@@ -48,7 +48,6 @@ def page_table_inquiries():
 def page_info_inquiry(uid):
     db = TableInquiry()
     inquiries = db.retrieve(uid)
-    print(inquiries.sender_name)
     form = ReplyForm(request.form)
     if request.method == "POST" and form.validate():
         print(form.reply.data)
@@ -84,3 +83,30 @@ def page_info_inquiry(uid):
     return render_template(
         "admin/users/info_inquiry.html", inquiries=inquiries, form=form
     )
+
+@endpoint.route("/user_pages/inquiry/update/<uid>", methods=["GET", "POST"])
+def page_status_update(uid):
+    def check_valid(attr):
+        if attr is None:
+            return False
+        else:
+            try:
+                if attr.strip(" ") == "":
+                    return False
+            except:
+                pass
+        return True
+
+    db = TableInquiry()
+    target = db.retrieve(uid)
+    db.close()
+
+    if request.method == "GET":
+        dbtwo = TableInquiry()
+        attribute = {"status":False}
+        for key, value in attribute.items():
+            if check_valid(value):
+                setattr(target, key, value)
+        dbtwo.insert(target)
+        dbtwo.close
+    return redirect(url_for(f'admin_users.page_table_inquiries'))

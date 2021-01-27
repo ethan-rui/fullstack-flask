@@ -28,6 +28,14 @@ User Inquiry
                 <td>Content</td>
                 <td>{{inquiries.content}}</td>
             </tr>
+            <tr>
+                <td>Reply Status</td>
+                {% if inquiries.status==False %}
+                <td>Closed</td>
+                {% else %}
+                <td>Open</td>
+                {% endif %}
+            </tr>
         </tbody>
     </table>
     <br>
@@ -35,6 +43,7 @@ User Inquiry
     <a href="{{url_for('admin_users.page_table_inquiries')}}" class="btn btn-sm btn-primary">Return to Previous Page</a>
     {% from '_macros.html' import delete %}
     {{ delete(item=inquiries, table='inquiries') }}
+    <a href="{{url_for('admin_users.page_status_update',uid=inquiries.uuid)}}" class="btn btn-sm btn-warning">Mark as closed</a>
     <a id="reply" class="btn btn-sm btn-info">Reply</a>
     <div id="reply-div" class="card bg-secondary shadow mt-3">
         <div class="card-header border-0 ">
