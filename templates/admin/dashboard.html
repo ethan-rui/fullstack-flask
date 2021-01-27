@@ -1,23 +1,23 @@
 {% extends 'layouts/admin_base.html' %}
-{% block title %}
-Dashboard
-{% endblock title %}
+{% block title %}Dashboard{% endblock title %}
 {% block content %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css">
+<script src="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <div class="container-fluid p-6">
     <h2>Dashboard Page</h2>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-12 col-lg-3 row-lg-3"  style="border:1px solid #cecece;">
+            <div class="col-12 col-lg-3 row-lg-6"  style="border:1px solid #cecece;">
                 <h3>New Orders</h3><canvas id="newOrderChart"></canvas>
             </div>
-            <div class="col-12 col-lg-3 row-lg-3"  style="border:1px solid #cecece;">
+            <div class="col-12 col-lg-3 row-lg-6"  style="border:1px solid #cecece;">
                 <h3>Total sales</h3><canvas id="totalSalesChart"></canvas>
             </div>
-            <div class="col-12 col-lg-3 row-lg-3"  style="border:1px solid #cecece;">
+            <div class="col-12 col-lg-3 row-lg-6"  style="border:1px solid #cecece;">
                 <h3>Total expenses</h3>
             </div>
-            <div class="col-12 col-lg-3 row-lg-3"  style="border:1px solid #cecece;">
+            <div class="col-12 col-lg-3 row-lg-6"  style="border:1px solid #cecece;">
                 <h3>New Users</h3><canvas id="newUserChart"></canvas>
             </div>
             <div class="col-12 col-lg-6"  style="border:1px solid #cecece;">
@@ -31,6 +31,18 @@ Dashboard
             </div>
             <div class="col-12 col-lg-4 row-lg-4"  style="border:1px solid #cecece;">
                 <h3>Recently Added Products</h3>
+                <table id="newBrandsTable" data-toggle="table" data-show-toggle="true" data-search="true" data-search-align="left"
+                    class="table-striped" data-url="/admin/inventory/brands/data_table" data-show-columns="true"
+                    data-show-columns-toggle-all="true" data-show-refresh="true" data-pagination="true"
+                    data-page-list="[10]" data-toggle="table" data-id-field="uuid">
+                    <thead>
+                        <tr>
+                            <th data-field="uuid">UUID</th>
+                            <th data-field="name" data-sortable="true">Name</th>
+                            <th data-field="date_created" data-sortable="true">Date Created</th>
+                        </tr>
+                     </thead>
+                </table>
             </div>
             <div class="col-12 col-lg-4 row-lg-4"  style="border:1px solid #cecece;">
                 <h3>Recent Buyers</h3>
