@@ -56,7 +56,15 @@ class User(Entry, UserMixin):
             return False
 
     def set_products_cart(self, key, value=1):
-            self.cart[key] = value
+        self.cart[key] = value
+
+    def to_json(self) -> dict:
+        return {
+            **(super().to_json()),
+            "name": self.username,
+            "email": self.email,
+            "role": self.role,
+        }
 
 
 class TableUser(Database):

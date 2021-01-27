@@ -1,12 +1,25 @@
-from flask import render_template, redirect, request, Blueprint, session, url_for
+from flask import (
+    render_template,
+    redirect,
+    request,
+    Blueprint,
+    url_for,
+    flash,
+    wrappers,
+)
+import json
 from flask_uploads import UploadSet, IMAGES
 import os
 from flask_login import login_required, current_user
-from data.inquiries import TableInquiry, Inquiry
-from data.users import User, TableUser
+from data.inquiries import TableInquiry
+from data.users import TableUser
 from services.forms.inquiry import ReplyForm
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+from .common_api import authorizer
+from ..forms.auth import RegistrationForm
+from data.users import User, TableUser
+from flask_login import current_user
 
 sgkey = "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"
 endpoint = Blueprint("admin_users", __name__)
@@ -17,13 +30,55 @@ basedir = os.getcwd()
 @endpoint.before_request
 @login_required
 def check_perms():
-    from .common_api import authorizer
-
     return authorizer(current_user)
 
 
-@endpoint.route("users")
+@endpoint.route("/users/data_table")
+def api_table_users():
+    db = TableUser()
+    if current_user.get_id() != "0":
+        queried_entries = db.query({"role": "customer"})
+        entries = [i.to_json() for i in queried_entries]
+    else:
+        entries = [i.to_json() for i in db.objects()]
+    db.close()
+    print("-- Retrieving entries for users --")
+    return wrappers.Response(
+        status=200,
+        content_type="application/json",
+        response=json.dumps(entries),
+    )
+
+
+@endpoint.route("/users/add/admin", methods=["POST"])
+def api_add_admin():
+    form = RegistrationForm(request.form)
+    if request.method == "POST" and form.validate():
+        db = TableUser()
+        """unique username & email"""
+        if form.username.data not in [
+            x.username for x in db.objects()
+        ] and form.email.data not in [x.email for x in db.objects()]:
+            user = User(
+                username=form.username.data,
+                password=form.password.data,
+                role="admin",
+                email=form.email.data,
+            )
+            db.insert(user)
+            db.close()
+            # print(form.username.data, form.email.data, form.password.data)
+            flash("User has been added")
+            return redirect(request.referrer)
+        flash("Email or Username already in used.", category="warning")
+        # print("Email or Username already in used.")
+        db.close()
+    return render_template("admin/users/users.html", form=form)
+
+
+@endpoint.route("/users")
 def page_table_users():
+    form = RegistrationForm(request.form)
     db = TableUser()
     entries = db.objects()
     db.close()
@@ -32,7 +87,7 @@ def page_table_users():
     .dict() returns all the key value pairs {uuid:entry}
     """
     return render_template(
-        "admin/users/users.html", users=entries, page_title="User Management"
+        "admin/users/users.html", users=entries, page_title="User Management", form=form
     )
 
 

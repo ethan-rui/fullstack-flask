@@ -3,51 +3,171 @@
 User Management
 {% endblock title %}
 {% block content %}
-<div class="row">
-    <div class="col-lg-1"></div>
-    <div class="col-lg-10">
-        <p style="font-size:2rem">Users</p>
-        <div class="md-form mt-0 mb-5">
-            <div class="input-group" style="width: 200px"><i class="fa fa-fw fa-search mt-2 mr-2"></i><input
-                    class="form-control" type="text" placeholder="Search" aria-label="Search"></div>
+<link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+<div class="container-fluid p-4">
+    <h3><b>Users</b></h3>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Add Admin
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Admin</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% from '_formhelpers.html' import render_field %}
+                    <form action="/admin/users/add/admin" method=POST enctype="multipart/form-data">
+                        <div>
+                            {{ render_field(form.username, class="form-control") }}
+                            {{ render_field(form.email, class="form-control") }}
+                            {{ render_field(form.password, class="form-control") }}
+                            {{ render_field(form.confirm, class="form-control") }}
+                        </div>
+                        <p><input type=submit value="Register" class="btn btn-success mt-2"></p>
+                    </form>
+                </div>
+            </div>
         </div>
-        <table class="table table-striped">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Role</th>
-                    <th colspan="2" scope="col">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for entry in users %}
-                <tr>
-                    {% if entry.role == "admin" %}
-                    <td></td>
-                    {% else %}
-                    <th scope="row">{{loop.index-1}}</th>
-                    {% endif %}
-                    <td>{{entry.username}}</td>
-                    <td>{{entry.email}}</td>
-                    <td>{{entry.role}}</td>
-                    {% if entry.role == "admin" %}
-                    <td></td>
-                    <td></td>
-                    {% else %}
-                    <td><a class="btn btn-sm btn-info">Edit</a>
-                    </td>
-                    <td>
-                    {% from '_macros.html' import delete %}
-                    {{ delete(item=entry, table='users') }}
-                    {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
     </div>
-    <div class="col-lg-1"></div>
+
+    <div id="toolbar">
+        <button id="modal_delete" disabled type="button" class="btn btn-danger" data-toggle="modal"
+            data-target="#modal-delete">
+            <i class="fa fa-trash"></i> Delete
+        </button>
+        <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">The following items have been selected for
+                            deletion.</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table" id="preview_delete">
+                            <thead>
+                                <th>
+                                    UUID
+                                </th>
+                                <th>
+                                    Name
+                                </th>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" id="btn_delete" data_dismiss="modal"
+                            class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <table id="table" data-show-export="true" data-toolbar="#toolbar" data-toggle="table" data-show-toggle="true"
+        data-search="true" data-click-to-select="true" data-search-align="right" class="table-striped"
+        data-url="/admin/users/data_table" data-show-columns="true" data-show-columns-toggle-all="true"
+        data-show-refresh="true" data-pagination="true" data-page-list="[10, 25, 50, 100, all]" data-toggle="table"
+        data-id-field="uuid">
+        <thead>
+            <tr>
+                <th data-checkbox="true" data-formatter="stateFormatter"></th>
+                <th data-field="uuid">UUID</th>
+                <th data-field="role" data-sortable="true">Role</th>
+                <th data-field="name" data-sortable="true">Name</th>
+                <th data-field="email" data-sortable="true">Email</th>
+                <th data-formatter="render_edit">View</th>
+                <th data-formatter="render_delete">Delete</th>
+            </tr>
+        </thead>
+    </table>
 </div>
+
+<script src="{{url_for('static', filename='js/config_table.js')}}"></script>
+<script>
+
+    function render_edit(index, row) {
+        if (!(row.uuid in ["1", "0"])) {
+            return `<div style="max-width: fit-content;">
+                <a href="#" type="button" class="btn btn-transparent btn-sm">
+                    <i class="fas fa-edit" style="color: orange;"></i>
+                </a>
+            </div>`}
+        else {
+            return
+        }
+    }
+
+    function render_delete(index, row) {
+        if (!(row.uuid in ["1", "0"])) {
+                return `<div style="max-width: fit-content;">
+                                <button type="button" class="btn btn-transparent btn-sm" data-toggle="modal" data-target="#delete_${row.uuid}">
+                                    <i class="fas fa-trash" style="color: red;"></i>
+                                </button>
+                                <div class="modal fade" id="delete_${row.uuid}" tabindex="-1" role="dialog"
+                                    aria-labelledby="delete_Label_${row.uuid}" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="delete_Label_${row.uuid}">${row.name}</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <span>Are you sure you want to delete item: <b>${row.name}</b>?</span>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                                <button onclick="delete_entries(['${row.uuid}'])" data-dismiss="modal" class="btn btn-danger">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+        }else{
+            return
+        }
+    }
+
+    function delete_entries(entries) {
+        $table.bootstrapTable('remove', {
+            field: 'uuid',
+            values: entries
+        })
+        console.log(entries)
+        fetch(`${window.location.origin}/admin/delete/users`, {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify(entries),
+            cache: "no-cache",
+            headers: new Headers({
+                "content-type": "application/json"
+            })
+        })
+        $('.modal-backdrop').removeClass('modal-backdrop');
+        console.log("completed")
+    }
+
+</script>
 {% endblock content %}

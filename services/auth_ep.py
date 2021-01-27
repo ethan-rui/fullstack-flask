@@ -37,8 +37,11 @@ def page_register():
 
 @endpoint.route("/login", methods=["GET", "POST"])
 def page_login():
-    if current_user.is_authenticated:
-        return redirect(url_for("auth.page_profile"))
+    try:
+        if current_user.is_authenticated:
+            return redirect(url_for("auth.page_profile"))
+    except Exception as e:
+        print(e)
     form = LoginForm(request.form)
     if request.method == "POST" and form.validate():
         try:
