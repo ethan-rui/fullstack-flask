@@ -15,21 +15,36 @@ from ..forms.inventory import AddProduct, AddBrand, AddCategory, UpdateProduct
 import os
 from PIL import Image
 import json
+from .common_api import authorizer
 
 endpoint = Blueprint("admin_inventory", __name__)
 basedir = os.getcwd()
+
+"""
+functions:
+
+check_perms
+page_update_bc
+api_update_bc
+page_table_brands
+page_table_categories
+api_table_brands
+api_table_categories
+page_products_add
+page_table_products
+page_update_products
+
+"""
 
 
 @endpoint.before_request
 @login_required
 def check_perms():
-    from .common_api import authorizer
-
     return authorizer(current_user)
 
 
-@endpoint.route("/inventory/update/brands_categories/<uid>")
-def page_update_bc(uid):
+@endpoint.route("/inventory/update/brands/<uid>")
+def page_update_brand(uid):
     db_bc = TableBC()
     try:
         target = db_bc.retrieve(uid)
@@ -46,9 +61,35 @@ def page_update_bc(uid):
     len_affliated_products = len(affliated_products)
 
     return render_template(
-        "admin/inventory/update/brands.html",
+        "admin/inventory/update/brands_categories.html",
         target=target,
-        len_affliated_products=len_affliated_products,
+        name="Brands",
+        query_key="brand",
+    )
+
+
+@endpoint.route("/inventory/update/categories/<uid>")
+def page_update_category(uid):
+    db_bc = TableBC()
+    try:
+        target = db_bc.retrieve(uid)
+    except:
+        flash("UUID does not exists in database.")
+        return redirect(url_for("admin_inventory.page_table_brands"))
+    finally:
+        db_bc.close()
+
+    """param to query to database"""
+    db_products = TableProduct()
+    affliated_products = db_products.query({"brand": uid})
+    db_products.close()
+    len_affliated_products = len(affliated_products)
+
+    return render_template(
+        "admin/inventory/update/brands_categories.html",
+        target=target,
+        name="Categories",
+        query_key="cat",
     )
 
 
@@ -117,6 +158,27 @@ def api_table_categories():
     entries = [i.to_json() for i in db.objects() if i.role == "cat"]
     db.close()
     print("-- Retrieving entries for categories --")
+    return wrappers.Response(
+        status=200,
+        content_type="application/json",
+        response=json.dumps(entries),
+    )
+
+
+@endpoint.route("/inventory/products/data_table")
+def api_table_products():
+    query_key = request.args.get("query_key", type=str, default="")
+    query_value = request.args.get("query_value", type=str, default="")
+
+    db = TableProduct()
+    if query_key.strip() == "" or query_value.strip() == "":
+        entries = [i.to_json() for i in db.objects()]
+    else:
+        queried_entries = db.query({query_key: query_value})
+        entries = [i.to_json() for i in queried_entries]
+
+    db.close()
+    print("-- Retrieving entries for products --")
     return wrappers.Response(
         status=200, content_type="application/json", response=json.dumps(entries)
     )

@@ -1,14 +1,14 @@
 {% extends 'layouts/admin_base.html' %}
-{% block title %}Brands{% endblock title %}
+{% block title %}Categories{% endblock title %}
 {% block content %}
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css">
 <script src="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js"></script>
 
 
 <div class="container-fluid p-4">
-	<h3><b>Category Management</b></h3>
+	<h3><b>Categories Management</b></h3>
 	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-		Add Category
+		Add Categories
 	</button>
 
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -16,7 +16,7 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
+					<h5 class="modal-title" id="exampleModalLabel">Category Brand</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -25,7 +25,7 @@
 					{% from '_formhelpers.html' import render_field %}
 					<form action="" method="POST">
 						{{ form.csrf_token}}
-						{{ render_field(form.name, class="form-control", placeholder="Name of Category") }}
+						{{ render_field(form.name, class="form-control", placeholder="Name of Categories") }}
 						{{ render_field(form.desc, class="form-control", placeholder="Short description of category",
 						rows=4) }}
 						<input value="Add Category" type="submit" name="category" class="btn btn-success">
@@ -37,10 +37,10 @@
 	</div>
 
 
-	<table data-toggle="table" data-show-toggle="true" data-search="true" data-search-align="left" class="table-striped"
-		data-url="/admin/inventory/categories/data_table" data-show-columns="true" data-show-columns-toggle-all="true"
-		data-show-refresh="true" data-pagination="true" data-page-list="[10, 25, 50, 100, all]" data-toggle="table"
-		data-id-field="uuid">
+	<table id="table" data-toggle="table" data-show-toggle="true" data-search="true" data-search-align="left"
+		class="table-striped" data-url="/admin/inventory/categories/data_table" data-show-columns="true"
+		data-show-columns-toggle-all="true" data-show-refresh="true" data-pagination="true"
+		data-page-list="[10, 25, 50, 100, all]" data-toggle="table" data-id-field="uuid">
 		<thead>
 			<tr>
 				<th data-field="uuid">UUID</th>
@@ -48,7 +48,7 @@
 				<th data-field="desc" data-sortable="true">Description</th>
 				<th data-field="date_created" data-sortable="true">Date Created</th>
 				<th data-field="date_updated" data-sortable="true">Date Updated</th>
-				<th data-formatter="render_edit">Edit</th>
+				<th data-formatter="render_edit">View</th>
 				<th data-formatter="render_delete">Delete</th>
 			</tr>
 		</thead>
@@ -58,41 +58,11 @@
 
 <script>
 	function render_edit(index, row) {
-		if (!(row.uuid in ["1", "0"])) {
-			return `<div style="max-width: fit-content;">
-                <button type="button" class="btn btn-transparent btn-sm" data-toggle="modal" data-target="#update_${row.uuid}">
+		return `<div style="max-width: fit-content;">
+                <a href="/admin/inventory/update/categories/${row.uuid}" type="button" class="btn btn-transparent btn-sm">
                     <i class="fas fa-edit" style="color: orange;"></i>
-                </button>
-                <div class="modal fade" id="update_${row.uuid}" tabindex="-1" role="dialog"
-                    aria-labelledby="update_Label_${row.uuid}" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="update_Label_${row.uuid}">${row.name}</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="/admin/inventory/update/brands_categories/${row.uuid}" method="POST">
-                                    <label for="name">{{ site }} Name</label>
-                                    <input type="text" name="name" class="form-control" value="${row.name}"
-                                        placeholder="Existing Name: ${row.name}">
-                                        <label for="desc">{{ site }} Description</label>
-                                        <textarea name="desc" class="form-control mb-2" rows=3
-                            placeholder="Existing Description: ${row.desc}">${row.desc}</textarea>
-                                    <input type="submit" class="btn btn-success" name="desc" value="Update" id="">
-                                        <button type="button" class="btn btn-secondary float-right" data-dismiss="modal">Close</button>
-                        </form>
-                    </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`}
-		else {
-			return
-		}
-	}
+                </a>
+            </div>`}
 
 	function render_delete(index, row) {
 		if (!(row.uuid in ["1", "0"])) {
@@ -115,9 +85,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                    <form action="/admin/delete/{{table}}/${row.uuid}" method="POST">
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
+                                    <button onclick="fetch_delete('${row.uuid}')" data-dismiss="modal" class="btn btn-danger">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -126,6 +94,23 @@
 		} else {
 			return
 		}
+	}
+
+	function fetch_delete(uuid) {
+		$("#table").bootstrapTable("refresh")
+		console.log(uuid)
+		fetch(`${window.location.origin}/admin/delete/brands_categories/${uuid}`, {
+			method: "POST",
+			credentials: "include",
+			body: JSON.stringify(uuid),
+			cache: "no-cache",
+			headers: new Headers({
+				"content-type": "application/json"
+			})
+		})
+		$("#table").bootstrapTable("refresh")
+		$('.modal-backdrop').removeClass('modal-backdrop');
+		console.log("completed")
 	}
 
 </script>

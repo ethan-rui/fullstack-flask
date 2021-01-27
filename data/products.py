@@ -36,6 +36,10 @@ class Product(Entry):
                 print(f"replace images index {i}")
         return self.__images
 
+    @property
+    def centprice_final(self):
+        return self.centprice * ((100 - self.discount) / 100)
+
     @images.setter
     def images(self, param: dict):
         print(param)
@@ -49,6 +53,11 @@ class Product(Entry):
             "brand": self.brand,
             "cat": self.cat,
             "image": self.images[0],
+            "stock": self.stock,
+            "centprice": self.centprice,
+            "discount": self.discount,
+            "centprice_final": self.centprice_final,
+            "desc": self.desc,
         }
 
 

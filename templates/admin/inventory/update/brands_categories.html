@@ -1,0 +1,148 @@
+{% extends 'layouts/admin_base.html' %}
+{% block title %}
+Update {{name}}
+{% endblock title %}
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css">
+<script src="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js"></script>
+
+<div class="container-fluid p-4">
+    <div class="row">
+        <div class="col-6">
+            <h4>Details</h4>
+            <table class="table">
+                <thead class="thead thead-dark">
+                    <tr>
+                        <th>Attribute:</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Name:</td>
+                        <td>{{target.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Description:</td>
+                        <td>{{target.desc}}</td>
+                    </tr>
+                    <tr>
+                        <td>Count of Affliated Products:</td>
+                        <td id="total_products"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6">
+            <h4>Update {{name}}</h4>
+            <form action="/admin/inventory/update/brands_categories/{{target.uuid}}" method="POST">
+                <label for="name">Name</label>
+                <input type="text" name="name" required class="form-control" value="{{target.name}}"
+                    placeholder="Existing Name: {{target.name}}">
+                <label for="desc">{{name}} Description</label>
+                <textarea name="desc" required class="form-control mb-2" rows=3
+                    placeholder="Existing Description: {{target.desc}}">{{target.desc}}</textarea>
+                <input type="submit" class="btn btn-success" name="desc" value="Update" id="">
+            </form>
+        </div>
+        <div class="col-12 mt-5">
+            <h4>Products under {{target.name}}</h4>
+            <table id="table" data-toggle="table" data-show-toggle="true" data-search="true" data-search-align="left"
+                class="table-striped"
+                data-url="/admin/inventory/products/data_table?query_key={{query_key}}&query_value={{target.uuid}}"
+                data-show-columns="true" data-total-field='total' data-show-columns-toggle-all="true"
+                data-show-refresh="true" data-pagination="true" data-page-list="[10, 25, 50, 100, all]"
+                data-toggle="table" data-id-field="uuid">
+                <thead>
+                    <tr>
+                        <th data-field="uuid">UUID</th>
+                        <th data-formatter="render_image">image</th>
+                        <th data-field="name" data-sortable="true">Name</th>
+                        <th data-field="stock" data-sortable="true">Stock</th>
+                        <th data-field="centprice" data-sortable="true">Price (Cents)</th>
+                        <th data-field="centprice" data-sortable="true">Discount (%)</th>
+                        <th data-field="centprice_final" data-sortable="true">Price (Cents) After Discount</th>
+                        <th data-formatter="render_edit">View</th>
+                        <th data-formatter="render_delete">Delete</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+        <script>
+            $(function () {
+                $('#table').on('load-success.bs.table', function () {
+                    $("#total_products").html($('#table').bootstrapTable('getOptions').totalRows)
+                })
+            })
+
+            function render_delete(index, row) {
+                if (!(row.uuid in ["1", "0"])) {
+                    return `<div style="max-width: fit-content;">
+                            <button type="button" class="btn btn-transparent btn-sm" data-toggle="modal" data-target="#delete_${row.uuid}">
+                                <i class="fas fa-trash" style="color: red;"></i>
+                            </button>
+                            <div class="modal fade" id="delete_${row.uuid}" tabindex="-1" role="dialog"
+                                aria-labelledby="delete_Label_${row.uuid}" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="delete_Label_${row.uuid}">${row.name}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <span>Are you sure you want to delete item: <b>${row.name}</b>?</span>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                            <button onclick="fetch_delete('${row.uuid}')" data-dismiss="modal" class="btn btn-danger">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`
+                } else {
+                    return
+                }
+            }
+
+            function render_image(index, row) {
+                return `
+                <img class='img-fluid' style="max-width: 13%;" src='../../../../static/media/${row.image}'></img>`
+            }
+
+            function render_edit(index, row) {
+                if (!(row.uuid in ["1", "0"])) {
+                    return `<div style="max-width: fit-content;">
+                        <a href="/admin/inventory/update/${row.uuid}" type="button" class="btn btn-transparent btn-sm">
+                            <i class="fas fa-edit" style="color: orange;"></i>
+                        </a>
+                    </div>`}
+                else {
+                    return
+                }
+            }
+
+
+            function fetch_delete(uuid) {
+                $("#table").bootstrapTable("refresh")
+                console.log(uuid)
+                fetch(`${window.location.origin}/admin/delete/products/${uuid}`, {
+                    method: "POST",
+                    credentials: "include",
+                    body: JSON.stringify(uuid),
+                    cache: "no-cache",
+                    headers: new Headers({
+                        "content-type": "application/json"
+                    })
+                })
+                $("#table").bootstrapTable("refresh")
+                $('.modal-backdrop').removeClass('modal-backdrop');
+                console.log("completed")
+            }
+        </script>
+    </div>
+</div>
+{% endblock content %}
