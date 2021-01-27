@@ -18,6 +18,7 @@ Inquiries
                     <th scope="col">Username</th>
                     <th scope="col">Email</th>
                     <th scope="col">Subject</th>
+                    <th scope="col">Status</th>
                     <th colspan="2" scope="col">Actions</th>
                 </tr>
             </thead>
@@ -32,6 +33,11 @@ Inquiries
                     <td>{{entry.sender_name}}</td>
                     <td>{{entry.sender_email}}</td>
                     <td>{{entry.subject}}</td>
+                    {% if entry.status==False %}
+                    <td>Closed</td>
+                    {% else %}
+                    <td>Open</td>
+                    {% endif %}
                     <td><a href="{{url_for('admin_users.page_info_inquiry',uid=entry.uuid)}}" class="btn btn-sm btn-info">View More</a>
                     </td>
                     <td>

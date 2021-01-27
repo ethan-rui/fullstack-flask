@@ -12,6 +12,7 @@ class Inquiry(Entry):
         sender_name: str,
         subject: str,
         content: str,
+        status: bool,
     ):
         super().__init__(uid=None)
         self.__sender_name = sender_name
