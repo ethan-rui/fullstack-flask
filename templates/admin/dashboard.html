@@ -15,7 +15,7 @@
                 <h3>Total sales</h3><canvas id="totalSalesChart"></canvas>
             </div>
             <div class="col-12 col-lg-3 row-lg-6"  style="border:1px solid #cecece;">
-                <h3>Total expenses</h3>
+                <h3>Total expenses</h3><canvas id="totalExpensesChart"></canvas>
             </div>
             <div class="col-12 col-lg-3 row-lg-6"  style="border:1px solid #cecece;">
                 <h3>New Users</h3><canvas id="newUserChart"></canvas>
@@ -31,6 +31,7 @@
             </div>
             <div class="col-12 col-lg-4 row-lg-4"  style="border:1px solid #cecece;">
                 <h3>Recently Added Products</h3>
+                // Tables for recently added stuff. Takes directly from brands.html
                 <table id="newBrandsTable" data-toggle="table" data-show-toggle="true" data-search="true" data-search-align="left"
                     class="table-striped" data-url="/admin/inventory/brands/data_table" data-show-columns="true"
                     data-show-columns-toggle-all="true" data-show-refresh="true" data-pagination="true"
@@ -58,7 +59,7 @@
     var barChart = new Chart(ctx, {
         type: 'line',
         data: {
-        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        labels: {{ days| safe}},
         datasets: [{
             fill: false,
             label: 'Order Count (Weekly)',
@@ -76,8 +77,7 @@
     options: {
         legend: {
             labels: {
-                fontSize: 24,
-                    fontColor: 'white',
+                display:false
             }
         },
         scales: {
@@ -106,15 +106,15 @@
     }
 });
 
-// New Orders
+// Sales Revenue
 var ctx = document.getElementById('totalSalesChart').getContext('2d');
 var barChart = new Chart(ctx, {
     type: 'bar',
     data: {
-    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    labels: {{ days| safe}},
     datasets: [{
         fill: false,
-        label: 'Revenue from Sales (Weekly)',
+        label: 'Sales revenue (Weekly)',
         data: [89, 0, 0, 351, 0, 1342, 2542],
         backgroundColor: [
         'rgba(255, 0, 34, 1)',
@@ -135,8 +135,65 @@ var barChart = new Chart(ctx, {
 options: {
     legend: {
         labels: {
-            fontSize: 24,
+            display:false
+        }
+    },
+    scales: {
+        yAxes: [{
+            ticks: {
+                fontSize: 16,
                 fontColor: 'white',
+                beginAtZero: true
+            }
+            ,
+            gridLines: {
+                color: "white"
+            }
+        }],
+        xAxes: [{
+            ticks: {
+                fontSize: 16,
+                fontColor: 'white',
+                beginAtZero: true
+            },
+            gridLines: {
+                color: "white"
+            }
+        }],                   
+    }
+}
+});
+
+// Total Expenses
+var ctx = document.getElementById('totalExpensesChart').getContext('2d');
+var barChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+    labels: {{ quarter4| safe}},
+    datasets: [{
+        fill: false,
+        label: 'Total Expenses (Last Quarter)',
+        data: [54, 120, 74],
+        backgroundColor: [
+        'rgba(255, 0, 34, 1)',
+        'rgba(255, 0, 34, 1)',
+        'rgba(255, 0, 34, 1)',
+        'rgba(255, 0, 34, 1)',
+        'rgba(255, 0, 34, 1)',
+        'rgba(255, 0, 34, 1)',
+        'rgba(255, 0, 34, 1)',
+        ],
+    borderColor: [
+        'rgba(255, 0, 34, 1)',
+        ],
+    borderWidth: 1,
+    lineTension: 0
+    }]
+},
+options: {
+    legend: {
+        labels: {
+            display:false
         }
     },
     scales: {
@@ -170,7 +227,7 @@ options: {
     var barChart = new Chart(ctx, {
         type: 'line',
         data: {
-        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        labels: {{ days| safe}},
         datasets: [{
             fill: false,
             label: 'User Count (Weekly)',
@@ -188,8 +245,7 @@ options: {
     options: {
         legend: {
             labels: {
-                fontSize: 24,
-                    fontColor: 'white',
+                display:false
             }
         },
         scales: {
@@ -250,8 +306,7 @@ options: {
     options: {
         legend: {
             labels: {
-                fontSize: 24,
-                    fontColor: 'white',
+                display:false
             }
         },
         scales: {
