@@ -30,8 +30,7 @@
                 <h3>Recent Orders</h3>
             </div>
             <div class="col-12 col-lg-4 row-lg-4"  style="border:1px solid #cecece;">
-                <h3>Recently Added Products</h3>
-                // Tables for recently added stuff. Takes directly from brands.html
+                <h3>Recently Added Products</h3>                
                 <table id="newBrandsTable" data-toggle="table" data-show-toggle="true" data-search="true" data-search-align="left"
                     class="table-striped" data-url="/admin/inventory/brands/data_table" data-show-columns="true"
                     data-show-columns-toggle-all="true" data-show-refresh="true" data-pagination="true"
@@ -43,7 +42,7 @@
                             <th data-field="date_created" data-sortable="true">Date Created</th>
                         </tr>
                      </thead>
-                </table>
+                </table>                
             </div>
             <div class="col-12 col-lg-4 row-lg-4"  style="border:1px solid #cecece;">
                 <h3>Recent Buyers</h3>
@@ -169,11 +168,11 @@ var ctx = document.getElementById('totalExpensesChart').getContext('2d');
 var barChart = new Chart(ctx, {
     type: 'line',
     data: {
-    labels: {{ quarter4| safe}},
+    labels: {{ quarter2| safe}},
     datasets: [{
         fill: false,
         label: 'Total Expenses (Last Quarter)',
-        data: [54, 120, 74],
+        data: {{ quarter2expenses| safe}},
         backgroundColor: [
         'rgba(255, 0, 34, 1)',
         'rgba(255, 0, 34, 1)',
