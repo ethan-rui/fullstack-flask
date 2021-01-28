@@ -99,7 +99,7 @@ def page_table_inquiries():
     return render_template("admin/users/inquiries.html", inquiries=inquiries)
 
 
-@endpoint.route("/inquiry/<uid>", methods=["GET", "POST"])
+@endpoint.route("/inquiries/<uid>", methods=["GET", "POST"])
 def page_info_inquiry(uid):
     db = TableInquiry()
     inquiries = db.retrieve(uid)
@@ -140,7 +140,7 @@ def page_info_inquiry(uid):
     )
 
 
-@endpoint.route("/inquiry/update/<uid>", methods=["GET", "POST"])
+@endpoint.route("/inquiries/update/<uid>", methods=["GET", "POST"])
 def page_status_update(uid):
     def check_valid(attr):
         if attr is None:
@@ -166,3 +166,14 @@ def page_status_update(uid):
         dbtwo.insert(target)
         dbtwo.close
     return redirect(url_for(f"admin_users.page_table_inquiries"))
+
+
+@endpoint.route("/inquiries/data_table")
+def api_table_inquiries():
+    db = TableInquiry()
+    entries = [i.to_json() for i in db.objects()]
+    db.close()
+    print("-- Retrieving entries for inquiries. --")
+    return wrappers.Response(
+        status=200, content_type="application/json", response=json.dumps(entries)
+    )

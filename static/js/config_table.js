@@ -16,7 +16,6 @@ $modal_delete.click(function () {
     for (i = 0; i < entries_id.length; i++) {
         $("#preview_delete > tbody").append(`<tr><td>${entries_id[i]}</td><td>${entries_name[i]}</td></tr>`)
     }
-
 })
 
 $btn_delete.click(function () {
@@ -28,7 +27,6 @@ $btn_delete.click(function () {
 
 $("#table").bootstrapTable({
     exportOptions: {
-        fileName: "categorys",
         ignoreColumn: [-1, -2]
     }
 })
@@ -51,6 +49,12 @@ function getIdSelections() {
 function getNameSelections() {
     return $.map($table.bootstrapTable('getSelections'), function (row) {
         return row.name
+    })
+}
+
+function getSubjectSelections() {
+    return $.map($table.bootstrapTable('getSelections'), function (row) {
+        return row.subject
     })
 }
 
