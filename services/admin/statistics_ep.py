@@ -18,7 +18,7 @@ def check_perms():
 def page_dashboard():
     datasets = [89, 23, 63, 13, 55, 169]
     labels = ["Apple", "Orange", "Fish", "Brinjal", "Banana", "Pineapple"]
-    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     quarter1 = ["January", "Feburary", "March"]
     quarter2 = ["April", "May", "June"]
     quarter3 = ["July", "August", "September"]
