@@ -35,8 +35,7 @@ def api_delete(table):
     function_delete = {
         "products": del_products,
         "brands_categories": set_defaults,
-        "users": print,
-        "inquiries": print,
+        "users": print
     }
 
     if table not in function_delete.keys():
@@ -73,3 +72,29 @@ def authorizer(user):
             return render_template("errors/403.html")
     except:
         return render_template("errors/403.html")
+
+@endpoint.route("delete/<table>/<uid>", methods=["POST"])
+def api_delete_inquiry(table, uid):
+    """
+    data = [uuid, uuid, uuid]
+    """
+
+
+    function_delete = {
+        "inquiries": print
+    }
+
+    if table not in function_delete.keys():
+        print("Table was not found, redirecting back to main page.")
+    else:
+        """
+        object specific functions
+        """
+        db = Database(label=table)
+        if table == "inquiries":
+            target = db.retrieve(uid)
+            function_delete[table](uid)
+            print("-- deleting by uuid --")
+            db.delete(uid)
+        db.close()
+        return redirect("/admin/inquiries")
