@@ -1,8 +1,10 @@
 {% extends 'layouts/admin_base.html' %}
 {% block title %}Brands{% endblock title %}
 {% block content %}
-<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css">
-<script src="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js"></script>
+<link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
 
 
 <div class="container-fluid p-4">
@@ -35,14 +37,58 @@
             </div>
         </div>
     </div>
+    <div id="toolbar">
+        <button id="modal_delete" disabled type="button" class="btn btn-danger" data-toggle="modal"
+            data-target="#modal-delete">
+            <i class="fa fa-trash"></i> Delete
+        </button>
+        <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">The following items have been selected for
+                            deletion.</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table" id="preview_delete">
+                            <thead>
+                                <th>
+                                    UUID
+                                </th>
+                                <th>
+                                    Name
+                                </th>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
 
 
-    <table id="table" data-toggle="table" data-show-toggle="true" data-search="true" data-search-align="left"
-        class="table-striped" data-url="/admin/inventory/brands/data_table" data-show-columns="true"
-        data-show-columns-toggle-all="true" data-show-refresh="true" data-pagination="true"
-        data-page-list="[10, 25, 50, 100, all]" data-toggle="table" data-id-field="uuid">
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" id="btn_delete" data_dismiss="modal"
+                            class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <table id="table" data-show-export="true" data-toolbar="#toolbar" data-toggle="table" data-show-toggle="true"
+        data-search="true" data-click-to-select="true" data-search-align="right" class="table-striped"
+        data-url="/admin/inventory/brands/data_table" data-show-columns="true" data-show-columns-toggle-all="true"
+        data-show-refresh="true" data-pagination="true" data-page-list="[10, 25, 50, 100, all]" data-toggle="table"
+        data-id-field="uuid">
         <thead>
             <tr>
+                <th data-checkbox="true" data-formatter="stateFormatter"></th>
                 <th data-field="uuid">UUID</th>
                 <th data-field="name" data-sortable="true">Name</th>
                 <th data-field="desc" data-sortable="true">Description</th>
@@ -56,18 +102,14 @@
 </div>
 
 
+<script src="{{url_for('static', filename='js/config_table.js')}}"></script>
 <script>
     function render_edit(index, row) {
-        if (!(row.uuid in ["1", "0"])) {
-            return `<div style="max-width: fit-content;">
+        return `<div style="max-width: fit-content;">
                 <a href="/admin/inventory/update/brands/${row.uuid}" type="button" class="btn btn-transparent btn-sm">
                     <i class="fas fa-edit" style="color: orange;"></i>
                 </a>
             </div>`}
-        else {
-            return
-        }
-    }
 
     function render_delete(index, row) {
         if (!(row.uuid in ["1", "0"])) {
@@ -90,7 +132,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                    <button onclick="fetch_delete('${row.uuid}')" data-dismiss="modal" class="btn btn-danger">Delete</button>
+                                    <button onclick="delete_entries(['${row.uuid}'])" data-dismiss="modal" class="btn btn-danger">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -101,22 +143,25 @@
         }
     }
 
-    function fetch_delete(uuid) {
-        $("#table").bootstrapTable("refresh")
-        console.log(uuid)
-        fetch(`${window.location.origin}/admin/delete/brands_categories/${uuid}`, {
+    function delete_entries(entries) {
+        $table.bootstrapTable('remove', {
+            field: 'uuid',
+            values: entries
+        })
+        console.log(entries)
+        fetch(`${window.location.origin}/admin/delete/brands_categories`, {
             method: "POST",
             credentials: "include",
-            body: JSON.stringify(uuid),
+            body: JSON.stringify(entries),
             cache: "no-cache",
             headers: new Headers({
                 "content-type": "application/json"
             })
         })
-        $("#table").bootstrapTable("refresh")
         $('.modal-backdrop').removeClass('modal-backdrop');
         console.log("completed")
     }
+
 
 </script>
 

@@ -1,14 +1,16 @@
 {% extends 'layouts/admin_base.html' %}
 {% block title %}Categories{% endblock title %}
 {% block content %}
-<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css">
-<script src="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js"></script>
+<link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
 
 
 <div class="container-fluid p-4">
-	<h3><b>Categories Management</b></h3>
+	<h3><b>Catgeories Management</b></h3>
 	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-		Add Categories
+		Add Category
 	</button>
 
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -16,7 +18,7 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Category Brand</h5>
+					<h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -25,7 +27,7 @@
 					{% from '_formhelpers.html' import render_field %}
 					<form action="" method="POST">
 						{{ form.csrf_token}}
-						{{ render_field(form.name, class="form-control", placeholder="Name of Categories") }}
+						{{ render_field(form.name, class="form-control", placeholder="Name of Category") }}
 						{{ render_field(form.desc, class="form-control", placeholder="Short description of category",
 						rows=4) }}
 						<input value="Add Category" type="submit" name="category" class="btn btn-success">
@@ -35,14 +37,58 @@
 			</div>
 		</div>
 	</div>
+	<div id="toolbar">
+		<button id="modal_delete" disabled type="button" class="btn btn-danger" data-toggle="modal"
+			data-target="#modal-delete">
+			<i class="fa fa-trash"></i> Delete
+		</button>
+		<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">The following items have been selected for
+							deletion.</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<table class="table" id="preview_delete">
+							<thead>
+								<th>
+									UUID
+								</th>
+								<th>
+									Name
+								</th>
+							</thead>
+							<tbody>
+
+							</tbody>
 
 
-	<table id="table" data-toggle="table" data-show-toggle="true" data-search="true" data-search-align="left"
-		class="table-striped" data-url="/admin/inventory/categories/data_table" data-show-columns="true"
-		data-show-columns-toggle-all="true" data-show-refresh="true" data-pagination="true"
-		data-page-list="[10, 25, 50, 100, all]" data-toggle="table" data-id-field="uuid">
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="button" id="btn_delete" data_dismiss="modal"
+							class="btn btn-danger">Delete</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+	<table id="table" data-show-export="true" data-toolbar="#toolbar" data-toggle="table" data-show-toggle="true"
+		data-search="true" data-click-to-select="true" data-search-align="right" class="table-striped"
+		data-url="/admin/inventory/categories/data_table" data-show-columns="true" data-show-columns-toggle-all="true"
+		data-show-refresh="true" data-pagination="true" data-page-list="[10, 25, 50, 100, all]" data-toggle="table"
+		data-id-field="uuid">
 		<thead>
 			<tr>
+				<th data-checkbox="true" data-formatter="stateFormatter"></th>
 				<th data-field="uuid">UUID</th>
 				<th data-field="name" data-sortable="true">Name</th>
 				<th data-field="desc" data-sortable="true">Description</th>
@@ -56,6 +102,7 @@
 </div>
 
 
+<script src="{{url_for('static', filename='js/config_table.js')}}"></script>
 <script>
 	function render_edit(index, row) {
 		return `<div style="max-width: fit-content;">
@@ -85,7 +132,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                    <button onclick="fetch_delete('${row.uuid}')" data-dismiss="modal" class="btn btn-danger">Delete</button>
+                                    <button onclick="delete_entries(['${row.uuid}'])" data-dismiss="modal" class="btn btn-danger">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -96,22 +143,25 @@
 		}
 	}
 
-	function fetch_delete(uuid) {
-		$("#table").bootstrapTable("refresh")
-		console.log(uuid)
-		fetch(`${window.location.origin}/admin/delete/brands_categories/${uuid}`, {
+	function delete_entries(entries) {
+		console.log(entries)
+		$table.bootstrapTable('remove', {
+			field: 'uuid',
+			values: entries
+		})
+		fetch(`${window.location.origin}/admin/delete/brands_categories`, {
 			method: "POST",
 			credentials: "include",
-			body: JSON.stringify(uuid),
+			body: JSON.stringify(entries),
 			cache: "no-cache",
 			headers: new Headers({
 				"content-type": "application/json"
 			})
 		})
-		$("#table").bootstrapTable("refresh")
 		$('.modal-backdrop').removeClass('modal-backdrop');
 		console.log("completed")
 	}
+
 
 </script>
 

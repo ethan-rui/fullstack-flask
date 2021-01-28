@@ -38,6 +38,15 @@ class Inquiry(Entry):
     def content(self):
         return self.__content
 
+    def to_json(self) -> dict:
+        return {
+            **(super().to_json()),
+            "user": self.sender_name,
+            "email": self.sender_email,
+            "subject": self.subject,
+            "status": self.status,
+        }
+
 
 class TableInquiry(Database):
     def __init__(self):

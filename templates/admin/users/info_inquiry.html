@@ -47,7 +47,7 @@ User Inquiry
     <a href="/admin/inquiries" class="btn btn-sm btn-primary mr-2">Return to Previous Page</a>
     {% from '_macros.html' import delete %}
     {{ delete(item=inquiries, table='inquiries') }}
-    <a href="/admin/user_pages/inquiry/update/{{inquiries.uuid}}" class="btn btn-sm btn-warning ml-2">Mark as closed</a>
+    <a href="/admin/inquiries/update/{{inquiries.uuid}}" class="btn btn-sm btn-warning ml-2">Mark as closed</a>
     <a id="reply" class="btn btn-sm btn-info ml-2">Reply</a>
     <div id="reply-div" class="card bg-secondary shadow mt-3">
         <div class="card-header border-0 ">

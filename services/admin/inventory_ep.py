@@ -255,7 +255,7 @@ def page_table_products():
     )
 
 
-@endpoint.route("/inventory/update/<uid>", methods=["GET", "POST"])
+@endpoint.route("/inventory/update/products/<uid>", methods=["GET", "POST"])
 def page_update_products(uid):
     form = UpdateProduct()
 
