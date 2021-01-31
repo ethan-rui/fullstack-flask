@@ -5,7 +5,6 @@ Add Products
 {% block content %}
 <div class="container-fluid p-4">
     <div class="row">
-        <div class="col-lg-4"></div>
         <div class="col-lg-4">
             {% block flashed %}
             {% with messages = get_flashed_messages() %}
@@ -13,10 +12,8 @@ Add Products
 
             <div class="container" id="flashed_messages">
                 <div class="row">
-                    <div class="col-lg-4"></div>
                     {% for message in get_flashed_messages() %}
-                    <p class="alert alert-success col-lg-4" role="alert">{{ message }}</p>
-                    <div class="col-lg-4"></div>
+                    <p class="alert alert-success col-12" role="alert">{{ message }}</p>
                     {% endfor %}
                 </div>
             </div>
@@ -27,11 +24,11 @@ Add Products
             {% from '_formhelpers.html' import render_field %}
             <form action="" method="POST" enctype="multipart/form-data">
                 {{ form.csrf_token}}
-                {{ render_field(form.name, class="form-control", placeholder="Name of Product") }}
-                {{ render_field(form.centprice, class="form-control", placeholder="Price in Cents") }}
-                {{ render_field(form.discount, class="form-control", placeholder="Percentage off") }}
+                {{ render_field(form.name, class="form-control", placeholder="Name of Product", onkeyup="preview_name(this.value)") }}
+                {{ render_field(form.centprice, class="form-control", placeholder="Price in Cents", id="form_price", onkeyup="preview_og_price()") }}
+                {{ render_field(form.discount, class="form-control", placeholder="Percentage off", id="form_discount", onkeyup="preview_og_price()") }}
                 {{ render_field(form.stock, class="form-control", placeholder="Default 0") }}
-                {{ render_field(form.desc, class="form-control", placeholder="Description of Product") }}
+                {{ render_field(form.desc, class="form-control", placeholder="Description of Product", onkeyup="preview_desc(this.value)") }}
 
                 <label for="brands"><b>Brand</b></label>
                 <select name="brand" id="brand" class="form-control">
@@ -48,15 +45,111 @@ Add Products
 
                 <div class="container mt-2">
                     <div class="row">
-                        <div class="col-md-4">{{ render_field(form.image_0, class="form-control")}}</div>
-                        <div class="col-md-4">{{ render_field(form.image_1, class="form-control")}}</div>
-                        <div class="col-md-4">{{ render_field(form.image_2, class="form-control")}}</div>
+                        <div class="col-md-4">{{ render_field(form.image_0, class="form-control", onchange="document.getElementById('image-0').src = window.URL.createObjectURL(this.files[0])")}}</div>
+                        <div class="col-md-4">{{ render_field(form.image_1, class="form-control", onchange="document.getElementById('image-1').src = window.URL.createObjectURL(this.files[0])")}}</div>
+                        <div class="col-md-4">{{ render_field(form.image_2, class="form-control", onchange="document.getElementById('image-2').src = window.URL.createObjectURL(this.files[0])")}}</div>
                     </div>
                 </div>
                 <input type="submit" value="Add Product" class="btn btn-success mt-2">
             </form>
         </div>
-        <div class="col-lg-4"></div>
+        <div class="col-lg-8">
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row pl-5 pr-5">
+                            <div class="col-12">
+                                <img id="image-main"  src="{{url_for('static', filename='media/placeholders/placeholder.png')}}" alt=""
+                                    class="p-3 img-fluid">
+                            </div>
+                            <div class="col-12">
+                                <div class="row" id="image_side">
+                                    <div class="col-4 text-center">
+                                        <p>Image 1</p>
+                                        <img src="{{url_for('static', filename='media/placeholders/placeholder.png')}}"
+                                            class="img-fluid" id="image-0" alt="">
+                                    </div>
+                                    <div class="col-4">
+                                        <p>Image 2</p>
+                                        <img src="{{url_for('static', filename='media/placeholders/placeholder.png')}}"
+                                            class="img-fluid" id="image-1" alt="">
+                                    </div>
+                                    <div class="col-4">
+                                        <p>Image 3</p>
+                                        <img src="{{url_for('static', filename='media/placeholders/placeholder.png')}}"
+                                            class="img-fluid" id="image-2" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 id="product_name">[Name of Product]</h3>
+                        <hr>
+                        <h5 id="price_original">[Price of Product]</h5>
+                        <h4 class="font-weight-bold text-danger" id="price_final"></h4>
+                        <h6 id="discount"></h6>
+                            <button class="btn btn-success btn-sm-md btn-lg-sm"><i class="fas fa-shopping-cart mr-1"></i>Add To
+                                Cart</button>
+                        <div class="mt-4">
+                            <h5>Description</h5>
+                            <p id="description">[Description of Product]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                function preview_name(name_field){
+                    if(name_field.length > 0){
+                        $("#product_name").html(name_field)
+                    }else{
+                        $("#product_name").html("[Name of Product]")
+                    }
+                }
+
+                function preview_desc(desc){
+                    if(desc.length > 0){
+                        $("#description").html(desc)
+                    }else{
+                        $("#description").html("[Description of Product]")
+                    }
+                }
+
+
+                function preview_og_price(){
+                    discount = parseInt($("#form_discount").val())
+                    price = parseInt($("#form_price").val())
+                    if(isNaN(price) === false){
+                        if(discount <= 0 || isNaN(discount)){
+                            $("#price_original").html(`$${(price/100).toFixed(2)}`)
+                            $("#discount").empty()
+                            $("#price_final").empty()
+                        }else{
+                            $("#discount").html(`(Save ${discount}%)`)
+                            $("#price_original").html(`<del>$${(price/100).toFixed(2)}</del>`)
+                            $("#price_final").html(`$${(price*(1-discount/100)/100).toFixed(2)}`)
+                        }
+                    }e
+                }
+
+                var image_side = $("#image_side").find("img")
+                $(image_side[0]).click(function() {full_image(image_side[0].src)});
+                $(image_side[1]).click(function() {full_image(image_side[1].src)});
+                $(image_side[2]).click(function() {full_image(image_side[2].src)});
+
+                function full_image(source) {
+                    console.log(source)
+                    $("#image-main").attr("src", source)
+                }
+            </script>
+
+            <style>
+                img:hover {
+                    cursor: pointer;
+                    border: 2px solid #d0d0d0;
+                }
+            </style>
+        </div>
     </div>
 </div>
 

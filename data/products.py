@@ -54,9 +54,9 @@ class Product(Entry):
             "cat": self.cat,
             "image": self.images[0],
             "stock": self.stock,
-            "centprice": self.centprice,
+            "price": f"{(self.centprice/100):.2f}",
             "discount": self.discount,
-            "centprice_final": self.centprice_final,
+            "price_final": f"{(self.centprice_final/100):.2f}",
             "desc": self.desc,
         }
 

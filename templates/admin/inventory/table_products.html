@@ -11,12 +11,8 @@
 <div class="container-fluid p-4">
   <h3><b>Products</b></h3>
   <a class="btn btn-primary" href="/admin/inventory/add/products">Add Product</a>
-
   <div id="toolbar">
-    <button id="modal_delete" disabled type="button" class="btn btn-danger" data-toggle="modal"
-      data-target="#modal-delete">
-      <i class="fa fa-trash"></i> Delete
-    </button>
+    <button id="modal_delete" disabled type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-delete"><i class="fa fa-trash"></i> Delete Selected</button>
     <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
       aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -63,16 +59,16 @@
     data-id-field="uuid">
     <thead>
       <tr>
-        <th data-checkbox="true" data-formatter="stateFormatter"></th>
-        <th data-field="uuid">UUID</th>
-        <th data-formatter="render_image">image</th>
-        <th data-field="name" data-sortable="true">Name</th>
-        <th data-field="stock" data-sortable="true">Stock</th>
-        <th data-field="centprice" data-sortable="true">Price (Cents)</th>
-        <th data-field="discount" data-sortable="true">Discount (%)</th>
-        <th data-field="centprice_final" data-sortable="true">Price (Cents) After Discount</th>
-        <th data-formatter="render_edit">View</th>
-        <th data-formatter="render_delete">Delete</th>
+        <th data-checkbox="true" data-formatter="stateFormatter" data-align="right"></th>
+        <th data-field="uuid" data-align="right">UUID</th>
+        <th data-formatter="render_image" data-align="center">Image</th>
+        <th data-field="name" data-sortable="true" data-align="right">Name</th>
+        <th data-field="stock" data-sortable="true" data-align="right">Stock</th>
+        <th data-field="centprice" data-sortable="true" data-align="right">Price ($)</th>
+        <th data-field="discount" data-sortable="true" data-align="right">Discount (%)</th>
+        <th data-field="centprice_final" data-sortable="true" data-align="right">Final Price ($)</th>
+        <th data-formatter="render_edit" data-align="right">View</th>
+        <th data-formatter="render_delete" data-align="right">Delete</th>
       </tr>
     </thead>
   </table>
@@ -82,8 +78,7 @@
 <script>
   function render_delete(index, row) {
     if (!(row.uuid in ["1", "0"])) {
-      return `<div style="max-width: fit-content;">
-                    <button type="button" class="btn btn-transparent btn-sm" data-toggle="modal" data-target="#delete_${row.uuid}">
+      return `<button type="button" class="btn btn-transparent btn-sm" data-toggle="modal" data-target="#delete_${row.uuid}">
                         <i class="fas fa-trash" style="color: red;"></i>
                     </button>
                     <div class="modal fade" id="delete_${row.uuid}" tabindex="-1" role="dialog"
@@ -105,25 +100,24 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>`
+                  </div>`
     } else {
       return
     }
   }
 
+  $("#table").bootstrapTable('hideColumn', 'uuid')
+
   function render_image(index, row) {
     return `
-      <img class='img-fluid' style="max-width: 13%;" src='../../../static/media/${row.image}'></img>`
+      <img class='img-fluid' style="max-width: 10%;" src='../../../static/media/${row.image}'></img>`
   }
 
   function render_edit(index, row) {
     if (!(row.uuid in ["1", "0"])) {
-      return `<div style="max-width: fit-content;">
-                <a href="/admin/inventory/update/products/${row.uuid}" type="button" class="btn btn-transparent btn-sm">
-                    <i class="fas fa-edit" style="color: orange;"></i>
-                </a>
-            </div>`}
+      return `<a href="/admin/inventory/update/products/${row.uuid}" type="button" class="btn btn-transparent btn-sm">
+                <i class="fas fa-edit" style="color: orange;"></i>
+              </a>`}
     else {
       return
     }
