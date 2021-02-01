@@ -37,8 +37,8 @@ class Entry:
     def to_json(self) -> dict:
         return {
             "uuid": self.__uuid,
-            "date_created": self.__date_created.isoformat(),
-            "date_updated": self.__date_updated.isoformat(),
+            "date_created": self.__date_created.strftime("%b %d %Y %H:%M:%S"),
+            "date_updated": self.__date_updated.strftime("%b %d %Y %H:%M:%S"),
         }
 
 

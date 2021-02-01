@@ -2,6 +2,8 @@ var $modal_delete = $('#modal_delete')
 var $table = $('#table')
 var $btn_delete = $("#btn_delete")
 
+
+
 $(document).ready(function () {
     selections = getIdSelections()
     if (selections <= 0) {

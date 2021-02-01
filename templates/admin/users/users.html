@@ -118,9 +118,11 @@ User Management
         }
     }
 
+    $("#table").bootstrapTable('hideColumn', 'uuid')
+
     function render_delete(index, row) {
-        if (!(row.uuid in ["1", "0"])) {
-                return `<div style="max-width: fit-content;">
+        if (row.uuid != "00000000-0000-0000-0000-000000000002") {
+            return `<div style="max-width: fit-content;">
                                 <button type="button" class="btn btn-transparent btn-sm" data-toggle="modal" data-target="#delete_${row.uuid}">
                                     <i class="fas fa-trash" style="color: red;"></i>
                                 </button>
@@ -145,7 +147,7 @@ User Management
                                     </div>
                                 </div>
                             </div>`
-        }else{
+        } else {
             return
         }
     }

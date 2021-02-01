@@ -20,22 +20,6 @@ from .common_api import authorizer
 endpoint = Blueprint("admin_inventory", __name__)
 basedir = os.getcwd()
 
-"""
-functions:
-
-check_perms
-page_update_bc
-api_update_bc
-page_table_brands
-page_table_categories
-api_table_brands
-api_table_categories
-page_products_add
-page_table_products
-page_update_products
-
-"""
-
 
 @endpoint.before_request
 @login_required

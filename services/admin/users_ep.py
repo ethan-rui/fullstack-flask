@@ -36,7 +36,7 @@ def check_perms():
 @endpoint.route("/users/data_table")
 def api_table_users():
     db = TableUser()
-    if current_user.get_id() != "0":
+    if current_user.get_id() != "00000000-0000-0000-0000-000000000002":
         queried_entries = db.query({"role": "customer"})
         entries = [i.to_json() for i in queried_entries]
     else:

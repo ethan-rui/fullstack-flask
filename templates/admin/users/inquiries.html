@@ -94,6 +94,8 @@
         }
     }
 
+	$("#table").bootstrapTable('hideColumn', 'uuid')
+
     function render_delete(index, row) {
         if (!(row.uuid in ["1", "0"])) {
             return `<div style="max-width: fit-content;">

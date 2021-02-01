@@ -1,8 +1,2 @@
-from data.user_pages import TableUserPages
-import data
-
-
-db = TableUserPages()
-print(db.sub_tables())
-print(db.objects())
-db.close()
+print(len("fa5ce10d-6f8d-4a84-86a0-6f28a182f48f"))
+print(len("00000000-0000-0000-0000-000000000000"))

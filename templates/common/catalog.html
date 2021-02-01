@@ -24,7 +24,8 @@ Products
                     </div>
                     <div class="card-body">
                         <h4 class="card-title">{{product.name}}</h4>
-                        <h6 class="card-subtitle mb-2 text-muted">{{product.cat}}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">{{bc[product.cat].name}}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">{{bc[product.brand].name}}</h6>
                         <p class="card-text">{{product.desc}}</p>
                         <div class="buy d-flex justify-content-between">
                             <div class="price text-success">

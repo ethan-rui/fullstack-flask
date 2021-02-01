@@ -71,7 +71,6 @@ app.register_blueprint(EP_Payment, url_prefix="/user")
 if __name__ == "__main__":
     from data.products import TableBC, Brand, Category
     from data.users import User, TableUser
-
     """
     inserting the default entries to tables before server starts
     - superuser
@@ -80,8 +79,8 @@ if __name__ == "__main__":
     """
     # default brands & categories
     db_bc = TableBC()
-    db_bc.insert(Category(uid="1"))
-    db_bc.insert(Brand(uid="0"))
+    db_bc.insert(Category(uid="00000000-0000-0000-0000-000000000001"))
+    db_bc.insert(Brand(uid="00000000-0000-0000-0000-000000000000"))
     db_bc.close()
     # default superuser
     db_users = TableUser()
@@ -90,7 +89,7 @@ if __name__ == "__main__":
             username="admin",
             password="password",
             role="admin",
-            uid="0",
+            uid="00000000-0000-0000-0000-000000000002",
             email="admin@admin.com",
         )
     )
