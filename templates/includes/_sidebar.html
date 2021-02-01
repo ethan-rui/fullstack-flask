@@ -1,10 +1,10 @@
-<div class="vertical-nav bg-secondary" id="sidebar">
-  <div class="py-4 px-3 mb-4 mt-4 bg-secondary">
+<div class="vertical-nav bg-black" id="sidebar">
+  <div class="mt-5"></div>
+  <div id="sidebar-heading">
+    <p class="text-secondary font-weight-bold text-uppercase pt-5 mb-0 text-center">{{current_user.username}}</p>
+    <p class="text-secondary font-weight-bold text-uppercase mt-0 text-center">{{current_user.email}}</p>
   </div>
-
-  <p class="text-white font-weight-bold text-uppercase px-3 pb-4 mb-0">Tools</p>
-
-  <ul class="nav flex-column bg-secondary mb-0 pl-4">
+  <ul class="nav flex-column mb-0">
     <li>
       <a class="head" href="{{url_for('admin_statistics.page_dashboard')}}"><i class="fas fa-chart-pie-alt"></i><span>
           Dashboard</span></a>
@@ -12,7 +12,7 @@
     <li class="mb-1">
       <a href="#" data-toggle="collapse" onclick="dropdown_save(this)" data-target="#submenu-1" class="head"><i
           class="fa fa-box mr-1"></i><span>Inventory</span><i class="fa fa-fw fa-angle-down pull-right"></i></a>
-      <ul id="submenu-1" class="collapse speed">
+      <ul id="submenu-1" class="collapse speed pl-0">
         <li><a href="{{url_for('admin_inventory.page_table_brands')}}"><i class="fa fa-copyright mr-1"></i>Brands</a>
         </li>
         <li><a href="{{url_for('admin_inventory.page_table_categories')}}"><i
@@ -26,12 +26,11 @@
     <li>
       <a href="#" data-toggle="collapse" onclick="dropdown_save(this)" data-target="#submenu-2" class="head"><i
           class="fa fa-fw fa-user-plus mr-1"></i><span>Users</span><i class="fa fa-fw fa-angle-down pull-right"></i></a>
-      <ul id="submenu-2" class="collapse speed">
+      <ul id="submenu-2" class="collapse speed pl-0">
         <li><a href="{{url_for('admin_users.page_table_users')}}"><i class="fa fa-user mr-1"></i>Users</a>
         </li>
         <li><a href="{{url_for('admin_users.page_table_inquiries')}}"><i class="fa fas fa-book mr-1"></i>Inquiries</a>
         </li>
-        <li><a href="#"><i class="fa fa-angle-double-right"></i>Menu 2</a></li>
       </ul>
     </li>
 
@@ -39,17 +38,53 @@
   </ul>
 </div>
 <style>
+  #sidebar ul li.active>a,
+  a[aria-expanded="true"] {
+    color: #fff;
+    background: #6d7fcc;
+  }
+
+  #sidebar-heading>p {
+    font-size: 0.8em;
+  }
+
+  ul {
+    list-style-type: none;
+  }
+
+
+  #sidebar ul p {
+    color: #fff;
+  }
+
+  #sidebar ul li a {
+    padding: 7px;
+    font-size: 1.1em;
+    display: block;
+  }
+
+  #sidebar ul li a:hover {
+    color: black;
+    background: #fff;
+  }
+
+  a,
+  a:hover,
+  a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
   .nav ul li a {
     font-size: 1.1em;
   }
 
-  a span {
-    font-size: 1.2em;
-  }
+
 
   .vertical-nav {
-    min-width: 17rem;
-    width: 17rem;
+    min-width: 16em;
+    width: 16em;
     height: 100vh;
     position: fixed;
     top: 0;
@@ -59,15 +94,18 @@
   }
 
   .page-content {
-    width: calc(100% - 17em);
-    margin-left: 17rem;
+    width: calc(100% - 16em);
+    margin-left: 16em;
     transition: all 0.2s;
   }
 
   /* for toggle behavior */
+  div#sidebar {
+    width: 16em;
+  }
 
   #sidebar.active {
-    margin-left: -17rem;
+    margin-left: -16em;
   }
 
   #content.active {
@@ -77,7 +115,7 @@
 
   @media (max-width: 768px) {
     #sidebar {
-      margin-left: -17rem;
+      margin-left: -16em;
     }
 
     #sidebar.active {
@@ -90,8 +128,8 @@
     }
 
     #content.active {
-      margin-left: 17rem;
-      width: calc(100% - 17rem);
+      margin-left: 16em;
+      width: calc(100% - 16em);
     }
   }
 
