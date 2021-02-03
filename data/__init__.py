@@ -114,7 +114,8 @@ class Database:
             return [
                 x
                 for x in self.objects()
-                if getattr(x, list(query.keys())[0]) == list(query.values())[0]
+                if list(query.values())[0].lower()
+                in getattr(x, list(query.keys())[0]).lower()
             ]
         except Exception as e:
             print(e)

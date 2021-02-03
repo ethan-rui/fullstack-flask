@@ -9,7 +9,15 @@ from wtforms import (
 
 
 class AddProduct(Form):
-    name = StringField("Name", [validators.DataRequired()])
+    name = StringField(
+        "Name",
+        [
+            validators.Regexp(
+                "/^[A-Za-z]+$/", message="Only alphabetic characters are allowed."
+            ),
+            validators.DataRequired(),
+        ],
+    )
     centprice = IntegerField(
         "Price",
         [
