@@ -109,13 +109,31 @@ class Database:
         self.__db.sync()
         self.__db.close()
 
-    def query(self, query: dict = {"": ""}) -> list:
-        try:
-            return [
-                x
-                for x in self.objects()
-                if list(query.values())[0].lower()
-                in getattr(x, list(query.keys())[0]).lower()
-            ]
-        except Exception as e:
-            print(e)
+    def query(self, query: dict = {"": ""}, mode="exact") -> list:
+        """
+        modes:
+        exact -> matches query to attribute value exactly
+        similar -> checks if query is similar to attribute value
+        """
+        if mode == "exact":
+            try:
+                return [
+                    x
+                    for x in self.objects()
+                    if list(query.values())[0].lower()
+                    == getattr(x, list(query.keys())[0]).lower()
+                ]
+            except Exception as e:
+                print(e)
+        elif mode == "similar":
+            try:
+                return [
+                    x
+                    for x in self.objects()
+                    if list(query.values())[0].lower()
+                    in getattr(x, list(query.keys())[0]).lower()
+                ]
+            except Exception as e:
+                print(e)
+        else:
+            raise Exception("Chosen mode of query does not exist.")

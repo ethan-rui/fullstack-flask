@@ -26,9 +26,12 @@ def page_catalog():
 
     """querying the object based on search params"""
     if param_search != "":
-        products_by_name = db_products.query({"name": param_search})
-        products_by_brand = db_products.query({"cat": param_search})
-        products_by_category = db_products.query({"brand": param_search})
+        products_by_name = db_products.query({"name": param_search}, mode="similar")
+        products_by_brand = db_products.query({"cat": param_search}, mode="similar")
+        products_by_category = db_products.query(
+            {"brand": param_search}, mode="similar"
+        )
+        """change to set to remove duplicates"""
         products = list(
             set(products_by_name + products_by_brand + products_by_category)
         )
