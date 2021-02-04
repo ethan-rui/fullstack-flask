@@ -15,7 +15,7 @@
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
         <a href="{{url_for('payment.page_cart')}}" class="nav-link navbar-link-2 waves-effect">
-          <span class="badge badge-pill red">{{current_user.cart|length}}</span>
+          <span class="badge badge-pill red" id="number_of_items">{{current_user.cart|length}}</span>
           <i class="fas fa-shopping-cart pl-0"></i>
         </a>
       </li>
