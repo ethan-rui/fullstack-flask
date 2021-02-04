@@ -109,3 +109,25 @@ class TableBC(Database):
         label = "brands_categories"
         super().__init__(label)
         self.label = label
+
+
+class CartItem:
+    def __init__(self, uuid: str, quantity: int):
+        self.__uuid = uuid
+        self.quantity = quantity
+
+        """set by the page_cart, so its always up to date with db"""
+        self.__subtotal = 0
+        self.name = ""
+        self.img = ""
+
+    @property
+    def uuid(self):
+        return self.__uuid
+
+    def calc_subtotal(self, centprice: int):
+        self.__subtotal = self.quantity * centprice
+
+    @property
+    def subtotal(self):
+        return self.__subtotal

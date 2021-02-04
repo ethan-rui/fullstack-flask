@@ -15,8 +15,8 @@ Products
         <!-- alert here -->
         <div class="alert alert-primary" role="alert" id="alert_message">
             this is some text
-          </div>
-          <!-- alert here -->
+        </div>
+        <!-- alert here -->
         <div class="row">
             {% if param_search|length > 0 %}
             <p>Search results for <span id="query">'{{param_search}}'</span>
@@ -60,19 +60,11 @@ Products
                                 <h5 class="">${{"%.2f"|format(product.centprice/100)}}</h5>
                             </div>
                         </div>
-<<<<<<< Updated upstream
-                        <form class="buy d-flex justify-content-center row" action="{{url_for('payment.add_cart')}}"
-                            method="POST">
-                            <input type="hidden" name="product_id" value="{{product.uuid}}">
-                            <input type="hidden" name="quantity" value="1">
-                            <button class="btn btn-success btn-sm col-10"><i
-                                    class="fas fa-shopping-cart mr-2"></i>Add</button>
-                        </form>
-=======
-                                <input type="hidden" name="quantity" id="{{'{}_quantity'.format(product.uuid)}}" value="1">
-                                <button class="btn btn-success btn-sm col-10" onclick="add_to_cart(this)" id="{{product.uuid}}"><i
-                                        class="fas fa-shopping-cart mr-2"></i>Add</button>
->>>>>>> Stashed changes
+                        <div class="justify-content-center row">
+                            <input type="hidden" name="quantity" id="{{product.uuid}}_quantity" value="1">
+                            <button class="btn btn-success btn-sm col-10" onclick="add_cart(this)"
+                                id="{{product.uuid}}"><i class="fas fa-shopping-cart mr-2"></i>Add</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -124,19 +116,18 @@ Products
     </div>
 </div>
 <!-- add to cart function and alerts -->
-<script>
-    $(document).ready(function() {
-        $("#alert_message").hide();});
-
-<<<<<<< Updated upstream
 <style>
     #query {
         font-weight: bold;
         color: darkred;
     }
 </style>
-
 <script>
+    $(document).ready(function () {
+        $("#alert_message").hide();
+    });
+
+
     $("#query_search").keyup(function (event) {
         // keyCode 13 is the enter key
         // search item when enter key is pressed
@@ -148,54 +139,53 @@ Products
 
     function item_search() {
         query = $("#query_search").val().replace(/\s/g, "-")
-        window.location.href = `${window.location.origin}/catalog/?page={{pg_index}}&size={{pg_size}}&filter_by={{param_filter}}&sort_by={{param_sort}}&search=${query}`
+        window.location.href = `${window.location.origin}/catalog/?page={{ pg_index }}&size={{ pg_size }}&filter_by={{ param_filter }}&sort_by={{ param_sort }}&search=${query}`
 
     }
-</script>
 
-=======
-    function add_to_cart(item){
-        var product_id = item.id;
-        var quantity = document.getElementById(product_id+'_quantity');
+    function add_cart(item) {
+        alert("item added")
+        var item_id = item.id;
+        var item_quantity = $(`#${item_id}_quantity`).val()
+        console.log(item_id, item_quantity)
 
         var item = {
-            "id" : product_id,
-            "quantity" : quantity.value
+            "id": item_id,
+            "quantity": item_quantity
         };
 
 
-        fetch(`${window.origin}/user/add_cart`,
-        {
-            method: "POST",
-            credentials: "include",
-            body: JSON.stringify(item),
-            cache: "no-cache",
-            headers: new Headers({
-                "content-type": "application/json"
-            })
-        }).then(
-            response => response.json()
-            ).then(function(data) {
-                let cart_count=data.item_in_cart;
-                let message=data.alert_message;
-                let alert_color=data.alert_color;
+        fetch(`${window.location.origin}/user/add_cart`,
+            {
+                method: "POST",
+                credentials: "include",
+                body: JSON.stringify(item),
+                cache: "no-cache",
+                headers: new Headers({
+                    "content-type": "application/json"
+                })
+            }).then(
+                response => response.json()
+            ).then(function (data) {
+                let cart_count = data.item_in_cart;
+                let message = data.alert_message;
+                let alert_color = data.alert_color;
                 document.getElementById("number_of_items").innerHTML = cart_count;
                 document.getElementById("alert_message").innerHTML = message;
                 document.getElementById("alert_message").className = alert_color;
             }
             ).then(
-            $("#alert_message").show()
-                ).then(setTimeout(close_alert, 2000)
+                $("#alert_message").show()
+            ).then(setTimeout(close_alert, 2000)
 
-                ).catch(function (error) {
-                    console.log("Fetch error: " + error);
-                  });
+            ).catch(function (error) {
+                console.log("Fetch error: " + error);
+            });
 
     };
 
     function close_alert() {
         $("#alert_message").hide();
-      };
+    };
 </script>
->>>>>>> Stashed changes
 {% endblock content %}

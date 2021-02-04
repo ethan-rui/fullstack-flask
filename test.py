@@ -1,2 +1,8 @@
-print(len("fa5ce10d-6f8d-4a84-86a0-6f28a182f48f"))
-print(len("00000000-0000-0000-0000-000000000000"))
+from data.users import TableUser, User
+
+db = TableUser()
+objects = db.objects()
+db.close()
+
+for x in objects:
+    print(x.cart)

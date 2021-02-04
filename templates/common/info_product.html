@@ -28,8 +28,9 @@
             <h3>{{target.name}}</h3>
             <hr>
             {% if target.discount > 0 %}
-            <h5><del id="Original">${{target.centprice/100}}</del></h5>
-            <h4 class="font-weight-bold text-danger ">${{(target.centprice/100)*(1-target.discount/100)}}</h4>
+            <h5><del id="Original">${{"%.2f"|format(target.centprice/100)}}</del></h5>
+            <h4 class="font-weight-bold text-danger ">${{"%.2f"|format((target.centprice/100)*(1-target.discount/100))}}
+            </h4>
             <h6> (Save {{target.discount}}%)</h6>
             {% else %}
             <h4 class="font-weight-bold">${{target.centprice/100}}</h4>

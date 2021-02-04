@@ -71,6 +71,7 @@ app.register_blueprint(EP_Payment, url_prefix="/user")
 if __name__ == "__main__":
     from data.products import TableBC, Brand, Category
     from data.users import User, TableUser
+
     """
     inserting the default entries to tables before server starts
     - superuser
@@ -78,21 +79,32 @@ if __name__ == "__main__":
     - categories
     """
     # default brands & categories
+
     db_bc = TableBC()
-    db_bc.insert(Category(uid="00000000-0000-0000-0000-000000000001"))
-    db_bc.insert(Brand(uid="00000000-0000-0000-0000-000000000000"))
+    """checks if defaults are already in db"""
+    if "00000000-0000-0000-0000-000000000001" not in db_bc.dict():
+        db_bc.insert(Category(uid="00000000-0000-0000-0000-000000000001"))
+    if "00000000-0000-0000-0000-000000000000" not in db_bc.dict():
+        db_bc.insert(Brand(uid="00000000-0000-0000-0000-000000000000"))
     db_bc.close()
+
     # default superuser
     db_users = TableUser()
-    db_users.insert(
-        User(
-            username="admin",
-            password="password",
-            role="admin",
-            uid="00000000-0000-0000-0000-000000000002",
-            email="admin@admin.com",
+    """checks if existing admin is already in the table"""
+    if "00000000-0000-0000-0000-000000000002" not in db_users.dict():
+        db_users.insert(
+            User(
+                username="admin",
+                password="password",
+                role="admin",
+                uid="00000000-0000-0000-0000-000000000002",
+                email="admin@admin.com",
+            )
         )
-    )
-    db_users.close()
+    else:
+        """superuser password will revert back to password if edited"""
+        superuser = db_users.retrieve("00000000-0000-0000-0000-000000000002")
+        superuser.force_password_change("password")
 
+    db_users.close()
     app.run(debug=True)

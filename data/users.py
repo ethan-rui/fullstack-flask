@@ -55,8 +55,16 @@ class User(Entry, UserMixin):
         else:
             return False
 
-    def set_products_cart(self, key, value=1):
+    def force_password_change(self, password_new: str) -> bool:
+        self.password = generate_password_hash(password_new)
+        self.update_timestamp()
+        return True
+
+    def add_item_cart(self, key, value):
         self.cart[key] = value
+
+    def cart_objects(self) -> list:
+        return list(self.cart.values())
 
     def to_json(self) -> dict:
         return {
