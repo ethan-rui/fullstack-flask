@@ -1,0 +1,135 @@
+{% extends 'layouts/base.html' %}
+{% block title %}
+Products
+{% endblock title %}
+{% block content %}
+<section class="jumbotron text-center">
+    <div class="container">
+        <h1 class="jumbotron-heading">CART</h1>
+    </div>
+</section>
+
+<div class="container mb-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col"> </th>
+                            <th scope="col">Product</th>
+
+                            <th scope="col" class="text-right">Price</th>
+                            <th scope="col" class="text-center">Quantity</th>
+                            <th scope="col">Sub-Total</th>
+                            <th> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td><img src="{{url_for('static', filename='media/'+product.images[0])}}" /> </td>
+                            <td>{{product.name}}</td>
+
+                            <td class="text-right">
+                                <div class="input-group-prepend">$
+                                <span class="input-group-text" id="{{'{}_price'.format(product.uuid)}}">{{product.centprice_final}}</span></div></td>
+
+                            <td><input class="form-control" type="number" value="1" id="{{'{}_quantity'.format(product.uuid)}}" /></td>
+                            <td onload="calculate_subtotal(this)" id="{{product.uuid}}" >In stock</td>
+                            <td class="text-right"><button class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>
+                                </button> </td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Total</td>
+                            <td class="text-right">${{total_amt}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col mb-2">
+            <div class="row">
+                <div class="col-sm-12  col-md-6">
+                    <button class="btn btn-block btn-light">Continue Shopping</button>
+                </div>
+                <div class="col-sm-12 col-md-6 text-right">
+                    <form action="/user/checkout" method="POST">
+                    <button class="btn btn-lg btn-block btn-success text-uppercase" type="submit">Checkout</button>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    img {
+        width: 100px;
+        height: 100px;
+    }
+</style>
+<script>
+    function calculate_subtotal(ele){
+        var item_id = ele.id;
+
+        var quantity = document.getElementById(String(item_id)+'_quantity').value;
+
+        var price = document.getElementById(String(item_id)+'_price').innerHTML;
+
+        var sub_total = (quantity*price).toFixed(2);
+
+        document.getElementById(item_id).innerHTML = sub_total;
+    };
+
+    $(document).ready(function() {
+        $("#alert_message").hide();});
+
+    function add_to_cart(){
+        var product_id = document.getElementById("product_id");
+        var quantity = document.getElementById("quantity");
+
+        var item = {
+            "id" : product_id.value,
+            "quantity" : quantity.value
+        };
+
+
+        fetch(`${window.origin}/user/add_cart`,
+        {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify(item),
+            cache: "no-cache",
+            headers: new Headers({
+                "content-type": "application/json"
+            })
+        }).then(
+            response => response.json()
+            ).then(function(data) {
+                let cart_count=data.item_in_cart;
+                let message=data.alert_message;
+                let alert_color=data.alert_color;
+                document.getElementById("number_of_items").innerHTML = cart_count;
+                document.getElementById("alert_message").innerHTML = message;
+                document.getElementById("alert_message").className = alert_color;
+            }
+            ).then(
+            $("#alert_message").show()
+                ).then(setTimeout(close_alert, 1500)
+
+                ).catch(function (error) {
+                    console.log("Fetch error: " + error);
+                  });
+
+    };
+
+    function close_alert() {
+        $("#alert_message").hide();
+      };
+</script>
+{% endblock content %}
