@@ -10,9 +10,8 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{url_for('static', filename='css/user.css')}}">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
         crossorigin="anonymous"></script>
@@ -28,7 +27,7 @@
     {% include 'includes/_navbar.html' %}
     {% endblock navbar %}
     {% block blank_space %}
-    <div style="margin-bottom: 8rem;">
+    <div style="margin-bottom: 1rem;">
     </div>
     {% endblock blank_space %}
 
@@ -66,6 +65,22 @@
     setTimeout(function () {
         $("#flashed_messages").hide()
     }, 2000);
+
+    $("#query_search").keyup(function (event) {
+        // keyCode 13 is the enter key
+        // search item when enter key is pressed
+        if (event.keyCode == 13) {
+            item_search()
+        }
+    })
+
+
+    function item_search() {
+        query = $("#query_search").val().replace(/\s/g, "-")
+        window.location.href = `${window.location.origin}/catalog/?page={{ pg_index }}&size={{ pg_size }}&filter_by={{ param_filter }}&sort_by={{ param_sort }}&search=${query}`
+
+    }
+
 </script>
 
 </html>

@@ -34,7 +34,7 @@ $("#table").bootstrapTable({
 })
 
 function stateFormatter(value, row, index) {
-    if (row.uuid in ["1", "0"]) {
+    if (row.uuid == "00000000-0000-0000-0000-000000000000" || row.uuid == "00000000-0000-0000-0000-000000000001" || row.uuid == "00000000-0000-0000-0000-000000000002") {
         return {
             disabled: true,
             checked: false

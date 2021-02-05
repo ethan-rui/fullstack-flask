@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, url_for
 import os
 from datetime import timedelta
 from flask.templating import render_template
@@ -39,7 +39,7 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    return render_template("errors/401.html")
+    return redirect(url_for("auth.page_login"))
 
 
 @app.errorhandler(404)

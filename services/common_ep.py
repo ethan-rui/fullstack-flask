@@ -54,6 +54,7 @@ def page_catalog():
 
     shown_products = products[(pg_index * pg_size) : (pg_index * pg_size + pg_size)]
     pg_total = ceil(len(products) / pg_size)
+    len_products = len(products)
     return render_template(
         "common/catalog.html",
         shown_products=shown_products,
@@ -64,6 +65,7 @@ def page_catalog():
         param_search=param_search,
         pg_index=pg_index,
         pg_size=pg_size,
+        len_products=len_products,
     )
 
 
