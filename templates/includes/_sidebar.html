@@ -6,30 +6,42 @@
   </div>
   <ul class="nav flex-column mb-0">
     <li>
-      <a class="head" href="{{url_for('admin_statistics.page_dashboard')}}"><i class="fas fa-chart-pie-alt"></i><span>
+      <a class="head" href="/admin"><i class="fas fa-chart-pie-alt"></i><span>
           Dashboard</span></a>
     </li>
     <li class="mb-1">
-      <a href="#" data-toggle="collapse" onclick="dropdown_save(this)" data-target="#submenu-1" class="head"><i
-          class="fa fa-box mr-1"></i><span>Inventory</span><i class="fa fa-fw fa-angle-down pull-right"></i></a>
+      <a href="#" id="inventory_head" data-toggle="collapse" onclick="dropdown_save(this)" data-target="#submenu-1"
+        class="head"><i class="fa fa-box mr-1"></i><span>Inventory</span><i
+          class="fa fa-fw fa-angle-down pull-right"></i></a>
       <ul id="submenu-1" class="collapse speed pl-0">
-        <li><a href="{{url_for('admin_inventory.page_table_brands')}}"><i class="fa fa-copyright mr-1"></i>Brands</a>
+        <li><a href="/admin/inventory/brands"><i class="fa fa-copyright mr-1"></i>Brands</a>
         </li>
-        <li><a href="{{url_for('admin_inventory.page_table_categories')}}"><i
-              class="fa fa-arrow-to-right mr-1"></i>Categories</a></li>
-        <li><a href="{{url_for('admin_inventory.page_table_products')}}"><i class="fa fa-boxes mr-1"></i>View
+        <li><a href="/admin/inventory/categories"><i class="fa fa-arrow-to-right mr-1"></i>Categories</a></li>
+        <li><a href="/admin/inventory"><i class="fa fa-boxes mr-1"></i>View
             Products</a></li>
-        <li><a href="{{url_for('admin_inventory.page_products_add')}}"><i class="fa fa-people-carry mr-1"></i>Add
+        <li><a href="/admin/inventory/add/products"><i class="fa fa-people-carry mr-1"></i>Add
             Products</a></li>
       </ul>
     </li>
     <li>
-      <a href="#" data-toggle="collapse" onclick="dropdown_save(this)" data-target="#submenu-2" class="head"><i
-          class="fa fa-fw fa-user-plus mr-1"></i><span>Users</span><i class="fa fa-fw fa-angle-down pull-right"></i></a>
+      <a href="#" id="users_head" data-toggle="collapse" onclick="dropdown_save(this)" data-target="#submenu-2"
+        class="head"><i class="fa fa-fw fa-user-plus mr-1"></i><span>Users</span><i
+          class="fa fa-fw fa-angle-down pull-right"></i></a>
       <ul id="submenu-2" class="collapse speed pl-0">
-        <li><a href="{{url_for('admin_users.page_table_users')}}"><i class="fa fa-user mr-1"></i>Users</a>
+        <li><a href="/admin/users"><i class="fa fa-user mr-1"></i>Users</a>
         </li>
-        <li><a href="{{url_for('admin_users.page_table_inquiries')}}"><i class="fa fas fa-book mr-1"></i>Inquiries</a>
+        <li><a href="/admin/inquiries"><i class="fa fas fa-book mr-1"></i>Inquiries</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#" id="frontpage-head" data-toggle="collapse" onclick="dropdown_save(this)" data-target="#submenu-3"
+        class="head"><i class="fas fa-images mr-1"></i><span>Front Page</span><i
+          class="fa fa-fw fa-angle-down pull-right"></i></a>
+      <ul id="submenu-3" class="collapse speed pl-0">
+        <li><a href="/admin/front-page/carousel"><i class="fad fa-dharmachakra mr-1"></i></i>Carousel</a>
+        </li>
+        <li><a href="/admin/front-page/featured"><i class="fa fas fa-shopping-cart mr-1"></i>Featured Products</a>
         </li>
       </ul>
     </li>

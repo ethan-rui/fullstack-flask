@@ -41,7 +41,7 @@ class UpdateCarousel(Form):
     )
 
 
-class UpdatePromoProducts(Form):
+class UpdateFeaturedProducts(Form):
     image_0 = FileField(
         "Image 1",
         validators=[

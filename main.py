@@ -57,6 +57,7 @@ from services.admin.users_ep import endpoint as EP_Admin_Users
 from services.admin.statistics_ep import endpoint as EP_Admin_Stats
 from services.admin.common_api import endpoint as EP_Admin_API
 from services.payment_ep import endpoint as EP_Payment
+from services.admin.frontpage_ep import endpoint as EP_Admin_FrontPage
 
 # from services.admin_ep import endpoint as EP_Admin
 
@@ -67,6 +68,7 @@ app.register_blueprint(EP_Admin_Users, url_prefix="/admin")
 app.register_blueprint(EP_Admin_Stats, url_prefix="/admin")
 app.register_blueprint(EP_Admin_API, url_prefix="/admin")
 app.register_blueprint(EP_Payment, url_prefix="/user")
+app.register_blueprint(EP_Admin_FrontPage, url_prefix="/admin")
 
 if __name__ == "__main__":
     from data.products import TableBC, Brand, Category

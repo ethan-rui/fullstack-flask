@@ -19,7 +19,7 @@ class Inquiry(Entry):
         self.__sender_email = sender_email
         self.__subject = subject
         self.__content = content
-        self.status = True
+        self.status = status
         """status denotes whether the ticket is open"""
 
     @property

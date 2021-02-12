@@ -1,7 +1,8 @@
 from flask import render_template, redirect, url_for, Blueprint, request, flash
-from data.products import Category, TableBC, TableProduct
+from data.products import TableBC, TableProduct
 from data.inquiries import TableInquiry, Inquiry
-from math import ceil, prod
+from data.frontpage import TableFrontPage
+from math import ceil
 from services.forms.inquiry import InquiryForm
 from operator import attrgetter
 
@@ -10,7 +11,23 @@ endpoint = Blueprint("base", __name__)
 
 @endpoint.route("/")
 def page_home():
-    return render_template("common/home.html")
+    db = TableFrontPage()
+    db.close()
+    """retrieving the carousel images"""
+    try:
+        carou_active_key = list(db.carousel.keys())[0]
+        carou_others_keys = list(db.carousel.keys())[1:]
+    except IndexError:
+        carou_active_key = ""
+        carou_others_keys = ""
+    """wont render if carousel is empty"""
+
+    return render_template(
+        "common/home.html",
+        img_carousel=db.carousel,
+        carou_active_key=carou_active_key,
+        carou_others_keys=carou_others_keys,
+    )
 
 
 @endpoint.route("/catalog/")
@@ -47,6 +64,7 @@ def page_catalog():
         if param_sort == "price_desc":
             products = sorted(products, key=attrgetter("centprice_final"), reverse=True)
 
+    """gets the respective brands and cat for each product"""
     db_bc = TableBC()
     bc = db_bc.dict()
     db_bc.close()
