@@ -24,6 +24,7 @@ def page_cart():
     user = db.retrieve(current_user.uuid)
     """check if cart is empty"""
     if len(user.cart) == 0:
+        db.close()
         return render_template("payment/cart.html")
 
     db_products = TableProduct()
@@ -33,17 +34,24 @@ def page_cart():
     total_amt = 0
 
     """user.cart -> {product_uuid: cart_item}"""
+    invalid_products = []
     for product_uuid in user.cart:
-        target = db_products.retrieve(product_uuid)
-        """setting the attribute of each cart item"""
-        user.cart[product_uuid].img = target.images[0]
-        user.cart[product_uuid].centprice_final = target.centprice_final
-        user.cart[product_uuid].calc_subtotal(centprice=target.centprice)
-        user.cart[product_uuid].name = target.name
-        total_amt += target.centprice_final
+        try:
+            target = db_products.retrieve(product_uuid)
+            """setting the attribute of each cart item"""
+            user.cart[product_uuid].img = target.images[0]
+            user.cart[product_uuid].centprice_final = target.centprice_final
+            user.cart[product_uuid].calc_subtotal(centprice=target.centprice)
+            user.cart[product_uuid].name = target.name
+            total_amt += target.centprice_final
+        except:
+            invalid_products.append(product_uuid)
 
+    if len(invalid_products) > 0:
+        for i in invalid_products:
+            del user.cart[i]
+        db.insert(user)
     products = user.cart_objects()
-    db.insert(user)
     db.close()
     return render_template("payment/cart.html", products=products, total_amt=total_amt)
 
@@ -72,6 +80,9 @@ def add_cart():
         user.add_item_cart(
             key=product_id, value=CartItem(uuid=product_id, quantity=quantity)
         )
+        current_user.add_item_cart(
+            key=product_id, value=CartItem(uuid=product_id, quantity=quantity)
+        )
         db.insert(user)
     db.close()
 
@@ -85,14 +96,42 @@ def add_cart():
     return resp
 
 
-@endpoint.route("/checkout", methods=["POST"])
+@endpoint.route("/checkout")
 @login_required
-def api_checkout():
+def page_checkout():
     db = TableUser()
     user = db.retrieve(current_user.uuid)
-    current_user.cart = {}
-    user.cart = {}
-    db.insert(user)
+    if len(user.cart) == 0:
+        db.close()
+        return render_template("payment/cart.html")
+
+    db_products = TableProduct()
+    db_products.close()
+
+    """"{products name: quantity}"""
+    total_amt = 0
+
+    """user.cart -> {product_uuid: cart_item}"""
+    invalid_products = []
+    for product_uuid in user.cart:
+        try:
+            target = db_products.retrieve(product_uuid)
+            """setting the attribute of each cart item"""
+            user.cart[product_uuid].img = target.images[0]
+            user.cart[product_uuid].centprice_final = target.centprice_final
+            user.cart[product_uuid].calc_subtotal(centprice=target.centprice)
+            user.cart[product_uuid].name = target.name
+            total_amt += target.centprice_final
+        except:
+            invalid_products.append(product_uuid)
+
+    if len(invalid_products) > 0:
+        for i in invalid_products:
+            del user.cart[i]
+        db.insert(user)
+
+    products = user.cart_objects()
     db.close()
-    flash("Payment Completed")
-    return render_template("common/home.html")
+    return render_template(
+        "payment/checkout.html", user=user, products=products, total_amt=total_amt
+    )

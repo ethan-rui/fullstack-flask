@@ -5,7 +5,7 @@ Carousel
 {% block content %}
 <div class="container-fluid p-4">
     <h3>
-        Carousel
+        <b>Carousel Management</b>
     </h3>
     <div class="row">
         <div class="col-lg-6">
@@ -93,7 +93,7 @@ Carousel
                 data: JSON.stringify(selected_slides),
                 dataType: "json",
                 url: `${window.location.origin}/admin/front-page/delete/carousel`,
-                success: function (e) {
+                success: function () {
                     console.log("Deleted")
                     location.reload(true)
                 },

@@ -20,11 +20,19 @@ class LoginForm(Form):
     username = StringField("Username", [validators.Length(min=4, max=25)])
     password = PasswordField("Password", [validators.DataRequired()])
 
+
 class ProfileForm(Form):
-    city = StringField("City", [validators.DataRequired(), validators.Length(min=4, max=25)])
-    country = StringField("Country", [validators.DataRequired(), validators.Length(min=4, max=25)])
-    pcode = StringField("Postal code", [validators.DataRequired(), validators.Length(min=4, max=25)])
-    
+    street = StringField(
+        "Street", [validators.DataRequired(), validators.Length(min=4, max=25)]
+    )
+    unit_no = StringField(
+        "Unit No.", [validators.DataRequired(), validators.Length(min=4, max=25)]
+    )
+    pcode = StringField(
+        "Postal code", [validators.DataRequired(), validators.Length(min=4, max=25)]
+    )
+
+
 class PswUpdateForm(Form):
     oldpassword = PasswordField("Old Password", [validators.DataRequired()])
 
@@ -33,6 +41,6 @@ class PswUpdateForm(Form):
         [
             validators.DataRequired(),
             validators.EqualTo("confirm", message="Passwords must match"),
-        ]
+        ],
     )
     confirm = PasswordField("Repeat Password")

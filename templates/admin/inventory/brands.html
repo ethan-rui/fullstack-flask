@@ -8,7 +8,7 @@
 
 
 <div class="container-fluid p-4">
-    <h3><b>Brands Management</b></h3>
+    <h3><b>Brand Management</b></h3>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
         Add Brand
     </button>
@@ -111,10 +111,10 @@
                 </a>
             </div>`}
 
-	$("#table").bootstrapTable('hideColumn', 'uuid')
+    $("#table").bootstrapTable('hideColumn', 'uuid')
 
     function render_delete(index, row) {
-		if (row.uuid != "00000000-0000-0000-0000-000000000001" && row.uuid != "00000000-0000-0000-0000-000000000000") {
+        if (row.uuid != "00000000-0000-0000-0000-000000000001" && row.uuid != "00000000-0000-0000-0000-000000000000") {
             return `<div style="max-width: fit-content;">
                     <button type="button" class="btn btn-transparent btn-sm" data-toggle="modal" data-target="#delete_${row.uuid}">
                         <i class="fas fa-trash" style="color: red;"></i>

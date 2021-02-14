@@ -3,7 +3,7 @@ import os
 from datetime import timedelta
 from flask.templating import render_template
 from flask_uploads import IMAGES, UploadSet, configure_uploads, patch_request_class
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager, AnonymousUserMixin
 from werkzeug.utils import redirect
 from data.users import TableUser
 
@@ -24,6 +24,7 @@ patch_request_class(app)
 """flask-login config"""
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.anonymous_user = AnonymousUserMixin
 
 
 @login_manager.user_loader
@@ -45,6 +46,11 @@ def unauthorized():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("errors/404.html")
+
+
+@app.route("/nets")
+def nets_payment():
+    return render_template("nets.html")
 
 
 """other login routes under auth_ep.py"""

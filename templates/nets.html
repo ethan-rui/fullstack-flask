@@ -1,0 +1,44 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="container">
+
+    <head>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script src="{{url_for('static', filename='js/moment.js')}}"></script>
+        <script src="{{url_for('static', filename='js/nets.js')}}"></script>
+        <script src="{{url_for('static', filename='js/sha256.js')}}"></script>
+    </head>
+
+    <body>
+        <div class="container-fluid">
+            <div class="container">
+                <div>
+                    <div class="data-input">
+                        <table class="table table-condensed" align="center">
+                            <thead>
+                                <tr>
+                                    <th>Fields</th>
+                                    <th>Input</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><label>Amount (Cents) </label></td>
+                                    <td><input class="form-control" type="text" size="40" id="amount" value="1000"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="container container-result">
+                    <button id='generate_qr' class="btn btn-primary" align="center">Generate QR</button>
+                    <div id="payment_image"></div>
+                    <div id="result_image"></div>
+                </div>
+
+            </div>
+        </div>
+    </body>
+</div>
+
+{% endblock content %}

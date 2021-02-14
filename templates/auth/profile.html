@@ -16,16 +16,19 @@
                             <h3 class="mb-0">My account</h3>
                         </div>
                         <div class="col-4 text-right">
-<div class="dropdown">
-                            <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Settings
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                              <a class="dropdown-item" href="{{url_for('auth.page_update_profile')}}">Edit Address</a>
-                              <a class="dropdown-item" href="{{url_for('auth.page_update_password')}}">Change Password</a>
-                              <a class="dropdown-item" href="#">Something else here</a>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-primary dropdown-toggle" type="button"
+                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    Settings
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="{{url_for('auth.page_update_profile')}}">Edit
+                                        Address</a>
+                                    <a class="dropdown-item" href="{{url_for('auth.page_update_password')}}">Change
+                                        Password</a>
+                                </div>
                             </div>
-                    </div>
                         </div>
                     </div>
                 </div>
@@ -69,24 +72,24 @@
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="form-group focused">
-                                        <label class="form-control-label" for="input-city">City</label>
-                                        <input readonly type="text" id="input-city"
-                                            class="form-control form-control-alternative" placeholder="City"
-                                            value="{{current_user.full_address('city')}}">
+                                        <label class="form-control-label" for="input-street">Street</label>
+                                        <input readonly type="text" id="input-street"
+                                            class="form-control form-control-alternative" placeholder="street"
+                                            value="{{current_user.full_address('street')}}">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group focused">
-                                        <label class="form-control-label" for="input-country">Country</label>
-                                        <input readonly type="text" id="input-country"
-                                            class="form-control form-control-alternative" placeholder="Country"
-                                            value="{{current_user.full_address('country')}}">
+                                        <label class="form-control-label" for="input-unit_no">Unit No</label>
+                                        <input readonly type="text" id="input-unit_no"
+                                            class="form-control form-control-alternative" placeholder="unit_no"
+                                            value="{{current_user.full_address('unit_no')}}">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="form-control-label" for="input-country">Postal code</label>
-                                        <input readonly type="number" id="input-postal-code"
+                                        <label class="form-control-label" for="input-unit_no">Postal code</label>
+                                        <input readonly id="input-postal-code"
                                             class="form-control form-control-alternative"
                                             placeholder="{{current_user.full_address('pcode')}}">
                                     </div>

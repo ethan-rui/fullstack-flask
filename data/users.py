@@ -14,7 +14,7 @@ class User(Entry, UserMixin):
         role: str = "customer",
         email: str = "",
         uid: str = None,
-        full_address={"city": "-", "country": "-", "pcode": "-"},
+        full_address={"pcode": "-", "street": "-", "unit_no": "-"},
         cart={},
     ):
         try:
@@ -42,7 +42,7 @@ class User(Entry, UserMixin):
             return self.__full_address[value]
 
     def set_full_address(self, key, value):
-        if key not in ["country", "city", "pcode"]:
+        if key not in ["unit_no", "street", "pcode"]:
             raise KeyError(f"{key} is not an attribute of full_address")
         else:
             self.__full_address[key] = value

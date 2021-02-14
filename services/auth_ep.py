@@ -90,8 +90,8 @@ def page_update_profile():
     if form.validate():
         db = TableUser()
         user = db.retrieve(current_user.uuid)
-        user.set_full_address(key="city", value=form.city.data)
-        user.set_full_address(key="country", value=form.country.data)
+        user.set_full_address(key="street", value=form.street.data)
+        user.set_full_address(key="unit_no", value=form.unit_no.data)
         user.set_full_address(key="pcode", value=form.pcode.data)
         print(user.full_address)
         db.insert(user)
