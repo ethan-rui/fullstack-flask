@@ -23,16 +23,21 @@
             <h3>Overall Best Sellers</h3><canvas id="barChart"></canvas>
         </div>
         <div class="col-12 col-lg-6" style="border:1px solid #cecece;">
-            <h3>Top selling products</h3>
-        </div>
-        <div class="col-12 col-lg-4 row-lg-4" style="border:1px solid #cecece;">
-            <h3>Recent Orders</h3>
-        </div>
-        <div class="col-12 col-lg-4 row-lg-4" style="border:1px solid #cecece;">
-            <h3>Recently Added Products</h3>
-        </div>
-        <div class="col-12 col-lg-4 row-lg-4" style="border:1px solid #cecece;">
-            <h3>Recent Buyers</h3>
+            <h3>Recently Added Products (3 Days)</h3>
+            <table id="table" data-show-export="true" data-toolbar="#toolbar" data-toggle="table" data-show-toggle="true"
+            data-search="true" data-click-to-select="true" data-search-align="right" class="table-striped"
+            data-url="/admin/inventory/products/data_table" data-show-columns="true" data-show-columns-toggle-all="true"
+            data-show-refresh="true" data-pagination="true" data-page-list="[10, 25, 50, 100, all]" data-toggle="table"
+            data-id-field="uuid">
+                <thead>
+                    <tr>
+                        <th data-field="name" data-sortable="true" data-align="right">Name</th>
+                        <th data-field="stock" data-sortable="true" data-align="right">Stock</th>
+                        <th data-field="discount" data-sortable="true" data-align="right">Discount (%)</th>
+                        <th data-field="price_final" data-sortable="true" data-align="right">Final Price ($)</th>
+                    </tr>
+                </thead>
+            </table>         
         </div>
     </div>
 </div>
