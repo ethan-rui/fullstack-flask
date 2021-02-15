@@ -9,7 +9,7 @@ Products
     </div>
 </section>
 
-<div class="container mb-4">
+<div class="container">
     {% if products %}
     <div class="row">
         <div class="col-12">
@@ -23,7 +23,8 @@ Products
                         <th scope="col" class="text-right">Price</th>
                         <th scope="col" class="text-center">Quantity</th>
                         <th scope="col" class="text-right">Sub-Total</th>
-                        <th><button class="btn btn-block btn-success text-uppercase" onclick="update_cart()">Update</button></th>
+                        <th><button class="btn btn-block btn-success text-uppercase"
+                                onclick="update_cart()">Update</button></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,22 +44,23 @@ Products
 
                         <td class="justify-content-center">
                             <div class="input-group mb-12">
-                                    <select class="custom-select" id="{{product.uuid}}" onchange="change_quantity(this)">
-                                      <option value="1" selected>1</option>
-                                      <option value="2">2</option>
-                                      <option value="3">3</option>
-                                      <option value="4">4</option>
-                                      <option value="5">5</option>
-                                      <option value="6">6</option>
-                                      <option value="7">7</option>
-                                      <option value="8">8</option>
-                                      <option value="9">9</option>
-                                      <option value="10">10</option>
-                                    </select>
-                                  </div>
+                                <select class="custom-select" id="{{product.uuid}}" onchange="change_quantity(this)">
+                                    <option value="1" selected>1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
                         </td>
                         <td id="subtotal" class="text-right">${{"%.2f"|format(product.subtotal/100)}}</td>
-                        <td class="text-right"><button class="btn btn-sm btn-danger" id="{{product.uuid}}_" onclick="delete_item(this)"><i class="fa fa-trash"></i>
+                        <td class="text-right"><button class="btn btn-sm btn-danger" id="{{product.uuid}}_"
+                                onclick="delete_item(this)"><i class="fa fa-trash"></i>
                             </button> </td>
                     </tr>
                     {% endfor %}
@@ -76,7 +78,8 @@ Products
         <div class="col mb-2">
             <div class="row">
                 <div class="col-sm-12  col-md-3 mr-auto">
-                    <a href="/catalog/?page=0&size=1&filter_by=None&sort_by=None&search=" class="btn btn-block btn-light">Continue Shopping</a>
+                    <a href="/catalog/?page=0&size=1&filter_by=None&sort_by=None&search="
+                        class="btn btn-block btn-light">Continue Shopping</a>
                 </div>
                 <div class="col-sm-12 col-md-3 ml-auto">
                     <a href="/user/checkout" class="btn btn-md btn-block btn-success text-uppercase">Checkout</a>
@@ -92,10 +95,10 @@ Products
     {% endif %}
 </div>
 <script>
-    window.onload = function(){
+    window.onload = function () {
         var element_table = document.getElementsByName("cart");
         var element_tableRows = element_table[0].rows;
-        for (var i=1; i< (element_tableRows.length - 1);i++){
+        for (var i = 1; i < (element_tableRows.length - 1); i++) {
             var cell = element_tableRows[i].cells;
             var uuid = cell[3].innerHTML;
             var quantity = Number(cell[2].innerHTML);
@@ -103,10 +106,11 @@ Products
         }
     };
 
-    function update_cart(){
-        location.reload();};
+    function update_cart() {
+        location.reload();
+    };
 
-    function change_quantity(ele){
+    function change_quantity(ele) {
         var uuid = ele.id;
         var quantity = ele.value;
         var items = {
@@ -125,14 +129,14 @@ Products
             }).catch(function (error) {
                 console.log("Fetch error: " + error);
             });
-        
+
     };
 
-    function delete_item(ele){
+    function delete_item(ele) {
         var delet_id = ele.id;
         var postionOf_ = delet_id.lastIndexOf("_");
-        var uuid = delet_id.slice(0,postionOf_);
-        var Row_id = "#"+ uuid + "_row";
+        var uuid = delet_id.slice(0, postionOf_);
+        var Row_id = "#" + uuid + "_row";
         $(Row_id).remove();
         var items = {
             "id": uuid,
@@ -148,17 +152,18 @@ Products
                 })
             }).then(
                 response => response.json()
-            ).then(function(data) {
-                let cart_count=data.item_in_cart;
-                if(cart_count == 0){
+            ).then(function (data) {
+                let cart_count = data.item_in_cart;
+                if (cart_count == 0) {
                     location.reload();
-                }else{
+                } else {
                     document.getElementById("number_of_items").innerHTML = cart_count;
-                    console.log(cart_count);}
+                    console.log(cart_count);
+                }
             }).catch(function (error) {
                 console.log("Fetch error: " + error);
             });
-        
+
     };
 </script>
 {% endblock content %}

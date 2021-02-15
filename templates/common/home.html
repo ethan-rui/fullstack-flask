@@ -5,6 +5,19 @@ Home
 {% block content %}
 <!-- carousel taken from  -->
 <div class="container">
+    <div class="toast" role="alert" aria-live="polite" aria-atomic="true" data-delay="3000"
+        style="position: absolute; top: 15%; transform: translate(-50%, -50%); left:50%; z-index: 999;">
+        <div class="toast-header">
+            &#128276; &nbsp;
+            <strong class="mr-auto">Notification</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body" id="alert_message" style="font-weight: bolder;">
+            Hello, world! This is a toast message.
+        </div>
+    </div>
     {% if img_carousel|length > 0 %}
     <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
         <div class="carousel-inner">
@@ -37,30 +50,31 @@ Home
 
 <div class="container justify-content-center align-items-center">
     <div class="row">
-        {% for entry in tablefeatured %}
-                <div class="col-6 col-lg-3 col-md-4">
-                    <div class="card card-product">
-                        <div class="img-product">
-                            <a href="/catalog/product/{{product_keys[entry].uuid}}">
-                                <img class="card-img img-fluid" src="{{url_for('static', filename='media/'+product_keys[entry].images[0])}}" alt="">
-                            </a>
-                        </div>
-                        <div class="card-body">
-                            <h4 class="card-title">{{product_keys[entry].name}}</h4>
-                            <h6 class="card-subtitle mb-2 text-muted">{{bc[product_keys[entry].brand].name}}</h6>
-                            <div class="buy d-flex justify-content-between">
-                                <div class="price text-success">
-                                    <h5 class="">${{"%.2f"|format(product_keys[entry].centprice/100)}}</h5>
-                                </div>
-                            </div>
-                            <div class="justify-content-center row">
-                                <input type="hidden" name="quantity" id="{{product_keys[entry].uuid}}_quantity" value="1">
-                                <button class="btn btn-success btn-sm col-10" onclick="add_cart(this)" id="{{product_keys[entry].uuid}}"><i
-                                        class="fas fa-shopping-cart mr-2"></i>Add</button>
-                            </div>
+        {% for entry in featured_products %}
+        <div class="col-6 col-lg-3 col-md-4">
+            <div class="card card-product">
+                <div class="img-product">
+                    <a href="/catalog/product/{{product_keys[entry].uuid}}">
+                        <img class="card-img img-fluid"
+                            src="{{url_for('static', filename='media/'+product_keys[entry].images[0])}}" alt="">
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">{{product_keys[entry].name}}</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">{{bc[product_keys[entry].brand].name}}</h6>
+                    <div class="buy d-flex justify-content-between">
+                        <div class="price text-success">
+                            <h5 class="">${{"%.2f"|format(product_keys[entry].centprice/100)}}</h5>
                         </div>
                     </div>
+                    <div class="justify-content-center row">
+                        <input type="hidden" name="quantity" id="{{product_keys[entry].uuid}}_quantity" value="1">
+                        <button class="btn btn-success btn-sm col-10" onclick="add_cart(this)"
+                            id="{{product_keys[entry].uuid}}"><i class="fas fa-shopping-cart mr-2"></i>Add</button>
+                    </div>
                 </div>
+            </div>
+        </div>
         {% endfor %}
 
     </div>
@@ -92,7 +106,14 @@ Home
                 })
             }).then(
                 response => response.json()
-            ).catch(function (error) {
+            ).then(function (data) {
+                let cart_count = data.item_in_cart;
+                let message = data.alert_message;
+                document.getElementById("number_of_items").innerHTML = cart_count;
+                document.getElementById("alert_message").innerHTML = message;
+                $('.toast').toast('show');
+                console.log(cart_count)
+            }).catch(function (error) {
                 console.log("Fetch error: " + error);
             });
 

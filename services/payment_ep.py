@@ -76,6 +76,17 @@ def add_cart():
         alert_message = "Cart is full!"
 
     else:
+        db_products = TableProduct()
+        current_stock = db_products.retrieve(product_id).stock
+        db_products.close()
+        if current_stock < quantity:
+            resp_dic = {
+                "item_in_cart": len(user.cart),
+                "alert_message": "Item out of stock!",
+            }
+            resp = make_response(jsonify(resp_dic), 200)
+            return resp
+
         alert_message = "Item added successfully"
         user.add_item_cart(
             key=product_id, value=CartItem(uuid=product_id, quantity=quantity)
@@ -139,7 +150,7 @@ def page_checkout():
 @endpoint.route("/clear_cart", methods=["POST"])
 @login_required
 def api_clear_cart():
-    user_uuid = request.json
+    user_uuid, amount = request.json
     db_users = TableUser()
 
     db_products = TableProduct()
@@ -160,6 +171,8 @@ def api_clear_cart():
     db_products.close()
     db_users.close()
     return make_response("Success", 200)
+
+
 # def api_checkout():
 #     total_amt = 0
 #     history_dic = {}
@@ -178,13 +191,13 @@ def api_clear_cart():
 #     history_dic["products"] = products
 #     history_dic["total_amt"] = total_amt
 #     history_dic["statues"] = "Pending for delivery"
-    
+
 #     old_history = user.history
-    
+
 #     #removes the last history to keep the history to 6
 #     if len(old_history) == 6:
 #         old_history.popitem()
-    
+
 #     new_history[date_time] = history_dic
 #     new_history.update(old_history)
 #     #place ^ dictionary into the user's history dictionary with the date and time as key
@@ -194,6 +207,7 @@ def api_clear_cart():
 #     db.close()
 #     flash("Payment Completed")
 #     return redirect(url_for("base.page_home"))
+
 
 @endpoint.route("/change_quantity_cart", methods=["POST"])
 @login_required
@@ -205,12 +219,21 @@ def change_quantity():
 
     db = TableUser()
     user = db.retrieve(current_user.uuid)
-    user.add_item_cart(
-        key=product_id, value=CartItem(uuid=product_id, quantity=quantity)
-    )
-    db.insert(user)
+
+    """check for current stock of product"""
+    db_products = TableProduct()
+    current_stock = db_products.retrieve(product_id).stock
+    db_products.close()
+
+    if current_stock >= quantity:
+        user.add_item_cart(
+            key=product_id, value=CartItem(uuid=product_id, quantity=quantity)
+        )
+        db.insert(user)
+
     db.close()
-    return ('', 204)
+    return ("", 204)
+
 
 @endpoint.route("/delete_cart", methods=["POST"])
 @login_required
@@ -226,7 +249,7 @@ def delete_cart():
     db.close()
 
     resp_dic = {
-    "item_in_cart": len(user.cart),
+        "item_in_cart": len(user.cart),
     }
     resp = make_response(jsonify(resp_dic), 200)
     return resp

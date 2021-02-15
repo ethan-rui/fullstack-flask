@@ -8,16 +8,14 @@
   <li class="nav-item avatar dropdown list-unstyled" style="cursor: pointer;">
     <a class="nav-link dropdown-toggle waves-effect waves-light" id="navbarDropdownMenuLink-5"
       style="background-color: transparent;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-      <span class="badge badge-danger ml-2">4</span>
+      <span class="badge badge-danger ml-2" id="length_notif"></span>
       <i class="fas fa-bell"></i>
     </a>
-    <div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-5">
+    <div class="dropdown-menu dropdown-menu-lg-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-5"
+      id="notifs">
       <a class="dropdown-item waves-effect waves-light" href="#">Action <span
           class="badge badge-danger ml-2">4</span></a>
-      <a class="dropdown-item waves-effect waves-light" href="#">Another action <span
-          class="badge badge-danger ml-2">1</span></a>
-      <a class="dropdown-item waves-effect waves-light" href="#">Something else here <span
-          class="badge badge-danger ml-2">4</span></a>
+
     </div>
   </li>
   <a class="navbar-brand text-light font-weight-bold ml-3" href="{{url_for('auth.page_logout')}}">Logout<i
@@ -26,7 +24,13 @@
 
 <script>
   fetch(`${window.location.origin}/admin/notifications`)
-    .then(function (response) {
-      console.log(response.json())
+    .then(response => response.json())
+    .then(function (data) {
+      console.log(data.length);
+      $("#length_notif").html(data.length);
+      $("#notifs").html(
+        `<a class="dropdown-item waves-effect waves-light" href="#">Action <span
+          class="badge badge-danger ml-2"></span>${data}</a>`
+      )
     })
 </script>

@@ -7,14 +7,26 @@ Featured Products Management
 <script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
 <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <div class="container-fluid p-4">
     <h3>
-        Featured Products Management
+        <b>Featured Products Management</b>
     </h3>
     <div class="row">
         <div class="col-lg-6">
+            {% block flashed %}
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="container" id="flashed_messages">
+                <div class="row">
+                    {% for message in get_flashed_messages() %}
+                    <p class="alert alert-success col-12" role="alert">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            {% endwith %}
+            {% endblock flashed %}
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
@@ -27,53 +39,33 @@ Featured Products Management
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <table id="table" data-toggle="table" data-show-toggle="true" data-search="true"
+                        data-click-to-select="true" data-search-align="left" class="table-striped"
+                        data-url="/admin/inventory/products/data_table" data-show-columns="true"
+                        data-show-columns-toggle-all="true" data-show-refresh="true" data-pagination="true"
+                        data-page-list="[10, 25, 50, 100, all]" data-toggle="table" data-id-field="uuid">
+                        <thead>
+                            <tr>
+                                <th data-checkbox="true" data-formatter="stateFormatter" data-align="right"></th>
+                                <th data-formatter="render_image" data-align="center">Image</th>
+                                <th data-field="name" data-sortable="true" data-align="right">Name</th>
+                                <th data-field="price_final" data-sortable="true" data-align="right">Final Price ($)
+                                </th>
+                                <th data-formatter="render_edit" data-align="right">View</th>
+                                <th data-formatter="render_add" data-align="right">Add</th>
+                            </tr>
+                        </thead>
+                    </table>
                     <div class="col-12 mt-3">
-                        {% block flashed %}
-                        {% with messages = get_flashed_messages() %}
-                        {% if messages %}
-                        
-                        <div class="container" id="flashed_messages">
-                            <div class="row">
-                                {% for message in get_flashed_messages() %}
-                                <p class="alert alert-success col-12" role="alert">{{ message }}</p>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
-                        {% endwith %}
-                        {% endblock flashed %}
-                        <table class="table">
-                            <thead>
-                                <th>
-                                    Name
-                                </th>
-                                <th>
-                                    Price
-                                </th>
-                                <th>
-                                    Add
-                                </th>
-                        
-                            </thead>
-                            <tbody>
-                                {% for entry in objects %}
-                                {% if entry.uuid not in tablefeatured %}
-                                <tr>
-                                    <td>{{entry.name}}
-                                    <td>${{"%.2f"|format(entry.centprice/100)}}</td>
-                                    <td><a href="/admin/front-page/featured/add/{{entry.uuid}}" type="button" class="btn btn-transparent btn-sm">
-                                        <i class="material-icons">add</i></a></td>
-                                </tr>
-                                {% endif %}
-                                {% endfor %}
-                            </tbody>
-                        </table>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                     <div class="col-12 row mt-3">
-                        <table class="table">
+                        <table class="table table-dark text-right">
                             <thead>
+                                <th>
+                                    Image
+                                </th>
                                 <th>
                                     Name
                                 </th>
@@ -86,9 +78,12 @@ Featured Products Management
 
                             </thead>
                             <tbody>
-                                {% for entry in tablefeatured %}
+                                {% for entry in featured_products %}
                                 <tr>
-                                    <td>{{product_keys[entry].name}}
+                                    <td><img style="width: 32px; height: 32px;"
+                                            src="{{url_for('static', filename='media/'+product_keys[entry].images[0])}}"
+                                            alt=""></td>
+                                    <td>{{product_keys[entry].name}}</td>
                                     <td>${{"%.2f"|format(product_keys[entry].centprice/100)}}</td>
                                     <td><a href="/admin/front-page/featured/delete/{{entry}}"
                                             class="btn btn-danger">Delete</a></td>
@@ -110,4 +105,36 @@ Featured Products Management
 </div>
 
 <script src="{{url_for('static', filename='js/config_table.js')}}"></script>
+<script>
+
+
+    $("#table").bootstrapTable('hideColumn', 'uuid')
+
+    function render_image(index, row) {
+        return `
+    <img class='img-fluid' style="max-width: 10%;" src='../../../static/media/${row.image}'></img>`
+    }
+
+    function render_edit(index, row) {
+        if (!(row.uuid in ["1", "0"])) {
+            return `<a href="/admin/inventory/update/products/${row.uuid}" type="button" class="btn btn-transparent btn-sm">
+                <i class="fas fa-edit" style="color: orange;"></i>
+            </a>`}
+        else {
+            return
+        }
+    }
+
+
+    function render_add(index, row) {
+        if (!(row.uuid in ["1", "0"])) {
+            return `<a href="/admin/front-page/featured/add/${row.uuid}" type="button"
+            class="btn">
+        <i class="fas fa-plus" style="color: #90ee90"></i>
+        </a>`}
+        else {
+            return
+        }
+    }
+</script>
 {% endblock content %}

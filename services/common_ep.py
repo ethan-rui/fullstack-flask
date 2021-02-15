@@ -16,10 +16,10 @@ def page_home():
     db_bc = TableBC()
     bc = db_bc.dict()
     db_bc.close()
-    tablefeatured = db.table["featured_products"]
     db_products = TableProduct()
-    objects = db_products.objects()
     product_keys = db_products.dict()
+    """check the existence of the featured products in dict"""
+    featured_products = [x for x in db.table["featured_products"] if x in product_keys]
     """retrieving the carousel images"""
     try:
         carou_active_key = list(db.carousel.keys())[0]
@@ -34,9 +34,9 @@ def page_home():
         img_carousel=db.carousel,
         carou_active_key=carou_active_key,
         carou_others_keys=carou_others_keys,
-        tablefeatured=tablefeatured, 
+        featured_products=featured_products,
         product_keys=product_keys,
-        bc=bc
+        bc=bc,
     )
 
 
@@ -79,6 +79,9 @@ def page_catalog():
     bc = db_bc.dict()
     db_bc.close()
     db_products.close()
+
+    """removed all low stocks"""
+    products = [x for x in products if x.stock > 0]
 
     shown_products = products[(pg_index * pg_size) : (pg_index * pg_size + pg_size)]
     pg_total = ceil(len(products) / pg_size)
