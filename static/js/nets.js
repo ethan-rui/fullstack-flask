@@ -96,7 +96,7 @@ function nets_qr(amount, user_id) {
                         fetch(`${window.location.origin}/user/clear_cart`, {
                             method: "POST",
                             credentials: "include",
-                            body: JSON.stringify([user_id, amount]),
+                            body: JSON.parse([user_id, amount]),
                             cache: "no-cache",
                             headers: new Headers({
                                 "content-type": "application/json"

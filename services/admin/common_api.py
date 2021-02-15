@@ -88,7 +88,9 @@ def collate_notif():
     """filter products"""
     db_products = TableProduct()
     products_notif = [
-        x.name for x in db_products.objects() if x.stock <= threshold_stock
+        (x.name, x.stock, x.uuid)
+        for x in db_products.objects()
+        if x.stock <= threshold_stock
     ]
     print(products_notif)
     db_products.close()

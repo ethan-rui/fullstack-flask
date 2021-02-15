@@ -26,11 +26,12 @@
   fetch(`${window.location.origin}/admin/notifications`)
     .then(response => response.json())
     .then(function (data) {
-      console.log(data.length);
       $("#length_notif").html(data.length);
-      $("#notifs").html(
-        `<a class="dropdown-item waves-effect waves-light" href="#">Action <span
-          class="badge badge-danger ml-2"></span>${data}</a>`
-      )
+      var notifs = "";
+      for (x of data) {
+        notifs += `<a class="dropdown-item waves-effect waves-light" href="/admin/inventory/update/products/${x[2]}">Low Stock: <span
+          class="badge badge-danger ml-2"></span>${x[0]} <span style="color: red">${x[1]}</span></a>`
+      }
+      $("#notifs").html(notifs)
     })
 </script>
