@@ -100,16 +100,48 @@
                         <!-- Description -->
                         <div class="row">
                             <div class="col-6">
-                                <h6 class="heading-small text-muted mb-4">Past Orders</h6>
+                                <h6 class="heading-small text-muted mb-4">Order History</h6>
                                 <div class="pl-lg-4">
                                     <div class="form-group focused">
+                                        
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6">
-                                <h6 class="heading-small text-muted mb-4">Current Orders</h6>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="accordion" id="accordionExample">
+                                    {% for i in current_user.history.keys() %}
+                                        <div class="card">
+                                            <div class="card-header">
+                                              <h2 class="mb-0">
+                                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#t_{{i.replace(' ', '').replace(':', '').replace('/', '')}}" aria-expanded="true" aria-controls="t_{{i.replace(' ', '').replace(':', '').replace('/', '')}}">
+                                                    <table class="table">
+                                                          <tr>
+                                                            <th scope="row">#</th>
+                                                            <th scope="row">First</th>
+                                                            <th scope="row">Last</th>
+                                                            <th scope="row">Handle</th>
+                                                          </tr>
+                                                    </table>
+                                                </button>
+                                              </h2>
+                                            </div>
+                                        
+                                            <div id="t_{{i.replace(' ', '').replace(':', '').replace('/', '')}}" class="collapse" data-parent="#accordionExample">
+                                              <div class="card-body">
+                                                {% for p in current_user.history[i]["products"] %}
+                                                   {{p}} : {{current_user.history[i]["products"][p]}} 
+                                                {% endfor %}
+                                              </div>
+                                            </div>
+                                          </div>
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
+
                 </div>
             </div>
         </div>

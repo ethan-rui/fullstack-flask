@@ -16,6 +16,7 @@ class User(Entry, UserMixin):
         uid: str = None,
         full_address={"pcode": "-", "street": "-", "unit_no": "-"},
         cart={},
+        history={},
     ):
         try:
             Entry.__init__(self, uid=uid)
@@ -25,6 +26,7 @@ class User(Entry, UserMixin):
             self.__full_address = full_address
             self.role = role
             self.cart = cart
+            self.history = history
             print(f"Username: {self.username}")
             print(f"Password: {self.password}")
             print(f"Role: {self.role}")

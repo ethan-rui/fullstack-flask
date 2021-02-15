@@ -15,6 +15,8 @@ from .forms.auth import RegistrationForm, LoginForm, ProfileForm, PswUpdateForm
 from data.users import User, TableUser
 from data.products import TableProduct, CartItem
 
+import datetime
+
 endpoint = Blueprint("payment", __name__)
 
 
@@ -44,7 +46,7 @@ def page_cart():
             user.cart[product_uuid].centprice_final = target.centprice_final
             user.cart[product_uuid].calc_subtotal(centprice=target.centprice_final)
             user.cart[product_uuid].name = target.name
-            total_amt += target.centprice_final
+            total_amt += user.cart[product_uuid].subtotal
         except:
             invalid_products.append(product_uuid)
 
@@ -69,15 +71,12 @@ def add_cart():
     user = db.retrieve(current_user.uuid)
     if product_id in user.cart.keys():
         alert_message = "Item is already in cart"
-        alert_color = "alert alert-warning"
 
     elif len(current_user.cart) == 10:
         alert_message = "Cart is full!"
-        alert_color = "alert alert-warning"
 
     else:
         alert_message = "Item added successfully"
-        alert_color = "alert alert-success"
         user.add_item_cart(
             key=product_id, value=CartItem(uuid=product_id, quantity=quantity)
         )
@@ -88,9 +87,8 @@ def add_cart():
     db.close()
 
     resp_dic = {
-        "item_in_cart": len(current_user.cart),
+        "item_in_cart": len(user.cart),
         "alert_message": alert_message,
-        "alert_color": alert_color,
     }
 
     resp = make_response(jsonify(resp_dic), 200)
@@ -122,7 +120,7 @@ def page_checkout():
             user.cart[product_uuid].centprice_final = target.centprice_final
             user.cart[product_uuid].calc_subtotal(centprice=target.centprice_final)
             user.cart[product_uuid].name = target.name
-            total_amt += target.centprice_final
+            total_amt += user.cart[product_uuid].subtotal
         except:
             invalid_products.append(product_uuid)
 
@@ -162,3 +160,73 @@ def api_clear_cart():
     db_products.close()
     db_users.close()
     return make_response("Success", 200)
+# def api_checkout():
+#     total_amt = 0
+#     history_dic = {}
+#     new_history = {}
+#     products = {}
+#     Current_time = datetime.datetime.now()
+#     date = Current_time.strftime("%x")
+#     time = Current_time.strftime("%X")[0:5]
+#     date_time = f"{date} {time}"
+#     db = TableUser()
+#     user = db.retrieve(current_user.uuid)
+#     #placing the products into a dictionary
+#     for product in user.cart_objects():
+#         products.update({product.name : product.quantity})
+#     #placing the dictionary into another dictionary with the total amount and statues
+#     history_dic["products"] = products
+#     history_dic["total_amt"] = total_amt
+#     history_dic["statues"] = "Pending for delivery"
+    
+#     old_history = user.history
+    
+#     #removes the last history to keep the history to 6
+#     if len(old_history) == 6:
+#         old_history.popitem()
+    
+#     new_history[date_time] = history_dic
+#     new_history.update(old_history)
+#     #place ^ dictionary into the user's history dictionary with the date and time as key
+#     user.history = new_history
+#     user.cart = {}
+#     db.insert(user)
+#     db.close()
+#     flash("Payment Completed")
+#     return redirect(url_for("base.page_home"))
+
+@endpoint.route("/change_quantity_cart", methods=["POST"])
+@login_required
+def change_quantity():
+    req = request.get_json()
+
+    product_id = req.get("id")
+    quantity = int(req.get("quantity"))
+
+    db = TableUser()
+    user = db.retrieve(current_user.uuid)
+    user.add_item_cart(
+        key=product_id, value=CartItem(uuid=product_id, quantity=quantity)
+    )
+    db.insert(user)
+    db.close()
+    return ('', 204)
+
+@endpoint.route("/delete_cart", methods=["POST"])
+@login_required
+def delete_cart():
+    req = request.get_json()
+
+    product_id = req.get("id")
+
+    db = TableUser()
+    user = db.retrieve(current_user.uuid)
+    user.cart.pop(product_id)
+    db.insert(user)
+    db.close()
+
+    resp_dic = {
+    "item_in_cart": len(user.cart),
+    }
+    resp = make_response(jsonify(resp_dic), 200)
+    return resp

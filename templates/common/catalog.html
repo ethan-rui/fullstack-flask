@@ -4,6 +4,18 @@ Products
 {% endblock title %}
 {% block content %}
 <div class="container">
+    <div class="toast" role="alert" aria-live="polite" aria-atomic="true" data-delay="3000" style="position: absolute; top: 10%; transform: translate(-50%, -50%); left:50%;">
+        <div class="toast-header">
+            &#128276; &nbsp;
+          <strong class="mr-auto">Notification</strong>
+          <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="toast-body" id="alert_message" style="font-weight: bolder;">
+          Hello, world! This is a toast message.
+        </div>
+      </div>
     <div class="row">
         {% if param_search|length > 0 %}
         <p>{{len_products}}{% if len_products > 1 %}
@@ -139,7 +151,14 @@ Products
                 })
             }).then(
                 response => response.json()
-            ).catch(function (error) {
+            ).then(function(data) {
+                let cart_count=data.item_in_cart;
+                let message=data.alert_message;
+                document.getElementById("number_of_items").innerHTML = cart_count;
+                document.getElementById("alert_message").innerHTML = message;
+                $('.toast').toast('show');
+                console.log(cart_count)
+            }).catch(function (error) {
                 console.log("Fetch error: " + error);
             });
 
