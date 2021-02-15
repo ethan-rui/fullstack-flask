@@ -137,8 +137,6 @@ Checkout
             </div>
             <div class="modal-body">
                 <div class="container-result">
-                    <input id="amount" hidden type="text" value="{{total_amt}}">
-                    <button id='generate_qr' hidden class="btn btn-primary"></button>
                     <div id="payment_image" class="text-center"></div>
                     <div id="result_image" class="text-center"></div>
                 </div>
@@ -151,9 +149,11 @@ Checkout
 </div>
 
 <script src="{{url_for('static', filename='js/moment.js')}}"></script>
-<script src="{{url_for('static', filename='js/nets.js')}}"></script>
 <script src="{{url_for('static', filename='js/sha256.js')}}"></script>
+<script src="{{url_for('static', filename='js/nets.js')}}"></script>
 <script>
+    var user_id = "{{current_user.uuid}}";
+    var amount = {{total_amt}};
     (function () {
         'use strict';
 
@@ -170,15 +170,14 @@ Checkout
                     } else {
                         event.preventDefault();
                         event.stopPropagation();
-                        $("#nets-qr-modal").click()
-                        $("#generate_qr").click()
-
+                        $("#nets-qr-modal").click();
+                        nets_qr(amount, user_id)
                     }
-                    form.classList.add('was-validated');
+                form.classList.add('was-validated');
                 }, false);
             });
-        }, false);
-    })();
+                }, false);
+            }) ();
 </script>
 
 {% endblock content %}

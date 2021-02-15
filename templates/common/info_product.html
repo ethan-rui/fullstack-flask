@@ -35,11 +35,9 @@
             {% else %}
             <h4 class="font-weight-bold">${{target.centprice/100}}</h4>
             {% endif %}
-            <form action="{{url_for('payment.add_cart')}}" method="POST">
-                <input type="hidden" name="product_id" value="{{target.uuid}}">
-                <input type="hidden" name="quantity" value="1">
-                <button class="btn btn-success btn-sm-md btn-lg-sm"><i class="fas fa-shopping-cart mr-1"></i>Add To
-                    Cart</button>
+            <button onclick="add_cart({{target.uuid}})" class="btn btn-success btn-sm-md btn-lg-sm"><i
+                    class="fas fa-shopping-cart mr-1"></i>Add To
+                Cart</button>
             </form>
             <div class="mt-4">
                 <h5>Description</h5>
@@ -50,6 +48,7 @@
 </div>
 
 <script>
+    // focus on individual image onclick
     var image_side = $("#image_side").find("img")
     $(image_side[0]).click(full_image_0);
     $(image_side[1]).click(full_image_1);
@@ -66,6 +65,32 @@
     function full_image_2() {
         $("#image_main").attr("src", "{{url_for('static', filename='media/'+target.images[2])}}")
     }
+</script>
+
+<script>
+    function add_cart(item_id) {
+        var item_quantity = $(`#${item_id}_quantity`).val()
+        var item = {
+            "id": item_id,
+            "quantity": item_quantity
+        };
+
+        fetch(`${window.location.origin}/user/add_cart`,
+            {
+                method: "POST",
+                credentials: "include",
+                body: JSON.stringify(item),
+                cache: "no-cache",
+                headers: new Headers({
+                    "content-type": "application/json"
+                })
+            }).then(
+                response => response.json()
+            ).catch(function (error) {
+                console.log("Fetch error: " + error);
+            });
+
+    };
 </script>
 
 <style>

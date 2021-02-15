@@ -47,9 +47,16 @@ Products
                     <h6 class="card-subtitle mb-2 text-muted">{{bc[product.brand].name}}</h6>
                     <p class="card-text">{{product.desc}}</p>
                     <div class="buy d-flex justify-content-between">
+                        {% if product.discount > 0 %}
+                        <div class="price text-success">
+                            <h5 class="text-danger"><del>${{"%.2f"|format(product.centprice/100)}}</del></h5>
+                            <h5 class="">${{"%.2f"|format(product.centprice_final/100)}}</h5>
+                        </div>
+                        {% else %}
                         <div class="price text-success">
                             <h5 class="">${{"%.2f"|format(product.centprice/100)}}</h5>
                         </div>
+                        {% endif %}
                     </div>
                     <div class="justify-content-center row">
                         <input type="hidden" name="quantity" id="{{product.uuid}}_quantity" value="1">

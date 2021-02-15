@@ -31,7 +31,7 @@ login_manager.anonymous_user = AnonymousUserMixin
 def load_user(user_id):
     db = TableUser()
     try:
-        user = db.dict()[user_id]
+        user = db.retrieve(user_id)
     except KeyError:
         return redirect("/")
     db.close()
@@ -46,11 +46,6 @@ def unauthorized():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("errors/404.html")
-
-
-@app.route("/nets")
-def nets_payment():
-    return render_template("nets.html")
 
 
 """other login routes under auth_ep.py"""

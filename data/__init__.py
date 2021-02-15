@@ -45,7 +45,7 @@ class Entry:
 class Database:
     def __init__(self, label: str = ""):
         self.__db = shelve.open(f"{basedir}/data/db/database", flag="c", writeback=True)
-        if len(self.__db) < 5:
+        if len(self.__db) < 6:
             self.__db.clear()
             self.__db["users"] = {}
             self.__db["brands_categories"] = {}
@@ -55,12 +55,14 @@ class Database:
                 "carousel": {},
                 "featured_products": [],
             }
+            self.__db["settings"] = {"threshold_stock": 100}
         if label in [
             "users",
             "brands_categories",
             "products",
             "frontpage",
             "inquiries",
+            "settings",
         ]:
             self.table = self.__db[label]
             print(f"-- Accessing {label} table. --")

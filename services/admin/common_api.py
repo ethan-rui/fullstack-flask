@@ -1,7 +1,11 @@
 from flask.templating import render_template
-from flask import Blueprint, redirect, request
+from flask import Blueprint, redirect, request, wrappers
 from data import Database, Entry
+from data.statistics import Settings
+from data.products import TableProduct
 import os
+import json
+
 
 basedir = os.getcwd()
 endpoint = Blueprint("api", __name__)
@@ -75,28 +79,20 @@ def authorizer(user):
         return render_template("errors/403.html")
 
 
-# @endpoint.route("delete/<table>/<uid>", methods=["POST"])
-# def api_delete_inquiry(table, uid):
-#     """
-#     data = [uuid, uuid, uuid]
-#     """
-
-
-#     function_delete = {
-#         "inquiries": print
-#     }
-
-#     if table not in function_delete.keys():
-#         print("Table was not found, redirecting back to main page.")
-#     else:
-#         """
-#         object specific functions
-#         """
-#         db = Database(label=table)
-#         if table == "inquiries":
-#             target = db.retrieve(uid)
-#             function_delete[table](uid)
-#             print("-- deleting by uuid --")
-#             db.delete(uid)
-#         db.close()
-#         return redirect("/admin/inquiries")
+@endpoint.route("/notifications")
+def collate_notif():
+    settings = Settings()
+    """collect params for displaying notif"""
+    threshold_stock = settings.get_threshold_stock()
+    print(threshold_stock)
+    """filter products"""
+    db_products = TableProduct()
+    products_notif = [
+        x.name for x in db_products.objects() if x.stock <= threshold_stock
+    ]
+    print(products_notif)
+    db_products.close()
+    settings.close()
+    return wrappers.Response(
+        status=200, content_type="application/json", response=json.dumps(products_notif)
+    )

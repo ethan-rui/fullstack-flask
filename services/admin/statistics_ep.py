@@ -1,6 +1,7 @@
 from flask import render_template, redirect, request, Blueprint, session, url_for
 import os
 from flask_login.utils import login_required, current_user
+from data.statistics import Settings
 
 endpoint = Blueprint("admin_statistics", __name__)
 basedir = os.getcwd()
@@ -29,4 +30,26 @@ def page_dashboard():
     quarter4expenses = [320, 203, 416]
     if request.method == "POST":
         print("hello world")
-    return render_template("admin/dashboard.html", datasets=datasets, labels=labels, days=days, quarter1=quarter1, quarter2=quarter2, quarter3=quarter3, quarter4=quarter4, quarter1expenses=quarter1expenses, quarter2expenses=quarter2expenses, quarter3expenses=quarter3expenses, quarter4expenses=quarter4expenses)
+    return render_template(
+        "admin/dashboard.html",
+        datasets=datasets,
+        labels=labels,
+        days=days,
+        quarter1=quarter1,
+        quarter2=quarter2,
+        quarter3=quarter3,
+        quarter4=quarter4,
+        quarter1expenses=quarter1expenses,
+        quarter2expenses=quarter2expenses,
+        quarter3expenses=quarter3expenses,
+        quarter4expenses=quarter4expenses,
+    )
+
+
+@endpoint.route("/settings", methods=["GET", "POST"])
+def page_settings():
+    if request.method == "POST":
+        settings = Settings()
+        settings.set_threshold_stock(int(request.form["stock"]))
+        settings.close()
+    return render_template("admin/settings.html")

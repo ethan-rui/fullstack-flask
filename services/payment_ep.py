@@ -1,3 +1,4 @@
+from data.frontpage import TableFrontPage
 from flask import (
     render_template,
     session,
@@ -41,7 +42,7 @@ def page_cart():
             """setting the attribute of each cart item"""
             user.cart[product_uuid].img = target.images[0]
             user.cart[product_uuid].centprice_final = target.centprice_final
-            user.cart[product_uuid].calc_subtotal(centprice=target.centprice)
+            user.cart[product_uuid].calc_subtotal(centprice=target.centprice_final)
             user.cart[product_uuid].name = target.name
             total_amt += target.centprice_final
         except:
@@ -119,7 +120,7 @@ def page_checkout():
             """setting the attribute of each cart item"""
             user.cart[product_uuid].img = target.images[0]
             user.cart[product_uuid].centprice_final = target.centprice_final
-            user.cart[product_uuid].calc_subtotal(centprice=target.centprice)
+            user.cart[product_uuid].calc_subtotal(centprice=target.centprice_final)
             user.cart[product_uuid].name = target.name
             total_amt += target.centprice_final
         except:
@@ -135,3 +136,29 @@ def page_checkout():
     return render_template(
         "payment/checkout.html", user=user, products=products, total_amt=total_amt
     )
+
+
+@endpoint.route("/clear_cart", methods=["POST"])
+@login_required
+def api_clear_cart():
+    user_uuid = request.json
+    db_users = TableUser()
+
+    db_products = TableProduct()
+    target_user = db_users.retrieve(user_uuid)
+    target_products = target_user.cart
+
+    for i in target_products:
+        """removing stock from inventory"""
+        product = db_products.retrieve(i)
+        product.stock -= target_products[i].quantity
+        db_products.insert(product)
+
+    """clearing cart"""
+    target_user.cart = {}
+    current_user.cart = {}
+    db_users.insert(target_user)
+
+    db_products.close()
+    db_users.close()
+    return make_response("Success", 200)
