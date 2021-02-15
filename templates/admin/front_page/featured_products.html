@@ -3,9 +3,111 @@
 Featured Products Management
 {% endblock title %}
 {% block content %}
+<link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 <div class="container-fluid p-4">
     <h3>
         Featured Products Management
     </h3>
+    <div class="row">
+        <div class="col-lg-6">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                        aria-controls="home" aria-selected="true">Add New Products</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                        aria-controls="profile" aria-selected="false">Show Current List</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="col-12 mt-3">
+                        {% block flashed %}
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        
+                        <div class="container" id="flashed_messages">
+                            <div class="row">
+                                {% for message in get_flashed_messages() %}
+                                <p class="alert alert-success col-12" role="alert">{{ message }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+                        {% endblock flashed %}
+                        <table class="table">
+                            <thead>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Price
+                                </th>
+                                <th>
+                                    Add
+                                </th>
+                        
+                            </thead>
+                            <tbody>
+                                {% for entry in objects %}
+                                {% if entry.uuid not in tablefeatured %}
+                                <tr>
+                                    <td>{{entry.name}}
+                                    <td>${{"%.2f"|format(entry.centprice/100)}}</td>
+                                    <td><a href="/admin/front-page/featured/add/{{entry.uuid}}" type="button" class="btn btn-transparent btn-sm">
+                                        <i class="material-icons">add</i></a></td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="col-12 row mt-3">
+                        <table class="table">
+                            <thead>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Price
+                                </th>
+                                <th>
+                                    Delete
+                                </th>
+
+                            </thead>
+                            <tbody>
+                                {% for entry in tablefeatured %}
+                                <tr>
+                                    <td>{{product_keys[entry].name}}
+                                    <td>${{"%.2f"|format(product_keys[entry].centprice/100)}}</td>
+                                    <td><a href="/admin/front-page/featured/delete/{{entry}}"
+                                            class="btn btn-danger">Delete</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="embed-responsive embed-responsive-1by1">
+                <iframe class="embed-responsive-item" src="/" id="preview"></iframe>
+            </div>
+        </div>
+    </div>
 </div>
+</div>
+
+<script src="{{url_for('static', filename='js/config_table.js')}}"></script>
 {% endblock content %}

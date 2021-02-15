@@ -1,6 +1,7 @@
-from flask import render_template, Blueprint, request
+from flask import render_template, Blueprint, request, flash
 from werkzeug.utils import redirect
 from data.frontpage import TableFrontPage
+from data.products import TableProduct, TableBC
 from flask_login.utils import login_required, current_user
 import os
 from .common_api import authorizer
@@ -61,6 +62,36 @@ def api_delete_frontpage(table):
         return json.dumps({"success": True}), 200, {"ContentType": "application/json"}
 
 
-@endpoint.route("/front-page/featured")
+@endpoint.route("/front-page/featured", methods=["GET","POST"])
 def page_config_featured_products():
-    return render_template("/admin/front_page/featured_products.html")
+    db_featured = TableFrontPage()
+    tablefeatured = db_featured.table["featured_products"]
+    db_products = TableProduct()
+    objects = db_products.objects()
+    product_keys = db_products.dict()
+    return render_template("/admin/front_page/featured_products.html", tablefeatured=tablefeatured, product_keys=product_keys, objects=objects)
+
+@endpoint.route("/front-page/featured/add/<uid>", methods=["GET","POST"])
+def page_add_featured_products(uid):
+    db_featured = TableFrontPage()
+    featured_table = db_featured.table["featured_products"]
+    #Original code for duplicate validation
+    for x in featured_table:
+        if uid == x:
+            #print("duplicate entry")
+            db_featured.close()
+            flash("Product has already been added to the section. It will not be added again.", category="warning")
+            return redirect("/admin/front-page/featured")
+    else:
+        flash("Product is added succesfully!", category="warning")
+        db_featured.insert_featured(uuid=uid)
+    db_featured.close()
+    return redirect("/admin/front-page/featured")
+
+@endpoint.route("/front-page/featured/delete/<uid>", methods=["GET","POST"])
+def page_delete_featured_products(uid):
+    db_featured = TableFrontPage()
+    db_featured.delete_featured(uuid=uid)
+    db_featured.close()
+    flash("Product is removed succesfully!", category="warning")
+    return redirect("/admin/front-page/featured")

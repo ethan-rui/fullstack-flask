@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, Blueprint, request, flash
+from flask import render_template, redirect, url_for, Blueprint, request, flash, escape
 from data.products import TableBC, TableProduct
 from data.inquiries import TableInquiry, Inquiry
 from data.frontpage import TableFrontPage
@@ -13,6 +13,13 @@ endpoint = Blueprint("base", __name__)
 def page_home():
     db = TableFrontPage()
     db.close()
+    db_bc = TableBC()
+    bc = db_bc.dict()
+    db_bc.close()
+    tablefeatured = db.table["featured_products"]
+    db_products = TableProduct()
+    objects = db_products.objects()
+    product_keys = db_products.dict()
     """retrieving the carousel images"""
     try:
         carou_active_key = list(db.carousel.keys())[0]
@@ -27,6 +34,9 @@ def page_home():
         img_carousel=db.carousel,
         carou_active_key=carou_active_key,
         carou_others_keys=carou_others_keys,
+        tablefeatured=tablefeatured, 
+        product_keys=product_keys,
+        bc=bc
     )
 
 
@@ -104,7 +114,7 @@ def page_inquiry():
             sender_name=form.sender_name.data,
             sender_email=form.sender_email.data,
             subject=form.subject.data,
-            content=form.content.data,
+            content=escape(form.content.data),
             status=True,
         )
         db.insert(inquiry)

@@ -37,28 +37,65 @@ Home
 
 <div class="container justify-content-center align-items-center">
     <div class="row">
-        {% for p in products %}
-        <div class="col-md-3 mt-3">
-            <div class="card">
-                <img class="card-img-top" src="{{url_for('static', filename='media/'+p.images[0])}}" alt="{{p.name}}">
-                <div class="card-body">
-                    <h5 class="text-center">
-                        {{p.name}}
-                    </h5>
-                    <p class="text-center">
-                        ${{p.centprice/100}}
-                    </p>
-                    <p>{{p.desc}}</p>
+        {% for entry in tablefeatured %}
+                <div class="col-6 col-lg-3 col-md-4">
+                    <div class="card card-product">
+                        <div class="img-product">
+                            <a href="/catalog/product/{{product_keys[entry].uuid}}">
+                                <img class="card-img img-fluid" src="{{url_for('static', filename='media/'+product_keys[entry].images[0])}}" alt="">
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title">{{product_keys[entry].name}}</h4>
+                            <h6 class="card-subtitle mb-2 text-muted">{{bc[product_keys[entry].brand].name}}</h6>
+                            <div class="buy d-flex justify-content-between">
+                                <div class="price text-success">
+                                    <h5 class="">${{"%.2f"|format(product_keys[entry].centprice/100)}}</h5>
+                                </div>
+                            </div>
+                            <div class="justify-content-center row">
+                                <input type="hidden" name="quantity" id="{{product_keys[entry].uuid}}_quantity" value="1">
+                                <button class="btn btn-success btn-sm col-10" onclick="add_cart(this)" id="{{product_keys[entry].uuid}}"><i
+                                        class="fas fa-shopping-cart mr-2"></i>Add</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-footer text-center">
-                    <a href="{{url_for('auth.add_cart')}}" class="btn btn-success btn-sm"><i
-                            class="fas fa-shopping-cart"></i> Add</a>
-                    <a href="#" class="btn-sm btn-info ml-3">View</a>
-                </div>
-            </div>
-        </div>
         {% endfor %}
 
     </div>
 </div>
+<!-- add to cart function and alerts -->
+<style>
+    #query {
+        font-weight: bold;
+        color: darkred;
+    }
+</style>
+<script>
+    function add_cart(item) {
+        var item_id = item.id;
+        var item_quantity = $(`#${item_id}_quantity`).val()
+        var item = {
+            "id": item_id,
+            "quantity": item_quantity
+        };
+
+        fetch(`${window.location.origin}/user/add_cart`,
+            {
+                method: "POST",
+                credentials: "include",
+                body: JSON.stringify(item),
+                cache: "no-cache",
+                headers: new Headers({
+                    "content-type": "application/json"
+                })
+            }).then(
+                response => response.json()
+            ).catch(function (error) {
+                console.log("Fetch error: " + error);
+            });
+
+    };
+</script>
 {% endblock content %}

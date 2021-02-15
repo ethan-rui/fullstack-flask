@@ -53,7 +53,7 @@ class Database:
             self.__db["inquiries"] = {}
             self.__db["frontpage"] = {
                 "carousel": {},
-                "featured_products": {},
+                "featured_products": [],
             }
         if label in [
             "users",

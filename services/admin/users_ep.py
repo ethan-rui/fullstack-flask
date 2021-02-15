@@ -6,6 +6,7 @@ from flask import (
     url_for,
     flash,
     wrappers,
+    escape
 )
 import json
 from flask_uploads import UploadSet, IMAGES
@@ -116,7 +117,7 @@ def page_info_inquiry(uid):
             <p>Good news! We have looked into your inquiry and have came up with a reply. </p>
             <p>This is the reply given : </p>
             <br>
-            <p>{form.reply.data}</p>
+            <p>{escape(form.reply.data)}</p>
             <br>
             <p> For any further inquiries, please send in another inquiry through our website and we would be glad to serve you! </p>
             <p> Yours Sincerely, </p>
