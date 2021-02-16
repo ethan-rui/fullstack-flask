@@ -27,7 +27,7 @@
     {% include 'includes/_navbar.html' %}
     {% endblock navbar %}
     {% block blank_space %}
-    <div style="margin-bottom: 8rem;">
+    <div style="margin-bottom: 6rem;">
     </div>
     {% endblock blank_space %}
 
@@ -47,16 +47,18 @@
     </div>
     {% endif %}
     {% endwith %}
-    {% endblock flashed %}
 
+    {% endblock flashed %}
     {% block content %}
-    {% endblock %}
+    {% endblock content%}
+
     {% block footer %}
     {% include 'includes/_footer.html' %}
     {% endblock footer %}
-    {% block scripts %}
 
+    {% block scripts %}
     {% endblock scripts %}
+
     {% block js %}
     {% endblock js %}
 </body>

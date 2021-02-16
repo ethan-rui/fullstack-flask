@@ -32,8 +32,8 @@ class Product(Entry):
     def images(self) -> dict:
         for i in range(len(self.__images)):
             if os.path.isfile(f"{basedir}/static/media/{self.__images[i]}") is False:
-                self.__images[i] = "img_products/default_img.png"
-                print(f"replace images index {i}")
+                self.__images[i] = "placeholders/placeholder.png"
+                print(f"Replacing images index {i}")
         return self.__images
 
     @property

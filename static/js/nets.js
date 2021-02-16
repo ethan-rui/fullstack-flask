@@ -1,9 +1,7 @@
-function nets_qr(amount, user_id) {
-    console.log(amount)
-    console.log(user_id)
+function nets_qr(total_amt, user_id) {
     var continueFlag = true;
     var qrCode = '';
-    var amount = Math.ceil(amount);
+    var amount = Math.ceil(total_amt);
     var stan = "100001";
     var tid = "37066801";
     var mid = "11137066800";
@@ -96,16 +94,24 @@ function nets_qr(amount, user_id) {
                         fetch(`${window.location.origin}/user/clear_cart`, {
                             method: "POST",
                             credentials: "include",
-                            body: JSON.parse([user_id, amount]),
+                            body: JSON.stringify({ "user_id": user_id, "amount": amount }),
                             cache: "no-cache",
                             headers: new Headers({
                                 "content-type": "application/json"
                             })
                         })
+                            .then(response => {
+                                if (response.status == 200) {
+                                    setTimeout(function () {
+                                        window.location.replace(`${window.location.origin}/`);
+                                    }, 3000)
+                                }
+                            })
+                            .catch(error => {
+                                $('#result_image').html('<img class="mb-2" src="https://www.svgrepo.com/show/13658/error.svg" alt="Transaction Failure" height="100" width="100"><h4>Payment Failure!</h4>');
+                            })
+
                         // redirect to home page after 3 seconds
-                        setTimeout(function () {
-                            window.location.replace(`${window.location.origin}/`);
-                        }, 3000)
                     } else {
                         $('#result_image').html('<img class="mb-2" src="https://www.svgrepo.com/show/13658/error.svg" alt="Transaction Failure" height="100" width="100"><h4>Payment Failure!</h4>');
                     }

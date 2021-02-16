@@ -22,7 +22,10 @@ def api_delete(table):
         print("-- deleting products --")
         for x in list((target.images).values()):
             if x != "img_products/default_img.png":
-                os.remove(f"{basedir}/static/media/{x}")
+                try:
+                    os.remove(f"{basedir}/static/media/{x}")
+                except:
+                    print("Can't delete placeholder image.")
 
     def set_defaults(uid: str):
         db_products = Database(label="products")
@@ -87,12 +90,21 @@ def collate_notif():
     print(threshold_stock)
     """filter products"""
     db_products = TableProduct()
-    products_notif = [
+    low_stock_products = [
         (x.name, x.stock, x.uuid)
         for x in db_products.objects()
         if x.stock <= threshold_stock
     ]
-    print(products_notif)
+
+    invalid_img_products = []
+    """products with invalid images"""
+    for i in db_products.objects():
+        for j in i.images:
+            if i.images[j] == "placeholders/placeholder.png":
+                invalid_img_products.append((i.name, i.uuid))
+                break
+
+    products_notif = invalid_img_products + low_stock_products
     db_products.close()
     settings.close()
     return wrappers.Response(

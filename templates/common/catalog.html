@@ -3,7 +3,7 @@
 Products
 {% endblock title %}
 {% block content %}
-<div class="container">
+<div class="container-fluid px-5">
     <div class="toast" role="alert" aria-live="polite" aria-atomic="true" data-delay="3000"
         style="position: absolute; top: 15%; transform: translate(-50%, -50%); left:50%; z-index: 999;">
         <div class="toast-header">
@@ -17,7 +17,7 @@ Products
             Hello, world! This is a toast message.
         </div>
     </div>
-    <div class="row">
+    <div class="row mb-3 ml-2">
         {% if param_search|length > 0 %}
         <p>{{len_products}}{% if len_products > 1 %}
             results
@@ -26,13 +26,50 @@ Products
             {% endif %} for <span id="query">'{{param_search}}'</span>
         </p>
         {% endif %}
-        <div class="ml-auto">
+        <div class="ml-auto pr-3">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle btn-sm bg-light" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Filter By
+                </button>
+                <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-item bg-primary text-white" style="cursor: pointer;" id="filter-submit">
+                        Submit
+                    </div>
+                    <div class="dropdown-item">
+                        Brands:
+                    </div>
+                    {% for x in bc %}
+                    {% if bc[x].role == "brand" %}
+                    <div class="dropdown-item filter-dropdown">
+                        <input onclick="add_filters(this, '{{bc[x].role}}')" type="checkbox" id="{{bc[x].uuid}}"
+                            name="{{bc[x].uuid}}">
+                        <label for="{{bc[x].uuid}}">{{bc[x].name}}</label>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    <div class="dropdown-item">
+                        Categories:
+                    </div>
+                    {% for x in bc %}
+                    {% if bc[x].role == "cat" %}
+                    <div class="dropdown-item filter-dropdown">
+                        <input onclick="add_filters(this, '{{bc[x].role}}')" type="checkbox" id="{{bc[x].uuid}}"
+                            name="{{bc[x].uuid}}">
+                        <label for="{{bc[x].uuid}}">{{bc[x].name}}</label>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class=pr-3">
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle btn-sm bg-light" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Sort By
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item"
                         href="/catalog/?page={{pg_index}}&size={{pg_size}}&filter_by={{param_filter}}&sort_by=price_asc&search={{param_search}}">Price:
                         Low to High</a>
@@ -44,9 +81,9 @@ Products
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row pt-1">
         {% for product in shown_products %}
-        <div class="col-6 col-lg-3 col-md-4">
+        <div class="col-sm-12 col-lg-2 col-md-2">
             <div class="card card-product">
                 <div class="img-product">
                     <a href="/catalog/product/{{product.uuid}}">
@@ -133,6 +170,38 @@ Products
     }
 </style>
 <script>
+    $(".filter-dropdown").click(
+        function (e) {
+            e.stopPropagation();
+        }
+    )
+
+    var filter_brand = []
+    var filter_cat = []
+    function add_filters(item, role) {
+        if (role == "brand") {
+            if (filter_brand.includes(item.id)) {
+                filter_brand.pop(item.id)
+            } else {
+                filter_brand.push(item.id)
+            }
+        } else {
+            if (filter_cat.includes(item.id)) {
+                filter_cat.pop(item.id)
+            } else {
+                filter_cat.push(item.id)
+            }
+        }
+        console.log(filter_brand)
+        console.log(filter_cat)
+    }
+
+    $("#filter-submit").click(function () {
+        param_filter_brand = filter_brand.join(",")
+        param_filter_cat = filter_cat.join(",")
+        window.location.href = `${window.location.origin}/catalog/?page={{pg_index}}&size={{pg_size}}&filter_by=${param_filter_brand}+${param_filter_cat}&sort_by={{param_sort}}`
+    })
+
     function add_cart(item) {
         var item_id = item.id;
         var item_quantity = $(`#${item_id}_quantity`).val()

@@ -150,7 +150,9 @@ def page_checkout():
 @endpoint.route("/clear_cart", methods=["POST"])
 @login_required
 def api_clear_cart():
-    user_uuid, amount = request.json
+    """json => {user_id: user_id, amount: amount}"""
+    user_uuid = request.json["user_id"]
+    total_amount = request.json["amount"]
     db_users = TableUser()
 
     db_products = TableProduct()
@@ -170,7 +172,7 @@ def api_clear_cart():
 
     db_products.close()
     db_users.close()
-    return make_response("Success", 200)
+    return make_response("success", 200)
 
 
 # def api_checkout():

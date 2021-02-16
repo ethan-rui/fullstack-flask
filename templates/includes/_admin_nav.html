@@ -27,10 +27,16 @@
     .then(response => response.json())
     .then(function (data) {
       $("#length_notif").html(data.length);
+      console.log(data)
       var notifs = "";
       for (x of data) {
-        notifs += `<a class="dropdown-item waves-effect waves-light" href="/admin/inventory/update/products/${x[2]}">Low Stock: <span
-          class="badge badge-danger ml-2"></span>${x[0]} <span style="color: red">${x[1]}</span></a>`
+        if (x.length == 3) {
+          notifs += `<a class="dropdown-item waves-effect waves-light" href="/admin/inventory/update/products/${x[2]}">Low Stock: <span
+            class="badge badge-danger ml-2"></span><b>${x[0]}</b> <span style="color: red">${x[1]}</span></a>`
+        } else {
+          notifs += `<a class="dropdown-item waves-effect waves-light" href="/admin/inventory/update/products/${x[1]}">Invalid Images: <span
+            class="badge badge-danger ml-2"></span><b>${x[0]}</b></a>`
+        }
       }
       $("#notifs").html(notifs)
     })
