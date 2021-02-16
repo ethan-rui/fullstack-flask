@@ -16,6 +16,7 @@ class Product(Entry):
         centprice: int = 0,
         discount: int = 0,
         uid: str = None,
+        sold = 0,
     ):
         super().__init__(uid)
         self.name = name
@@ -27,6 +28,7 @@ class Product(Entry):
         self.discount = discount
         self.role = "products"
         self.__images = {0: None, 1: None, 2: None}
+        self.sold = sold
 
     @property
     def images(self) -> dict:

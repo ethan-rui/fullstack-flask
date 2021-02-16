@@ -152,8 +152,7 @@ def page_checkout():
 def api_clear_cart():
     """json => {user_id: user_id, amount: amount}"""
     user_uuid = request.json["user_id"]
-    total_amount = request.json["amount"]
-
+    amount = float(request.json["amount"])/100
     history_dic = {}
     new_history = {}
     products = {}
@@ -175,7 +174,7 @@ def api_clear_cart():
     old_history = target_user.history
 
     #removes the last history to keep the history to 6
-    if len(old_history) == 6:
+    if len(old_history) == 10:
         old_history.popitem()
 
     new_history[date_time] = history_dic
@@ -189,7 +188,9 @@ def api_clear_cart():
     for i in target_products:
         """removing stock from inventory"""
         product = db_products.retrieve(i)
-        product.stock -= target_products[i].quantity
+        sold_amount = target_products[i].quantity
+        product.stock -= sold_amount
+        product.sold += sold_amount
         db_products.insert(product)
 
     """clearing cart"""
