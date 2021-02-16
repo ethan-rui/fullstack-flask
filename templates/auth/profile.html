@@ -131,17 +131,15 @@
                                         <div class="row">&nbsp;</div>
 
                                     {% else %}
+                                    <table class="table table-sm">
                                         {% for i in curren_history_list.keys() %}
-                                            <table class="table table-sm">
+                                            
                                             <thead class="thead-dark">
                                             <tr>
-                                                <th scope="col" colspan="3">Order date: {{i}}</th>
-                                                <th scope="col" style="text-align: right;">Status: {{curren_history_list[i]["statues"]}}</th>
+                                                <th scope="col" colspan="2">Order date: {{i}}</th>
+                                                <th scope="col" style="text-align: right;">Status: {{curren_history_list[i]["status"]}}</th>
                                             </tr>
                                             </thead>
-                                            </table>
-                                        
-                                            <table class="table table-sm">
                                                 <thead class="thead-light">
                                                 <tr>
                                                     <th scope="col">Product Name</th>
@@ -162,15 +160,16 @@
                                                         </tr>
                                                     {% endfor %}
                                                 </tbody>
-                                            </table>
+                                            
                                         {% endfor %}
+                                    </table>
                                     {% endif %}
 
 
                                     </div>  
                                     <!--Past histoy -->
                                     <div class="tab-pane fade" id="past_history" role="tabpanel">
-                                    {% if curren_history_list|length == 0 %}
+                                    {% if past_history_list|length == 0 %}
                                         <div class="row">&nbsp;</div>
                                         <div class="d-flex justify-content-center">
                                             Your history is empty!
@@ -178,22 +177,19 @@
                                         </div>
                                         <div class="row">&nbsp;</div>
                                     {% else %}
+                                        <table class="table table-sm">
                                         {% for i in past_history_list.keys() %}
-                                            <table class="table table-sm">
                                                 <thead class="thead-dark">
                                                 <tr>
-                                                    <th scope="col" colspan="3">Order date: {{i}}</th>
-                                                    <th scope="col" style="text-align: right;">Status: {{past_history_list[i]["statues"]}}</th>
+                                                    <th scope="col" colspan="2">Order date: {{i}}</th>
+                                                    <th scope="col" style="text-align: right;">Status: {{past_history_list[i]["status"]}}</th>
                                                 </tr>
                                                 </thead>
-                                            </table>
-                                        
-                                            <table class="table table-sm">
                                                 <thead class="thead-light">
                                                 <tr>
                                                     <th scope="col">Product Name</th>
                                                     <th scope="col" style="text-align: center;">Quantity</th>
-                                                    <th scope="col" style="text-align: right;">Total spend</th>
+                                                    <th scope="col" style="text-align: right;">Total spent</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -209,8 +205,9 @@
                                                         </tr>
                                                     {% endfor %}
                                                 </tbody>
-                                            </table>
+                                            
                                         {% endfor %}
+                                    </table>
                                     {% endif %}
 
                                     </div>

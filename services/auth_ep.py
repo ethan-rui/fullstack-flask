@@ -84,8 +84,8 @@ def page_profile():
     past_history_list = {}
     for i in current_user.history.keys():
         history_item = current_user.history[i]
-        statues = history_item["statues"]
-        if statues == ("Pending for delivery" or "Out for delivery"):
+        status = history_item["status"]
+        if status == ("Pending for delivery" or "Out for delivery"):
             curren_history_list[i] = history_item
         else:
             past_history_list[i] = history_item

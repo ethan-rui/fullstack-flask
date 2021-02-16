@@ -77,6 +77,42 @@ def api_add_admin():
     return render_template("admin/users/users.html", form=form)
 
 
+@endpoint.route("/users/update/<uid>" , methods=["GET", "POST"])
+def page_update_users(uid):
+    db_users = TableUser()
+    user = db_users.retrieve(uid)
+    db_users.close()
+    curren_history_list = {}
+    past_history_list = {}
+    for i in user.history.keys():
+        history_item = user.history[i]
+        status = history_item["status"]
+        if status == "Delivered":
+            past_history_list[i] = history_item
+        else:
+            curren_history_list[i] = history_item
+
+    return render_template(
+        "admin/users/update_users.html", user=user, curren_history_list = curren_history_list, past_history_list = past_history_list, 
+    )
+
+@endpoint.route("/users/update_status" , methods=["POST"])
+def api_update_status():
+    req = request.get_json()
+
+    user_id = req.get("id")
+    status = req.get("status")
+    date = req.get("date")
+
+    db_users = TableUser()
+    user = db_users.retrieve(user_id)
+    user.history[date]["status"] = status
+    db_users.insert(user)
+    db_users.close()
+
+    return ("", 204)
+
+
 @endpoint.route("/users")
 def page_table_users():
     form = RegistrationForm(request.form)

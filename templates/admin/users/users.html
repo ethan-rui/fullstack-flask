@@ -109,7 +109,7 @@ User Management
     function render_edit(index, row) {
         if (!(row.uuid in ["1", "0"])) {
             return `<div style="max-width: fit-content;">
-                <a href="#" type="button" class="btn btn-transparent btn-sm">
+                <a href="/admin/users/update/${row.uuid}" type="button" class="btn btn-transparent btn-sm">
                     <i class="fas fa-edit" style="color: orange;"></i>
                 </a>
             </div>`}

@@ -194,10 +194,10 @@ def api_clear_cart():
     # placing the products into a dictionary
     for product in user.cart_objects():
         products.update({product.name: product.quantity})
-    # placing the dictionary into another dictionary with the total amount and statues
+    # placing the dictionary into another dictionary with the total amount and status
     history_dic[&#34;products&#34;] = products
     history_dic[&#34;total_amt&#34;] = amount
-    history_dic[&#34;statues&#34;] = &#34;Pending for delivery&#34;
+    history_dic[&#34;status&#34;] = &#34;Pending for delivery&#34;
 
     old_history = target_user.history
 
@@ -245,10 +245,10 @@ def api_clear_cart():
 # #placing the products into a dictionary
 # for product in user.cart_objects():
 #     products.update({product.name : product.quantity})
-# #placing the dictionary into another dictionary with the total amount and statues
+# #placing the dictionary into another dictionary with the total amount and status
 # history_dic[&#34;products&#34;] = products
 # history_dic[&#34;total_amt&#34;] = total_amt
-# history_dic[&#34;statues&#34;] = &#34;Pending for delivery&#34;
+# history_dic[&#34;status&#34;] = &#34;Pending for delivery&#34;
 
 # old_history = user.history
 
@@ -404,10 +404,10 @@ def api_clear_cart():
     # placing the products into a dictionary
     for product in user.cart_objects():
         products.update({product.name: product.quantity})
-    # placing the dictionary into another dictionary with the total amount and statues
+    # placing the dictionary into another dictionary with the total amount and status
     history_dic[&#34;products&#34;] = products
     history_dic[&#34;total_amt&#34;] = amount
-    history_dic[&#34;statues&#34;] = &#34;Pending for delivery&#34;
+    history_dic[&#34;status&#34;] = &#34;Pending for delivery&#34;
 
     old_history = target_user.history
 

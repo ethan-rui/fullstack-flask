@@ -1,0 +1,231 @@
+{% extends 'layouts/admin_base.html' %}
+{% block title %}
+Update User
+{% endblock title %}
+{% block content %}
+<div class="container-fluid p-4">
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8 order-lg-1">
+                <div class="card bg-dark shadow">
+                    <div class="card-header bg-dark border-0">
+                        <div class="row align-items-center">
+                            <div class="col-12">
+                            </div>
+                            <div class="col-8">
+                                <h3 class="mb-0">{{user.username}}'s account</h3>
+                            </div>
+                    <div class="card-body">
+                            <h6 class="heading-small text-muted mb-4">User information</h6>
+                            <div class="pl-lg-4">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group focused">
+                                            <label readonly class="form-control-label" for="input-username">User Id</label>
+                                            <input readonly type="text" id="input-userId"
+                                                class="form-control form-control-alternative" placeholder="{{user.uuid}}"
+                                                value="{{user.uuid}}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-email">Email address</label>
+                                            <input readonly type="email" id="input-email"
+                                                class="form-control form-control-alternative"
+                                                placeholder="{{user.email}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-4">
+                            <!-- Address -->
+                            <h6 class="heading-small text-muted mb-4">Contact information</h6>
+                            <div class="pl-lg-4">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group focused">
+                                            <label class="form-control-label" for="input-address">Address</label>
+                                            <input readonly id="input-address" class="form-control form-control-alternative"
+                                                placeholder="Home Address" value="{{user.full_address('all')}}"
+                                                type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group focused">
+                                            <label class="form-control-label" for="input-street">Street</label>
+                                            <input readonly type="text" id="input-street"
+                                                class="form-control form-control-alternative" placeholder="street"
+                                                value="{{user.full_address('street')}}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group focused">
+                                            <label class="form-control-label" for="input-unit_no">Unit No</label>
+                                            <input readonly type="text" id="input-unit_no"
+                                                class="form-control form-control-alternative" placeholder="unit_no"
+                                                value="{{user.full_address('unit_no')}}">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="input-unit_no">Postal code</label>
+                                            <input readonly id="input-postal-code"
+                                                class="form-control form-control-alternative"
+                                                placeholder="{{user.full_address('pcode')}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-4">
+                            <!-- Description -->
+                            <div class="row">
+                                <div class="col-6">
+                                    <h6 class="heading-small text-muted mb-4">Order History</h6>
+                                    <div class="pl-lg-4">
+                                        <div class="form-group focused">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                          <a class="nav-link active" data-toggle="tab" href="#current_history">Current Orders</a>
+                                        </li>
+                                        <li class="nav-item">
+                                          <a class="nav-link" data-toggle="tab" href="#past_history">Past Orders</a>
+                                        </li>
+                                      </ul>
+                                        <div class="tab-content" id="myTabContent">
+                                        <div class="tab-pane fade show active" id="current_history" role="tabpanel">
+                                    <!--current histoy -->
+                                        {% if curren_history_list|length == 0 %}
+                                            <div class="row">&nbsp;</div>
+                                            <div class="d-flex justify-content-center">
+                                                This user's history is empty!
+                                            
+                                            </div>
+                                            <div class="row">&nbsp;</div>
+    
+                                        {% else %}
+                                            <table class="table table-sm">
+                                                {% for i in curren_history_list.keys() %}
+                                                    <thead class="thead-light">
+                                                    <tr>
+                                                        <input type="hidden" id="dateID_{{i.replace(' ','').replace('/','').replace(':','')}}" value="{{i}}">
+                                                        <th scope="col" >Order date: {{i}}</th>
+                                                        <th scope="col" style="text-align: right;">Status:</th>
+                                                        <th scope="col" ><div class="input-group mb-12">
+                                                            <select class="custom-select" id="D_{{i.replace(' ','').replace('/','').replace(':','')}}" onchange="change_status(this)">
+                                                                <option value="Pending for delivery" selected>Pending for delivery</option>
+                                                                <option value="Out for delivery">Out for delivery</option>
+                                                                <option value="Delivered">Delivered</option>
+                                                            </select>
+                                                        </div>
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <thead class="thead-dark">
+                                                        <tr>
+                                                            <th scope="col" colspan="2">Product Name</th>
+                                                            <th scope="col">Quantity</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        
+                                                            {% for name in curren_history_list[i]["products"] %}
+                                                                <tr>
+                                                                    <td colspan="2">{{name}}</td>
+                                                                    <td >{{curren_history_list[i]["products"][name]}}</td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    
+                                                {% endfor %}
+                                            </table>
+                                        {% endif %}
+    
+    
+                                        </div>  
+                                        <!--Past histoy -->
+                                        <div class="tab-pane fade" id="past_history" role="tabpanel">
+                                        {% if past_history_list|length == 0 %}
+                                            <div class="row">&nbsp;</div>
+                                            <div class="d-flex justify-content-center">
+                                                This user's history is empty!
+                                            
+                                            </div>
+                                            <div class="row">&nbsp;</div>
+                                        {% else %}
+                                            {% for i in past_history_list.keys() %}
+                                                <table class="table table-sm">
+                                                    <thead class="thead-light">
+                                                    <tr>
+                                                        <th scope="col" colspan="3">Order date: {{i}}</th>
+                                                        <th scope="col" style="text-align: right;">Status: {{past_history_list[i]["status"]}}</th>
+                                                    </tr>
+                                                    </thead>
+                                                </table>
+                                            
+                                                <table class="table table-sm">
+                                                    <thead class="thead-dark">
+                                                    <tr>
+                                                        <th scope="col">Product Name</th>
+                                                        <th scope="col">Quantity</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for name in past_history_list[i]["products"] %}
+                                                            <tr>
+                                                                <td >{{name}}</td>
+                                                                <td >{{past_history_list[i]["products"][name]}}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            {% endfor %}
+                                        {% endif %}
+    
+                                        </div>
+                                      </div>
+                                </div>
+                            </div>
+    
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2"></div>
+    </div>
+<script>
+    function change_status(ele) {
+        var date_id ="dateI" + String(ele.id);
+        var date = $(`#${date_id}`).val()
+        var uuid = $(`#input-userId`).val()
+        var status = ele.value;
+        var items = {
+            "id": uuid,
+            "status": status,
+            "date" : date
+        };
+        fetch(`${window.location.origin}/admin/users/update_status`,
+            {
+                method: "POST",
+                credentials: "include",
+                body: JSON.stringify(items),
+                cache: "no-cache",
+                headers: new Headers({
+                    "content-type": "application/json"
+                })
+            }).catch(function (error) {
+                console.log("Fetch error: " + error);
+            });
+
+    };
+</script>
+{% endblock content %}
