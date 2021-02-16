@@ -151,10 +151,36 @@ def page_checkout():
 @login_required
 def api_clear_cart():
     user_uuid, amount = request.json
+    history_dic = {}
+    new_history = {}
+    products = {}
+    Current_time = datetime.datetime.now()
+    date = Current_time.strftime("%x")
+    time = Current_time.strftime("%X")[0:5]
+    date_time = f"{date} {time}"
     db_users = TableUser()
+    target_user = db_users.retrieve(user_uuid)
+    user = db_users.retrieve(current_user.uuid)
+    #placing the products into a dictionary
+    for product in user.cart_objects():
+        products.update({product.name : product.quantity})
+    #placing the dictionary into another dictionary with the total amount and statues
+    history_dic["products"] = products
+    history_dic["total_amt"] = amount
+    history_dic["statues"] = "Pending for delivery"
+
+    old_history = target_user.history
+
+    #removes the last history to keep the history to 6
+    if len(old_history) == 6:
+        old_history.popitem()
+
+    new_history[date_time] = history_dic
+    new_history.update(old_history)
+    #place ^ dictionary into the user's history dictionary with the date and time as key
+    target_user.history = new_history
 
     db_products = TableProduct()
-    target_user = db_users.retrieve(user_uuid)
     target_products = target_user.cart
 
     for i in target_products:
@@ -174,37 +200,37 @@ def api_clear_cart():
 
 
 # def api_checkout():
-#     total_amt = 0
-#     history_dic = {}
-#     new_history = {}
-#     products = {}
-#     Current_time = datetime.datetime.now()
-#     date = Current_time.strftime("%x")
-#     time = Current_time.strftime("%X")[0:5]
-#     date_time = f"{date} {time}"
-#     db = TableUser()
-#     user = db.retrieve(current_user.uuid)
-#     #placing the products into a dictionary
-#     for product in user.cart_objects():
-#         products.update({product.name : product.quantity})
-#     #placing the dictionary into another dictionary with the total amount and statues
-#     history_dic["products"] = products
-#     history_dic["total_amt"] = total_amt
-#     history_dic["statues"] = "Pending for delivery"
+    # total_amt = 0
+    # history_dic = {}
+    # new_history = {}
+    # products = {}
+    # Current_time = datetime.datetime.now()
+    # date = Current_time.strftime("%x")
+    # time = Current_time.strftime("%X")[0:5]
+    # date_time = f"{date} {time}"
+    # db = TableUser()
+    # user = db.retrieve(current_user.uuid)
+    # #placing the products into a dictionary
+    # for product in user.cart_objects():
+    #     products.update({product.name : product.quantity})
+    # #placing the dictionary into another dictionary with the total amount and statues
+    # history_dic["products"] = products
+    # history_dic["total_amt"] = total_amt
+    # history_dic["statues"] = "Pending for delivery"
 
-#     old_history = user.history
+    # old_history = user.history
 
-#     #removes the last history to keep the history to 6
-#     if len(old_history) == 6:
-#         old_history.popitem()
+    # #removes the last history to keep the history to 6
+    # if len(old_history) == 6:
+    #     old_history.popitem()
 
-#     new_history[date_time] = history_dic
-#     new_history.update(old_history)
-#     #place ^ dictionary into the user's history dictionary with the date and time as key
-#     user.history = new_history
-#     user.cart = {}
-#     db.insert(user)
-#     db.close()
+    # new_history[date_time] = history_dic
+    # new_history.update(old_history)
+    # #place ^ dictionary into the user's history dictionary with the date and time as key
+    # user.history = new_history
+    # user.cart = {}
+    # db.insert(user)
+    # db.close()
 #     flash("Payment Completed")
 #     return redirect(url_for("base.page_home"))
 

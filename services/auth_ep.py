@@ -80,7 +80,16 @@ def page_logout():
 @endpoint.route("/profile")
 @login_required
 def page_profile():
-    return render_template("auth/profile.html")
+    curren_history_list = {}
+    past_history_list = {}
+    for i in current_user.history.keys():
+        history_item = current_user.history[i]
+        statues = history_item["statues"]
+        if statues == ("Pending for delivery" or "Out for delivery"):
+            curren_history_list[i] = history_item
+        else:
+            past_history_list[i] = history_item
+    return render_template("auth/profile.html", curren_history_list = curren_history_list, past_history_list = past_history_list)
 
 
 @endpoint.route("/profile/edit", methods=["GET", "POST"])
