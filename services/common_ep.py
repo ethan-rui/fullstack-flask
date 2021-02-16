@@ -59,29 +59,22 @@ def page_catalog():
 
     """param filters -> list of uuid """
     if param_filter_brands != "":
-        param_filter_brands = list(param_filter_brands.split(","))
+        filtered_brands = list(param_filter_brands.split(","))
         print(param_filter_brands)
-        products_by_brand = [
-            i for i in products_by_name if i.brand in param_filter_brands
-        ]
+        products_by_brand = [i for i in products_by_name if i.brand in filtered_brands]
     else:
         products_by_brand = []
 
     if param_filter_categories != "":
-        param_filter_categories = list(param_filter_categories.split(","))
-        products_by_cat = [
-            i for i in products_by_name if i.cat in param_filter_categories
-        ]
+        filtered_categories = list(param_filter_categories.split(","))
+        products_by_cat = [i for i in products_by_name if i.cat in filtered_categories]
     else:
         products_by_cat = []
 
     """all the products -> set"""
     """no duplicates in set"""
-    products = (
-        list(set(products_by_brand + products_by_cat))
-        if param_filter_brands != "" or param_filter_categories != ""
-        else db_products.objects()
-    )
+
+    products = list(set(products_by_name + products_by_brand + products_by_cat))
 
     """removed all low stocks"""
     products = [x for x in products if x.stock > 0]

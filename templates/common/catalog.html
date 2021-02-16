@@ -172,14 +172,26 @@ Products
     }
 </style>
 <script>
+    var filter_brand = []
+    var filter_cat = []
+
     $(".filter-dropdown").click(
         function (e) {
             e.stopPropagation();
         }
     )
 
-    var filter_brand = []
-    var filter_cat = []
+    $(document).ready(function () {
+        var applied_filters_brands = "{{param_filter_brands}}".split(",")
+        var applied_filters_categories = "{{param_filter_categories}}".split(",")
+        for (x of applied_filters_brands) {
+            $(`#${x}`).click()
+        }
+        for (i of applied_filters_categories) {
+            $(`#${i}`).click()
+        }
+    })
+
     function add_filters(item, role) {
         if (role == "brand") {
             if (filter_brand.includes(item.id)) {
@@ -201,7 +213,7 @@ Products
     $("#filter-submit").click(function () {
         param_filter_brands = filter_brand.join(",")
         param_filter_categories = filter_cat.join(",")
-        window.location.href = `${window.location.origin}/catalog/?page={{pg_index}}&size={{pg_size}}&filter_by_brand=${param_filter_brands}&filter_by_cat=${param_filter_categories}&sort_by={{param_sort}}`
+        window.location.href = `${window.location.origin}/catalog/?page={{pg_index}}&size={{pg_size}}&filter_by_brand=${param_filter_brands}&filter_by_cat=${param_filter_categories}&sort_by={{param_sort}}&search={{param_search}}`
     })
 
     function add_cart(item) {

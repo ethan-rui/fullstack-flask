@@ -19,7 +19,7 @@ Home
         </div>
     </div>
     {% if img_carousel|length > 0 %}
-    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+    <div id="carouselExampleControls" class="carousel slide mb-4" data-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <img class="d-block w-100" src="{{url_for('static', filename='media/'+img_carousel[carou_active_key])}}"
@@ -45,7 +45,7 @@ Home
 </div>
 
 <div class="container justify-content-center">
-    <h2 style="font-size: 2.5em;">Featured</h2>
+    <h2 style="font-size: 2.5em;" class="mb-3">Featured</h2>
 </div>
 
 <div class="container justify-content-center align-items-center">

@@ -105,14 +105,6 @@ Checkout
                             required>
                         <label class="custom-control-label" for="nets-qr">Nets QR</label>
                     </div>
-                    <div class="custom-control custom-radio">
-                        <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
-                        <label class="custom-control-label" for="debit">Debit card</label>
-                    </div>
-                    <div class="custom-control custom-radio">
-                        <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
-                        <label class="custom-control-label" for="paypal">Paypal</label>
-                    </div>
                 </div>
 
                 <hr class="mb-4">
@@ -153,7 +145,7 @@ Checkout
 <script src="{{url_for('static', filename='js/nets.js')}}"></script>
 <script>
     var user_id = "{{current_user.uuid}}";
-    var amount = {{total_amt}};
+    var amount = {{ total_amt }};
     (function () {
         'use strict';
 
@@ -173,11 +165,11 @@ Checkout
                         $("#nets-qr-modal").click();
                         nets_qr(amount, user_id)
                     }
-                form.classList.add('was-validated');
+                    form.classList.add('was-validated');
                 }, false);
             });
-                }, false);
-            }) ();
+        }, false);
+    })();
 </script>
 
 {% endblock content %}
