@@ -103,7 +103,7 @@
                                 <h6 class="heading-small text-muted mb-4">Order History</h6>
                                 <div class="pl-lg-4">
                                     <div class="form-group focused">
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -113,105 +113,106 @@
                             <div class="col-md-12">
                                 <ul class="nav nav-tabs">
                                     <li class="nav-item">
-                                      <a class="nav-link active" data-toggle="tab" href="#current_history">Current Orders</a>
+                                        <a class="nav-link active" data-toggle="tab" href="#current_history">Current
+                                            Orders</a>
                                     </li>
                                     <li class="nav-item">
-                                      <a class="nav-link" data-toggle="tab" href="#past_history">Past Orders</a>
+                                        <a class="nav-link" data-toggle="tab" href="#past_history">Past Orders</a>
                                     </li>
-                                  </ul>
-                                    <div class="tab-content" id="myTabContent">
+                                </ul>
+                                <div class="tab-content" id="myTabContent">
                                     <div class="tab-pane fade show active" id="current_history" role="tabpanel">
                                         <!--current histoy -->
-                                    {% if curren_history_list|length == 0 %}
+                                        {% if curren_history_list|length == 0 %}
                                         <div class="row">&nbsp;</div>
                                         <div class="d-flex justify-content-center">
                                             Your history is empty!
-                                        
+
                                         </div>
                                         <div class="row">&nbsp;</div>
 
-                                    {% else %}
-                                    <table class="table table-sm">
-                                        {% for i in curren_history_list.keys() %}
-                                            
+                                        {% else %}
+                                        <table class="table table-sm">
+                                            {% for i in curren_history_list.keys() %}
+
                                             <thead class="thead-dark">
-                                            <tr>
-                                                <th scope="col" colspan="2">Order date: {{i}}</th>
-                                                <th scope="col" style="text-align: right;">Status: {{curren_history_list[i]["status"]}}</th>
-                                            </tr>
+                                                <tr>
+                                                    <th scope="col" colspan="2">Order date: {{i}}</th>
+                                                    <th scope="col" style="text-align: right;">Status:
+                                                        {{curren_history_list[i]["status"]}}</th>
+                                                </tr>
                                             </thead>
-                                                <thead class="thead-light">
+                                            <thead class="thead-light">
                                                 <tr>
                                                     <th scope="col">Product Name</th>
                                                     <th scope="col" style="text-align: center;">Quantity</th>
                                                     <th scope="col" style="text-align: right;">Total spend</th>
                                                 </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td rowspan="{{curren_history_list|length}}" style="text-align: right; color:green; font-weight: bold; ">${{curren_history_list[i]["total_amt"]}}</td>
-                                                    </tr>
-                                                    {% for name in curren_history_list[i]["products"] %}
-                                                        <tr>
-                                                            <td>{{name}}</td>
-                                                            <td style="text-align: center;">{{curren_history_list[i]["products"][name]}}</td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                </tbody>
-                                            
-                                        {% endfor %}
-                                    </table>
-                                    {% endif %}
+                                            </thead>
+                                            <tbody>
+                                                {% for name in curren_history_list[i]["products"] %}
+                                                <tr>
+                                                    <td>{{name}}</td>
+                                                    <td style="text-align: center;">
+                                                        {{curren_history_list[i]["products"][name]}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                                <td colspan=3
+                                                    style="text-align: right; color:green; font-weight: bold; ">
+                                                    ${{curren_history_list[i]["total_amt"]}}</td>
+                                            </tbody>
+
+                                            {% endfor %}
+                                        </table>
+                                        {% endif %}
 
 
-                                    </div>  
+                                    </div>
                                     <!--Past histoy -->
                                     <div class="tab-pane fade" id="past_history" role="tabpanel">
-                                    {% if past_history_list|length == 0 %}
+                                        {% if past_history_list|length == 0 %}
                                         <div class="row">&nbsp;</div>
                                         <div class="d-flex justify-content-center">
                                             Your history is empty!
-                                        
+
                                         </div>
                                         <div class="row">&nbsp;</div>
-                                    {% else %}
+                                        {% else %}
                                         <table class="table table-sm">
-                                        {% for i in past_history_list.keys() %}
-                                                <thead class="thead-dark">
+                                            {% for i in past_history_list.keys() %}
+                                            <thead class="thead-dark">
                                                 <tr>
                                                     <th scope="col" colspan="2">Order date: {{i}}</th>
-                                                    <th scope="col" style="text-align: right;">Status: {{past_history_list[i]["status"]}}</th>
+                                                    <th scope="col" style="text-align: right;">Status:
+                                                        {{past_history_list[i]["status"]}}</th>
                                                 </tr>
-                                                </thead>
-                                                <thead class="thead-light">
+                                            </thead>
+                                            <thead class="thead-light">
                                                 <tr>
                                                     <th scope="col">Product Name</th>
                                                     <th scope="col" style="text-align: center;">Quantity</th>
                                                     <th scope="col" style="text-align: right;">Total spent</th>
                                                 </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td rowspan="{{past_history_list|length}}" style="text-align: right; color:green; font-weight: bold; ">${{past_history_list[i]["total_amt"]}}</td>
-                                                    </tr>
-                                                    {% for name in past_history_list[i]["products"] %}
-                                                        <tr>
-                                                            <td>{{name}}</td>
-                                                            <td style="text-align: center;">{{past_history_list[i]["products"][name]}}</td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                </tbody>
-                                            
-                                        {% endfor %}
-                                    </table>
-                                    {% endif %}
+                                            </thead>
+                                            <tbody>
+                                                {% for name in past_history_list[i]["products"] %}
+                                                <tr>
+                                                    <td>{{name}}</td>
+                                                    <td style="text-align: center;">
+                                                        {{past_history_list[i]["products"][name]}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                                <td colspan="3"
+                                                    style="text-align: right; color:green; font-weight: bold; ">
+                                                    ${{past_history_list[i]["total_amt"]}}</td>
+                                            </tbody>
+
+                                            {% endfor %}
+                                        </table>
+                                        {% endif %}
 
                                     </div>
-                                  </div>
+                                </div>
                             </div>
                         </div>
 

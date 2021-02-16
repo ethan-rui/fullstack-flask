@@ -4,6 +4,7 @@ from flask_login.utils import login_required, current_user
 from data.statistics import Settings
 from data.users import User, TableUser
 import json
+import datetime
 
 endpoint = Blueprint("admin_statistics", __name__)
 basedir = os.getcwd()
@@ -18,8 +19,18 @@ def check_perms():
 
 
 @endpoint.route("/", methods=["GET", "POST"])
-def page_dashboard(): 
-    usercount = [0]
+def page_dashboard():
+    db_users = TableUser()
+    db_users.close()
+
+    """getting the new users that were created"""
+    users = db_users.objects()
+    current_date = datetime.datetime.now().strftime("%d/%m/%Y")
+    new_users = []
+    for x in users:
+        if x.date_created.strftime("%d/%m/%Y") == current_date:
+            new_users.append(x)
+
     datasets = [89, 23, 63, 13, 55, 169]
     labels = ["Seafood", "Fruits", "Dairy", "Others", "Vegetables", "Meat"]
     days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
@@ -35,7 +46,6 @@ def page_dashboard():
         print("hello world")
     return render_template(
         "admin/dashboard.html",
-        usercount=usercount,
         datasets=datasets,
         labels=labels,
         days=days,
@@ -49,7 +59,8 @@ def page_dashboard():
         quarter4expenses=quarter4expenses,
     )
 
-@endpoint.route('/dailyuserstotal', methods=["GET", "POST"])
+
+@endpoint.route("/dailyuserstotal", methods=["GET", "POST"])
 def api_user_total():
     """json => {total_users: total_users}"""
     user_total = request.json["total_users"]

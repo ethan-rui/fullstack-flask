@@ -11,9 +11,7 @@ from wtforms import (
 class AddProduct(Form):
     name = StringField(
         "Name",
-        [
-            validators.DataRequired(),
-        ],
+        [validators.DataRequired(), validators.length(min=5, max=11)],
     )
     centprice = IntegerField(
         "Price",

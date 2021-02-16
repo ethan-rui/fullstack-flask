@@ -85,11 +85,15 @@ def page_profile():
     for i in current_user.history.keys():
         history_item = current_user.history[i]
         status = history_item["status"]
-        if status == ("Pending for delivery" or "Out for delivery"):
+        if status in ["Pending for delivery", "Out for delivery"]:
             curren_history_list[i] = history_item
         else:
             past_history_list[i] = history_item
-    return render_template("auth/profile.html", curren_history_list = curren_history_list, past_history_list = past_history_list)
+    return render_template(
+        "auth/profile.html",
+        curren_history_list=curren_history_list,
+        past_history_list=past_history_list,
+    )
 
 
 @endpoint.route("/profile/edit", methods=["GET", "POST"])
