@@ -94,6 +94,8 @@ def page_catalog():
             )
         if param_sort == "price_desc":
             products = sorted(products, key=attrgetter("centprice_final"), reverse=True)
+        if param_sort == "popularity":
+            products = sorted(products, key=attrgetter("quantity_sold"), reverse=True)
 
     """gets the respective brands and cat for each product"""
     db_bc = TableBC()

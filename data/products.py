@@ -16,7 +16,7 @@ class Product(Entry):
         centprice: int = 0,
         discount: int = 0,
         uid: str = None,
-        sold = 0,
+        sold=0,
     ):
         super().__init__(uid)
         self.name = name
@@ -60,6 +60,7 @@ class Product(Entry):
             "discount": self.discount,
             "price_final": f"{(self.centprice_final/100):.2f}",
             "desc": self.desc,
+            "sold": self.quantity_sold,
         }
 
 

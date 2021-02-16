@@ -187,5 +187,8 @@ Update {{name}}
                 $('.modal-backdrop').removeClass('modal-backdrop');
                 console.log("completed")
             }
+            $('#table').on('load-success.bs.table', function () {
+                $("#total_products").html($('#table').bootstrapTable('getOptions').totalRows)
+            })
         </script>
         {% endblock content %}
