@@ -4,13 +4,8 @@ from flask_login.utils import login_required, current_user
 from data.statistics import Settings
 from data.users import User, TableUser
 import json
-<<<<<<< HEAD
-<<<<<<< HEAD
 import datetime
-=======
->>>>>>> parent of 5e766e2 (usercount daily 3)
-=======
->>>>>>> parent of 5e766e2 (usercount daily 3)
+
 
 endpoint = Blueprint("admin_statistics", __name__)
 basedir = os.getcwd()
@@ -65,11 +60,6 @@ def page_dashboard():
         quarter4expenses=quarter4expenses,
     )
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> parent of 5e766e2 (usercount daily 3)
 @endpoint.route('/dailyuserstotal', methods=["GET", "POST"])
 def api_user_total():
     """json => {total_users: total_users}"""
@@ -78,8 +68,6 @@ def api_user_total():
     db_users.close()
     users = db_users.objects()
     total_users = len(users)
-
->>>>>>> parent of 5e766e2 (usercount daily 3)
 
 @endpoint.route("/settings", methods=["GET", "POST"])
 def page_settings():
