@@ -45,17 +45,46 @@ def page_catalog():
     """pg_index starts from 0"""
     pg_index = request.args.get("page", type=int, default=0)
     pg_size = request.args.get("size", type=int, default=10)
-    param_filter = request.args.get("filter_by", type=str, default=None)
+    param_filter_brands = request.args.get("filter_by_brand", type=str, default="")
+    param_filter_categories = request.args.get("filter_by_cat", type=str, default="")
     param_sort = request.args.get("sort_by", type=str, default="price_asc")
     param_search = request.args.get("search", type=str, default="").replace("-", " ")
 
     db_products = TableProduct()
-
     """querying the object based on search params"""
     if param_search != "":
-        products = db_products.query({"name": param_search}, mode="similar")
+        products_by_name = db_products.query({"name": param_search}, mode="similar")
     else:
-        products = db_products.objects()
+        products_by_name = db_products.objects()
+
+    """param filters -> list of uuid """
+    if param_filter_brands != "":
+        param_filter_brands = list(param_filter_brands.split(","))
+        print(param_filter_brands)
+        products_by_brand = [
+            i for i in products_by_name if i.brand in param_filter_brands
+        ]
+    else:
+        products_by_brand = []
+
+    if param_filter_categories != "":
+        param_filter_categories = list(param_filter_categories.split(","))
+        products_by_cat = [
+            i for i in products_by_name if i.cat in param_filter_categories
+        ]
+    else:
+        products_by_cat = []
+
+    """all the products -> set"""
+    """no duplicates in set"""
+    products = (
+        list(set(products_by_brand + products_by_cat))
+        if param_filter_brands != "" or param_filter_categories != ""
+        else db_products.objects()
+    )
+
+    """removed all low stocks"""
+    products = [x for x in products if x.stock > 0]
 
     """sorting the products based on sorting params"""
     if param_sort != "":
@@ -72,18 +101,21 @@ def page_catalog():
     db_bc.close()
     db_products.close()
 
-    """removed all low stocks"""
-    products = [x for x in products if x.stock > 0]
+    if pg_size <= 0:
+        pg_size = 1
+    pg_total = ceil(len(products) / pg_size)
+    if pg_index > pg_total or pg_index < 0:
+        pg_index = 0
 
     shown_products = products[(pg_index * pg_size) : (pg_index * pg_size + pg_size)]
-    pg_total = ceil(len(products) / pg_size)
     len_products = len(products)
     return render_template(
         "common/catalog.html",
         shown_products=shown_products,
         bc=bc,
         pg_total=pg_total,
-        param_filter=param_filter,
+        param_filter_brands=param_filter_brands,
+        param_filter_categories=param_filter_categories,
         param_sort=param_sort,
         param_search=param_search,
         pg_index=pg_index,

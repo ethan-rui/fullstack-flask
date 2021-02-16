@@ -79,7 +79,7 @@
 
     function item_search() {
         query = $("#query_search").val().replace(/\s/g, "-")
-        window.location.href = `${window.location.origin}/catalog/?page={{ pg_index }}&size={{ pg_size }}&filter_by={{ param_filter }}&sort_by={{ param_sort }}&search=${query}`
+        window.location.href = `${window.location.origin}/catalog/?page={{ pg_index }}&size={{ pg_size }}&filter_by_brand={{ param_filter_brands }}&filter_by_categories={{ param_filter_categories }}&sort_by={{ param_sort }}&search=${query}`
 
     }
 
