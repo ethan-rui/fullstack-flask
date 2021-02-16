@@ -14,7 +14,7 @@ endpoint = Blueprint("api", __name__)
 @endpoint.route("delete/<table>", methods=["POST"])
 def api_delete(table):
     """
-    data = [uuid, uuid, uuid]
+    data -> list of uuids
     """
     data = request.json
 
