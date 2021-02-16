@@ -190,7 +190,7 @@ def api_clear_cart():
         product = db_products.retrieve(i)
         sold_amount = target_products[i].quantity
         product.stock -= sold_amount
-        product.sold += sold_amount
+        product.quantity_sold += sold_amount
         db_products.insert(product)
 
     """clearing cart"""

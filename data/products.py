@@ -28,7 +28,7 @@ class Product(Entry):
         self.discount = discount
         self.role = "products"
         self.__images = {0: None, 1: None, 2: None}
-        self.sold = sold
+        self.quantity_sold = sold
 
     @property
     def images(self) -> dict:
