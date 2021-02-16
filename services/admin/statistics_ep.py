@@ -5,7 +5,10 @@ from data.statistics import Settings
 from data.users import User, TableUser
 import json
 <<<<<<< HEAD
+<<<<<<< HEAD
 import datetime
+=======
+>>>>>>> parent of 5e766e2 (usercount daily 3)
 =======
 >>>>>>> parent of 5e766e2 (usercount daily 3)
 
@@ -63,7 +66,10 @@ def page_dashboard():
     )
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of 5e766e2 (usercount daily 3)
 @endpoint.route('/dailyuserstotal', methods=["GET", "POST"])
 def api_user_total():
     """json => {total_users: total_users}"""
