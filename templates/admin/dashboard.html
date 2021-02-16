@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.css">
 <script src="https://unpkg.com/bootstrap-table@1.18.0/dist/bootstrap-table.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <div class="container-fluid p-4">
     <h2>Dashboard Page</h2>
     <div class="row">
@@ -221,7 +222,7 @@
     datasets: [{
         fill: false,
         label: 'User Count (Daily)',
-        data: [0],
+        data: {{ usercount| safe}},
         backgroundColor: [
             'rgba(255, 0, 34, 1)',
         ],

@@ -3,6 +3,7 @@ import os
 from flask_login.utils import login_required, current_user
 from data.statistics import Settings
 from data.users import User, TableUser
+import json
 
 endpoint = Blueprint("admin_statistics", __name__)
 basedir = os.getcwd()
@@ -17,11 +18,8 @@ def check_perms():
 
 
 @endpoint.route("/", methods=["GET", "POST"])
-def page_dashboard():
-    db_users = TableUser()
-    db_users.close()
-    users = db_users.objects()
-    total_users = len(users),
+def page_dashboard(): 
+    usercount = [0]
     datasets = [89, 23, 63, 13, 55, 169]
     labels = ["Seafood", "Fruits", "Dairy", "Others", "Vegetables", "Meat"]
     days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
@@ -37,7 +35,7 @@ def page_dashboard():
         print("hello world")
     return render_template(
         "admin/dashboard.html",
-        total_users=total_users,
+        usercount=usercount,
         datasets=datasets,
         labels=labels,
         days=days,
@@ -50,6 +48,15 @@ def page_dashboard():
         quarter3expenses=quarter3expenses,
         quarter4expenses=quarter4expenses,
     )
+
+@endpoint.route('/dailyuserstotal', methods=["GET", "POST"])
+def api_user_total():
+    """json => {total_users: total_users}"""
+    user_total = request.json["total_users"]
+    db_users = TableUser()
+    db_users.close()
+    users = db_users.objects()
+    total_users = len(users)
 
 
 @endpoint.route("/settings", methods=["GET", "POST"])
