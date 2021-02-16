@@ -135,8 +135,8 @@
                                             <table class="table table-sm">
                                             <thead class="thead-dark">
                                             <tr>
-                                                <th scope="col" colspan="2">Order date: {{i}}</th>
-                                                <th scope="col">Statues: {{curren_history_list[i]["statues"]}}</th>
+                                                <th scope="col" colspan="3">Order date: {{i}}</th>
+                                                <th scope="col" style="text-align: right;">Status: {{curren_history_list[i]["statues"]}}</th>
                                             </tr>
                                             </thead>
                                             </table>
@@ -145,20 +145,20 @@
                                                 <thead class="thead-light">
                                                 <tr>
                                                     <th scope="col">Product Name</th>
-                                                    <th scope="col">Quantity</th>
-                                                    <th scope="col">Total spend</th>
+                                                    <th scope="col" style="text-align: center;">Quantity</th>
+                                                    <th scope="col" style="text-align: right;">Total spend</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
                                                         <td></td>
                                                         <td></td>
-                                                        <td rowspan="{{curren_history_list|length}}">{{curren_history_list[i]["total_amt"]}}</td>
+                                                        <td rowspan="{{curren_history_list|length}}" style="text-align: right; color:green; font-weight: bold; ">${{curren_history_list[i]["total_amt"]}}</td>
                                                     </tr>
                                                     {% for name in curren_history_list[i]["products"] %}
                                                         <tr>
                                                             <td>{{name}}</td>
-                                                            <td>{{curren_history_list[i]["products"][name]}}</td>
+                                                            <td style="text-align: center;">{{curren_history_list[i]["products"][name]}}</td>
                                                         </tr>
                                                     {% endfor %}
                                                 </tbody>
@@ -182,8 +182,8 @@
                                             <table class="table table-sm">
                                                 <thead class="thead-dark">
                                                 <tr>
-                                                    <th scope="col" colspan="2">Order date: {{i}}</th>
-                                                    <th scope="col">Statues: {{past_history_list[i]["statues"]}}</th>
+                                                    <th scope="col" colspan="3">Order date: {{i}}</th>
+                                                    <th scope="col" style="text-align: right;">Status: {{past_history_list[i]["statues"]}}</th>
                                                 </tr>
                                                 </thead>
                                             </table>
@@ -192,20 +192,20 @@
                                                 <thead class="thead-light">
                                                 <tr>
                                                     <th scope="col">Product Name</th>
-                                                    <th scope="col">Quantity</th>
-                                                    <th scope="col">Total spend</th>
+                                                    <th scope="col" style="text-align: center;">Quantity</th>
+                                                    <th scope="col" style="text-align: right;">Total spend</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
                                                         <td></td>
                                                         <td></td>
-                                                        <td rowspan="{{past_history_list|length}}">{{past_history_list[i]["total_amt"]}}</td>
+                                                        <td rowspan="{{past_history_list|length}}" style="text-align: right; color:green; font-weight: bold; ">${{past_history_list[i]["total_amt"]}}</td>
                                                     </tr>
                                                     {% for name in past_history_list[i]["products"] %}
                                                         <tr>
                                                             <td>{{name}}</td>
-                                                            <td>{{past_history_list[i]["products"][name]}}</td>
+                                                            <td style="text-align: center;">{{past_history_list[i]["products"][name]}}</td>
                                                         </tr>
                                                     {% endfor %}
                                                 </tbody>

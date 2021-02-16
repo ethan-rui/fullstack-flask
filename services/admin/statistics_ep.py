@@ -2,6 +2,7 @@ from flask import render_template, redirect, request, Blueprint, session, url_fo
 import os
 from flask_login.utils import login_required, current_user
 from data.statistics import Settings
+from data.users import User, TableUser
 
 endpoint = Blueprint("admin_statistics", __name__)
 basedir = os.getcwd()
@@ -17,6 +18,10 @@ def check_perms():
 
 @endpoint.route("/", methods=["GET", "POST"])
 def page_dashboard():
+    db_users = TableUser()
+    db_users.close()
+    users = db_users.objects()
+    total_users = len(users),
     datasets = [89, 23, 63, 13, 55, 169]
     labels = ["Seafood", "Fruits", "Dairy", "Others", "Vegetables", "Meat"]
     days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
@@ -32,6 +37,7 @@ def page_dashboard():
         print("hello world")
     return render_template(
         "admin/dashboard.html",
+        total_users=total_users,
         datasets=datasets,
         labels=labels,
         days=days,

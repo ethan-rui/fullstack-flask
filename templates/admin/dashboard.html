@@ -17,7 +17,7 @@
             <h3>Total expenses</h3><canvas id="totalExpensesChart"></canvas>
         </div>
         <div class="col-12 col-lg-3 row-lg-6" style="border:1px solid #cecece;">
-            <h3>New Users</h3><canvas id="newUserChart"></canvas>
+            <h3>New Users Today</h3><canvas id="newUserChart"></canvas>
         </div>
         <div class="col-12 col-lg-6" style="border:1px solid #cecece;">
             <h3>Overall Best Sellers</h3><canvas id="barChart"></canvas>
@@ -215,13 +215,13 @@
     // New Users
     var ctx = document.getElementById('newUserChart').getContext('2d');
     var barChart = new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
-            labels: {{ days| safe}},
+            labels: ['Today'],
     datasets: [{
         fill: false,
-        label: 'User Count (Weekly)',
-        data: [3, 1, 2, 6, 3, 2, 9],
+        label: 'User Count (Daily)',
+        data: [0],
         backgroundColor: [
             'rgba(255, 0, 34, 1)',
         ],
