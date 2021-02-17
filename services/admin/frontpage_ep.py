@@ -66,6 +66,8 @@ def api_delete_frontpage(table):
 def page_config_featured_products():
     db_featured = TableFrontPage()
     db_products = TableProduct()
+    db_featured.close()
+    db_products.close()
     objects = db_products.objects()
     product_keys = db_products.dict()
     featured_products = [
