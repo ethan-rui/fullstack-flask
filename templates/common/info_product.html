@@ -45,7 +45,7 @@
             </h4>
             <h6> (Save {{target.discount}}%)</h6>
             {% else %}
-            <h4 class="font-weight-bold">${{target.centprice/100}}</h4>
+            <h4 class="font-weight-bold">${{"%.2f"|format(target.centprice/100)}}</h4>
             {% endif %}
                 <input type="hidden" name="quantity" id="{{target.uuid}}_quantity" value="1">
                 <button class="btn btn-success btn-sm-md btn-lg-sm" onclick="add_cart(this)" id="{{target.uuid}}"><i class="fas fa-shopping-cart mr-1"></i>Add To
