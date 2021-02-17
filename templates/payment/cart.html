@@ -30,7 +30,7 @@ Products
                 <tbody>
                     {% for product in products %}
                     <tr id="{{product.uuid}}_row">
-                        <td class="col-1"><img class="img-fluid"
+                        <td class="col-lg-1"><img class="img-fluid"
                                 src="{{url_for('static', filename='media/'+product.img)}}" />
                         </td>
                         <td>{{product.name}}</td>
