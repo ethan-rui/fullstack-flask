@@ -6,7 +6,9 @@ from flask import (
     url_for,
     flash,
     wrappers,
-    escape
+    escape,
+    jsonify,
+    make_response,
 )
 import json
 from flask_uploads import UploadSet, IMAGES
@@ -105,11 +107,19 @@ def api_update_status():
 
     db_users = TableUser()
     user = db_users.retrieve(user_id)
-    user.history[date]["status"] = status
-    db_users.insert(user)
+    if user.history[date]["status"] != status:
+        user.history[date]["status"] = status
+        resp_dic = {
+        "alert_message": " has been changed to "+ status,
+        }
+        db_users.insert(user)
+        resp = make_response(jsonify(resp_dic), 200)
+        return resp
+    else:
+        return ("", 204)
     db_users.close()
 
-    return ("", 204)
+
 
 
 @endpoint.route("/users")

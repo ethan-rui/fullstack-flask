@@ -10,6 +10,19 @@ Products
 </section>
 
 <div class="container">
+    <div class="toast" role="alert" aria-live="polite" aria-atomic="true" data-delay="3000"
+        style="position: sticky; top: 15%; transform: translate(-50%, -50%); left:50%; z-index: 999;">
+        <div class="toast-header">
+            &#128276; &nbsp;
+            <strong class="mr-auto">Notification</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body" id="alert_message" style="font-weight: bolder;">
+            Hello, world! This is a toast message.
+        </div>
+    </div>
     {% if products %}
     <div class="row">
         <div class="col-12">
@@ -98,12 +111,23 @@ Products
     window.onload = function () {
         var element_table = document.getElementsByName("cart");
         var element_tableRows = element_table[0].rows;
+        var message_array = {{message|tojson}};
+        var message = "";
+        if (message_array.length > 1){
+            for(var d = 1; (d < message_array.length); d++ ){
+                message = message + message_array[d] + "<br>"
+            };
+            document.getElementById("alert_message").innerHTML = message;
+            $('.toast').toast('show');
+        }else{
+
+        };
         for (var i = 1; i < (element_tableRows.length - 1); i++) {
             var cell = element_tableRows[i].cells;
             var uuid = cell[3].innerHTML;
             var quantity = Number(cell[2].innerHTML);
             document.getElementById(uuid).value = quantity
-        }
+        };
     };
 
     function update_cart() {

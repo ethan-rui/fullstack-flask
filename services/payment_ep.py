@@ -36,18 +36,45 @@ def page_cart():
     """"{products name: quantity}"""
     total_amt = 0
 
+    message_array = [1]
+    message = ' has been removed from cart'
+
     """user.cart -> {product_uuid: cart_item}"""
     invalid_products = []
     for product_uuid in user.cart:
         try:
             target = db_products.retrieve(product_uuid)
-            """setting the attribute of each cart item"""
-            user.cart[product_uuid].img = target.images[0]
-            user.cart[product_uuid].centprice_final = target.centprice_final
-            user.cart[product_uuid].calc_subtotal(centprice=target.centprice_final)
-            user.cart[product_uuid].name = target.name
-            total_amt += user.cart[product_uuid].subtotal
+            """check if there is stock"""
+            #If there is no stock
+            if target.stock == 0:
+                message = target.name + message + " as it is out of stock"
+                message_array.append(message)
+                invalid_products.append(product_uuid)
+
+
+            #If there is enough stock
+            elif user.cart[product_uuid].quantity <=  target.stock:
+                """setting the attribute of each cart item"""
+                user.cart[product_uuid].img = target.images[0]
+                user.cart[product_uuid].centprice_final = target.centprice_final
+                user.cart[product_uuid].calc_subtotal(centprice=target.centprice_final)
+                user.cart[product_uuid].name = target.name
+                total_amt += user.cart[product_uuid].subtotal
+
+            #If there is not enough stock
+            else:
+                message = target.name + " only left " + str(target.stock) + " in stock"
+                message_array.append(message)
+                """setting the attribute of each cart item"""
+                user.cart[product_uuid].quantity = target.stock
+                user.cart[product_uuid].img = target.images[0]
+                user.cart[product_uuid].centprice_final = target.centprice_final
+                user.cart[product_uuid].calc_subtotal(centprice=target.centprice_final)
+                user.cart[product_uuid].name = target.name
+                total_amt += user.cart[product_uuid].subtotal
         except:
+            message = "An item" + message
+            message_array.append(message)
             invalid_products.append(product_uuid)
 
     if len(invalid_products) > 0:
@@ -56,7 +83,8 @@ def page_cart():
         db.insert(user)
     products = user.cart_objects()
     db.close()
-    return render_template("payment/cart.html", products=products, total_amt=total_amt)
+    print(message_array)
+    return render_template("payment/cart.html", products=products, total_amt=total_amt, message = message_array)
 
 
 @endpoint.route("/add_cart", methods=["POST"])
@@ -79,13 +107,6 @@ def add_cart():
         db_products = TableProduct()
         current_stock = db_products.retrieve(product_id).stock
         db_products.close()
-        if current_stock < quantity:
-            resp_dic = {
-                "item_in_cart": len(user.cart),
-                "alert_message": "Item out of stock!",
-            }
-            resp = make_response(jsonify(resp_dic), 200)
-            return resp
 
         alert_message = "Item added successfully"
         user.add_item_cart(
@@ -219,11 +240,10 @@ def change_quantity():
     current_stock = db_products.retrieve(product_id).stock
     db_products.close()
 
-    if current_stock >= quantity:
-        user.add_item_cart(
-            key=product_id, value=CartItem(uuid=product_id, quantity=quantity)
-        )
-        db.insert(user)
+    user.add_item_cart(
+        key=product_id, value=CartItem(uuid=product_id, quantity=quantity)
+    )
+    db.insert(user)
 
     db.close()
     return ("", 204)
