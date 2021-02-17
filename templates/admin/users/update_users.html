@@ -100,6 +100,7 @@ Update User
                                         <li class="nav-item">
                                           <a class="nav-link" data-toggle="tab" href="#past_history">Past Orders</a>
                                         </li>
+                                        <li><button class="btn btn-success btn-sm-md btn-lg-sm" onclick="update_user()">Update</button></li>
                                       </ul>
                                         <div class="tab-content" id="myTabContent">
                                         <div class="tab-pane fade show active" id="current_history" role="tabpanel">
@@ -113,10 +114,13 @@ Update User
                                             <div class="row">&nbsp;</div>
     
                                         {% else %}
-                                            <table class="table table-sm">
+                                            
                                                 {% for i in curren_history_list.keys() %}
+                                                <table class="table table-sm" name="order_date_table">
                                                     <thead class="thead-light">
                                                     <tr>
+                                                        <th class="d-none" >{{curren_history_list[i]["status"]}}</th>
+                                                        <th class="d-none" >D_{{i.replace(' ','').replace('/','').replace(':','')}}</th>
                                                         <input type="hidden" id="dateID_{{i.replace(' ','').replace('/','').replace(':','')}}" value="{{i}}">
                                                         <th scope="col" >Order date: {{i}}</th>
                                                         <th scope="col" style="text-align: right;">Status:</th>
@@ -130,6 +134,9 @@ Update User
                                                         </th>
                                                     </tr>
                                                     </thead>
+                                                </table>
+
+                                                <table class="table table-sm">
                                                     <thead class="thead-dark">
                                                         <tr>
                                                             <th scope="col" colspan="2">Product Name</th>
@@ -145,9 +152,9 @@ Update User
                                                                 </tr>
                                                             {% endfor %}
                                                         </tbody>
-                                                    
+                                                    </table>
                                                 {% endfor %}
-                                            </table>
+                                            
                                         {% endif %}
     
     
@@ -163,12 +170,23 @@ Update User
                                             <div class="row">&nbsp;</div>
                                         {% else %}
                                             {% for i in past_history_list.keys() %}
-                                                <table class="table table-sm">
+                                                <table class="table table-sm" name="order_date_table">
                                                     <thead class="thead-light">
-                                                    <tr>
-                                                        <th scope="col" colspan="3">Order date: {{i}}</th>
-                                                        <th scope="col" style="text-align: right;">Status: {{past_history_list[i]["status"]}}</th>
-                                                    </tr>
+                                                        <tr>
+                                                            <th class="d-none" >{{past_history_list[i]["status"]}}</th>
+                                                            <th class="d-none" >D_{{i.replace(' ','').replace('/','').replace(':','')}}</th>
+                                                            <input type="hidden" id="dateID_{{i.replace(' ','').replace('/','').replace(':','')}}" value="{{i}}">
+                                                            <th scope="col" >Order date: {{i}}</th>
+                                                            <th scope="col" style="text-align: right;">Status:</th>
+                                                            <th scope="col" ><div class="input-group mb-12">
+                                                                <select class="custom-select" id="D_{{i.replace(' ','').replace('/','').replace(':','')}}" onchange="change_status(this)">
+                                                                    <option value="Pending for delivery" selected>Pending for delivery</option>
+                                                                    <option value="Out for delivery">Out for delivery</option>
+                                                                    <option value="Delivered">Delivered</option>
+                                                                </select>
+                                                            </div>
+                                                            </th>
+                                                        </tr>
                                                     </thead>
                                                 </table>
                                             
@@ -203,6 +221,21 @@ Update User
         <div class="col-lg-2"></div>
     </div>
 <script>
+    window.onload = function () {
+        var element_table = document.getElementsByName("order_date_table");
+        for (var i = 0; i < (element_table.length); i++) {
+            var element_tableRows = element_table[i].rows
+            var cell = element_tableRows[0].cells;
+            var status_select_id = cell[1].innerHTML;
+            var status = String(cell[0].innerHTML);
+            document.getElementById(status_select_id).value = status
+        }
+    };
+
+    function update_user() {
+        location.reload();
+    };
+
     function change_status(ele) {
         var date_id ="dateI" + String(ele.id);
         var date = $(`#${date_id}`).val()

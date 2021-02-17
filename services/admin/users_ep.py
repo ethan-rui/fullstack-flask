@@ -76,7 +76,7 @@ def api_add_admin():
         db.close()
     return render_template("admin/users/users.html", form=form)
 
-
+""""Only updates the delivery status"""
 @endpoint.route("/users/update/<uid>" , methods=["GET", "POST"])
 def page_update_users(uid):
     db_users = TableUser()
@@ -91,7 +91,6 @@ def page_update_users(uid):
             past_history_list[i] = history_item
         else:
             curren_history_list[i] = history_item
-
     return render_template(
         "admin/users/update_users.html", user=user, curren_history_list = curren_history_list, past_history_list = past_history_list, 
     )
