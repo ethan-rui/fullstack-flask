@@ -25,14 +25,22 @@ Carousel
                         {% from '_formhelpers.html' import render_field %}
                         <form action="" method="POST" enctype="multipart/form-data">
                             <div class="row">
-                                <div class="col-12">{{ render_field(form.image_0, class="form-control")}}</div>
-                                <div class="col-12">{{ render_field(form.image_1, class="form-control")}}</div>
-                                <div class="col-12">{{ render_field(form.image_2, class="form-control")}}</div>
-                                <div class="col-12">{{ render_field(form.image_3, class="form-control")}}</div>
-                                <div class="col-12">{{ render_field(form.image_4, class="form-control")}}</div>
+                                <p><b>*Images will be resized to 1200x600</b></p>
+                                <div class="col-12">{{ render_field(form.image_0, class="form-control", onchange="document.getElementById('image-0').src = window.URL.createObjectURL(this.files[0])")}}</div>
+                                <div class="col-12">{{ render_field(form.image_1, class="form-control", onchange="document.getElementById('image-1').src = window.URL.createObjectURL(this.files[0])")}}</div>
+                                <div class="col-12">{{ render_field(form.image_2, class="form-control", onchange="document.getElementById('image-2').src = window.URL.createObjectURL(this.files[0])")}}</div>
+                                <div class="col-12">{{ render_field(form.image_3, class="form-control", onchange="document.getElementById('image-3').src = window.URL.createObjectURL(this.files[0])")}}</div>
+                                <div class="col-12">{{ render_field(form.image_4, class="form-control", onchange="document.getElementById('image-4').src = window.URL.createObjectURL(this.files[0])")}}</div>
                             </div>
                             <input type="submit" value="Update Carousel" class="btn btn-success mt-2">
                         </form>
+                    </div>
+                    <div class="row mt-4">
+                        <img class="col-3 mb-2" id="image-0">
+                        <img class="col-3 mb-2" id="image-1">
+                        <img class="col-3 mb-2" id="image-2">
+                        <img class="col-3 mb-2" id="image-3">
+                        <img class="col-3 mb-2" id="image-4">
                     </div>
                 </div>
                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">

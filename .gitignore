@@ -5,7 +5,4 @@
 *.dat
 *.dir
 *.db
-/static/media/img_products
-/static/media/img_carousel
-/static/media/img_users
 /.vscode

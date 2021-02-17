@@ -11,6 +11,9 @@ class RegistrationForm(Form):
         [
             validators.DataRequired(),
             validators.EqualTo("confirm", message="Passwords must match"),
+            validators.length(
+                min=8, max=32, message="Password must be at least 8 characters"
+            ),
         ],
     )
     confirm = PasswordField("Repeat Password")
