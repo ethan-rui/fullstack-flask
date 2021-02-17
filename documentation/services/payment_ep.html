@@ -231,42 +231,6 @@ def api_clear_cart():
     return make_response(&#34;success&#34;, 200)
 
 
-# def api_checkout():
-# total_amt = 0
-# history_dic = {}
-# new_history = {}
-# products = {}
-# Current_time = datetime.datetime.now()
-# date = Current_time.strftime(&#34;%x&#34;)
-# time = Current_time.strftime(&#34;%X&#34;)[0:5]
-# date_time = f&#34;{date} {time}&#34;
-# db = TableUser()
-# user = db.retrieve(current_user.uuid)
-# #placing the products into a dictionary
-# for product in user.cart_objects():
-#     products.update({product.name : product.quantity})
-# #placing the dictionary into another dictionary with the total amount and status
-# history_dic[&#34;products&#34;] = products
-# history_dic[&#34;total_amt&#34;] = total_amt
-# history_dic[&#34;status&#34;] = &#34;Pending for delivery&#34;
-
-# old_history = user.history
-
-# #removes the last history to keep the history to 6
-# if len(old_history) == 6:
-#     old_history.popitem()
-
-# new_history[date_time] = history_dic
-# new_history.update(old_history)
-# #place ^ dictionary into the user&#39;s history dictionary with the date and time as key
-# user.history = new_history
-# user.cart = {}
-# db.insert(user)
-# db.close()
-#     flash(&#34;Payment Completed&#34;)
-#     return redirect(url_for(&#34;base.page_home&#34;))
-
-
 @endpoint.route(&#34;/change_quantity_cart&#34;, methods=[&#34;POST&#34;])
 @login_required
 def change_quantity():

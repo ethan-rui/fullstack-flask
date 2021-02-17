@@ -46,10 +46,7 @@ def check_perms():
 
 @endpoint.route(&#34;/&#34;, methods=[&#34;GET&#34;, &#34;POST&#34;])
 def page_dashboard():
-    db_users = TableUser()
-    db_users.close()
-    users = db_users.objects()
-    total_users = len(users),
+    usercount = [0]
     datasets = [89, 23, 63, 13, 55, 169]
     labels = [&#34;Seafood&#34;, &#34;Fruits&#34;, &#34;Dairy&#34;, &#34;Others&#34;, &#34;Vegetables&#34;, &#34;Meat&#34;]
     days = [&#34;Mon&#34;, &#34;Tue&#34;, &#34;Wed&#34;, &#34;Thu&#34;, &#34;Fri&#34;, &#34;Sat&#34;, &#34;Sun&#34;]
@@ -61,11 +58,16 @@ def page_dashboard():
     quarter2expenses = [69, 1337, 420]
     quarter3expenses = [93, 21, 37]
     quarter4expenses = [320, 203, 416]
+    final_count = [1]
+    db_users = TableUser()
+    db_users.close()
+    users = db_users.objects()
+    total_users = len(users)
     if request.method == &#34;POST&#34;:
         print(&#34;hello world&#34;)
     return render_template(
         &#34;admin/dashboard.html&#34;,
-        total_users=total_users,
+        usercount=usercount,
         datasets=datasets,
         labels=labels,
         days=days,
@@ -77,6 +79,23 @@ def page_dashboard():
         quarter2expenses=quarter2expenses,
         quarter3expenses=quarter3expenses,
         quarter4expenses=quarter4expenses,
+        final_count=final_count,
+        total_users=total_users,
+    )
+
+
+@endpoint.route(&#34;/usercount&#34;, methods=[&#34;GET&#34;, &#34;POST&#34;])
+def api_user_total():
+    final_count = [1]
+    db_users = TableUser()
+    db_users.close()
+    users = db_users.objects()
+    total_users = len(users)
+    if request.method == &#34;POST&#34;:
+        print(&#34;hello world&#34;)
+    return render_template(
+        &#34;admin/dashboard.html&#34;,
+        final_count=final_count,
     )
 
 
@@ -96,6 +115,30 @@ def page_settings():
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="services.admin.statistics_ep.api_user_total"><code class="name flex">
+<span>def <span class="ident">api_user_total</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@endpoint.route(&#34;/usercount&#34;, methods=[&#34;GET&#34;, &#34;POST&#34;])
+def api_user_total():
+    final_count = [1]
+    db_users = TableUser()
+    db_users.close()
+    users = db_users.objects()
+    total_users = len(users)
+    if request.method == &#34;POST&#34;:
+        print(&#34;hello world&#34;)
+    return render_template(
+        &#34;admin/dashboard.html&#34;,
+        final_count=final_count,
+    )</code></pre>
+</details>
+</dd>
 <dt id="services.admin.statistics_ep.check_perms"><code class="name flex">
 <span>def <span class="ident">check_perms</span></span>(<span>)</span>
 </code></dt>
@@ -124,10 +167,7 @@ def check_perms():
 </summary>
 <pre><code class="python">@endpoint.route(&#34;/&#34;, methods=[&#34;GET&#34;, &#34;POST&#34;])
 def page_dashboard():
-    db_users = TableUser()
-    db_users.close()
-    users = db_users.objects()
-    total_users = len(users),
+    usercount = [0]
     datasets = [89, 23, 63, 13, 55, 169]
     labels = [&#34;Seafood&#34;, &#34;Fruits&#34;, &#34;Dairy&#34;, &#34;Others&#34;, &#34;Vegetables&#34;, &#34;Meat&#34;]
     days = [&#34;Mon&#34;, &#34;Tue&#34;, &#34;Wed&#34;, &#34;Thu&#34;, &#34;Fri&#34;, &#34;Sat&#34;, &#34;Sun&#34;]
@@ -139,11 +179,16 @@ def page_dashboard():
     quarter2expenses = [69, 1337, 420]
     quarter3expenses = [93, 21, 37]
     quarter4expenses = [320, 203, 416]
+    final_count = [1]
+    db_users = TableUser()
+    db_users.close()
+    users = db_users.objects()
+    total_users = len(users)
     if request.method == &#34;POST&#34;:
         print(&#34;hello world&#34;)
     return render_template(
         &#34;admin/dashboard.html&#34;,
-        total_users=total_users,
+        usercount=usercount,
         datasets=datasets,
         labels=labels,
         days=days,
@@ -155,6 +200,8 @@ def page_dashboard():
         quarter2expenses=quarter2expenses,
         quarter3expenses=quarter3expenses,
         quarter4expenses=quarter4expenses,
+        final_count=final_count,
+        total_users=total_users,
     )</code></pre>
 </details>
 </dd>
@@ -194,6 +241,7 @@ def page_settings():
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="services.admin.statistics_ep.api_user_total" href="#services.admin.statistics_ep.api_user_total">api_user_total</a></code></li>
 <li><code><a title="services.admin.statistics_ep.check_perms" href="#services.admin.statistics_ep.check_perms">check_perms</a></code></li>
 <li><code><a title="services.admin.statistics_ep.page_dashboard" href="#services.admin.statistics_ep.page_dashboard">page_dashboard</a></code></li>
 <li><code><a title="services.admin.statistics_ep.page_settings" href="#services.admin.statistics_ep.page_settings">page_settings</a></code></li>

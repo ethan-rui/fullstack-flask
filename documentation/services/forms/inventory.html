@@ -39,9 +39,7 @@ from wtforms import (
 class AddProduct(Form):
     name = StringField(
         &#34;Name&#34;,
-        [
-            validators.DataRequired(),
-        ],
+        [validators.DataRequired(), validators.length(min=5, max=11)],
     )
     centprice = IntegerField(
         &#34;Price&#34;,
@@ -312,9 +310,7 @@ of a matching keyword argument to the field, if one exists.</p></div>
 <pre><code class="python">class AddProduct(Form):
     name = StringField(
         &#34;Name&#34;,
-        [
-            validators.DataRequired(),
-        ],
+        [validators.DataRequired(), validators.length(min=5, max=11)],
     )
     centprice = IntegerField(
         &#34;Price&#34;,

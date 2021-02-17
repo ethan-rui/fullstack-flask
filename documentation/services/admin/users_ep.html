@@ -104,6 +104,41 @@ def api_add_admin():
         db.close()
     return render_template(&#34;admin/users/users.html&#34;, form=form)
 
+&#34;&#34;&#34;&#34;Only updates the delivery status&#34;&#34;&#34;
+@endpoint.route(&#34;/users/update/&lt;uid&gt;&#34; , methods=[&#34;GET&#34;, &#34;POST&#34;])
+def page_update_users(uid):
+    db_users = TableUser()
+    user = db_users.retrieve(uid)
+    db_users.close()
+    curren_history_list = {}
+    past_history_list = {}
+    for i in user.history.keys():
+        history_item = user.history[i]
+        status = history_item[&#34;status&#34;]
+        if status == &#34;Delivered&#34;:
+            past_history_list[i] = history_item
+        else:
+            curren_history_list[i] = history_item
+    return render_template(
+        &#34;admin/users/update_users.html&#34;, user=user, curren_history_list = curren_history_list, past_history_list = past_history_list, 
+    )
+
+@endpoint.route(&#34;/users/update_status&#34; , methods=[&#34;POST&#34;])
+def api_update_status():
+    req = request.get_json()
+
+    user_id = req.get(&#34;id&#34;)
+    status = req.get(&#34;status&#34;)
+    date = req.get(&#34;date&#34;)
+
+    db_users = TableUser()
+    user = db_users.retrieve(user_id)
+    user.history[date][&#34;status&#34;] = status
+    db_users.insert(user)
+    db_users.close()
+
+    return (&#34;&#34;, 204)
+
 
 @endpoint.route(&#34;/users&#34;)
 def page_table_users():
@@ -296,6 +331,32 @@ def api_table_users():
     )</code></pre>
 </details>
 </dd>
+<dt id="services.admin.users_ep.api_update_status"><code class="name flex">
+<span>def <span class="ident">api_update_status</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@endpoint.route(&#34;/users/update_status&#34; , methods=[&#34;POST&#34;])
+def api_update_status():
+    req = request.get_json()
+
+    user_id = req.get(&#34;id&#34;)
+    status = req.get(&#34;status&#34;)
+    date = req.get(&#34;date&#34;)
+
+    db_users = TableUser()
+    user = db_users.retrieve(user_id)
+    user.history[date][&#34;status&#34;] = status
+    db_users.insert(user)
+    db_users.close()
+
+    return (&#34;&#34;, 204)</code></pre>
+</details>
+</dd>
 <dt id="services.admin.users_ep.check_perms"><code class="name flex">
 <span>def <span class="ident">check_perms</span></span>(<span>)</span>
 </code></dt>
@@ -439,6 +500,34 @@ def page_table_users():
     )</code></pre>
 </details>
 </dd>
+<dt id="services.admin.users_ep.page_update_users"><code class="name flex">
+<span>def <span class="ident">page_update_users</span></span>(<span>uid)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@endpoint.route(&#34;/users/update/&lt;uid&gt;&#34; , methods=[&#34;GET&#34;, &#34;POST&#34;])
+def page_update_users(uid):
+    db_users = TableUser()
+    user = db_users.retrieve(uid)
+    db_users.close()
+    curren_history_list = {}
+    past_history_list = {}
+    for i in user.history.keys():
+        history_item = user.history[i]
+        status = history_item[&#34;status&#34;]
+        if status == &#34;Delivered&#34;:
+            past_history_list[i] = history_item
+        else:
+            curren_history_list[i] = history_item
+    return render_template(
+        &#34;admin/users/update_users.html&#34;, user=user, curren_history_list = curren_history_list, past_history_list = past_history_list, 
+    )</code></pre>
+</details>
+</dd>
 </dl>
 </section>
 <section>
@@ -460,11 +549,13 @@ def page_table_users():
 <li><code><a title="services.admin.users_ep.api_add_admin" href="#services.admin.users_ep.api_add_admin">api_add_admin</a></code></li>
 <li><code><a title="services.admin.users_ep.api_table_inquiries" href="#services.admin.users_ep.api_table_inquiries">api_table_inquiries</a></code></li>
 <li><code><a title="services.admin.users_ep.api_table_users" href="#services.admin.users_ep.api_table_users">api_table_users</a></code></li>
+<li><code><a title="services.admin.users_ep.api_update_status" href="#services.admin.users_ep.api_update_status">api_update_status</a></code></li>
 <li><code><a title="services.admin.users_ep.check_perms" href="#services.admin.users_ep.check_perms">check_perms</a></code></li>
 <li><code><a title="services.admin.users_ep.page_info_inquiry" href="#services.admin.users_ep.page_info_inquiry">page_info_inquiry</a></code></li>
 <li><code><a title="services.admin.users_ep.page_status_update" href="#services.admin.users_ep.page_status_update">page_status_update</a></code></li>
 <li><code><a title="services.admin.users_ep.page_table_inquiries" href="#services.admin.users_ep.page_table_inquiries">page_table_inquiries</a></code></li>
 <li><code><a title="services.admin.users_ep.page_table_users" href="#services.admin.users_ep.page_table_users">page_table_users</a></code></li>
+<li><code><a title="services.admin.users_ep.page_update_users" href="#services.admin.users_ep.page_update_users">page_update_users</a></code></li>
 </ul>
 </li>
 </ul>
