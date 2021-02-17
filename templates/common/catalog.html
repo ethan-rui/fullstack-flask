@@ -3,7 +3,10 @@
 Products
 {% endblock title %}
 {% block content %}
-<div class="container-fluid px-5">
+{% block blank_space %}
+<div style="margin-bottom:2rem"></div>
+{% endblock blank_space %}
+<div class="container-fluid px-5 py-0">
     <div class="toast" role="alert" aria-live="polite" aria-atomic="true" data-delay="3000"
         style="position: sticky; top: 15%; transform: translate(-50%, -50%); left:50%; z-index: 999;">
         <div class="toast-header">

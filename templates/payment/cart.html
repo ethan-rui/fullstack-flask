@@ -111,7 +111,7 @@ Products
     window.onload = function () {
         var element_table = document.getElementsByName("cart");
         var element_tableRows = element_table[0].rows;
-        var message_array = {{message|tojson}};
+        var message_array = {{message|safe}};
         var message = "";
         if (message_array.length > 1){
             for(var d = 1; (d < message_array.length); d++ ){

@@ -4,15 +4,18 @@
 {% endblock title %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="toast" role="alert" aria-live="polite" aria-atomic="true" data-delay="3000" style="position: sticky; top: 12%; transform: translate(-50%, -50%); left:50%;">
+{% block blank_space %}
+<div style="margin-bottom: 2rem"></div>
+{% endblock blank_space %}
+<div class="container">
+    <div class="toast" role="alert" aria-live="polite" aria-atomic="true" data-delay="3000" style="position: sticky; top: 15%; transform: translate(-50%, -50%); left:50%; z-index: 999;">
         <div class="toast-header">
             &#128276; &nbsp;
             <strong class="mr-auto">Notification</strong>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
-        </div>
+        </div> 
         <div class="toast-body" id="alert_message" style="font-weight: bolder;">
             Hello, world! This is a toast message.
         </div>
