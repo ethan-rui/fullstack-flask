@@ -10,6 +10,7 @@ User Management
 
 <div class="container-fluid p-4">
     <h3><b>User Management</b></h3>
+    {% if current_user.uuid == "00000000-0000-0000-0000-000000000002" %}
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
         Add Admin
     </button>
@@ -38,6 +39,7 @@ User Management
             </div>
         </div>
     </div>
+    {% endif %}
 
     <div id="toolbar">
         <button id="modal_delete" disabled type="button" class="btn btn-danger" data-toggle="modal"

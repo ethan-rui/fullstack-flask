@@ -45,6 +45,7 @@ Add Products
 
                 <div class="container mt-2">
                     <div class="row">
+                        <p class="col-12"><b>*Images will be resized to 600x600</b></p>
                         <div class="col-md-4">{{ render_field(form.image_0, class="form-control", onchange="document.getElementById('image-0').src = window.URL.createObjectURL(this.files[0])")}}</div>
                         <div class="col-md-4">{{ render_field(form.image_1, class="form-control", onchange="document.getElementById('image-1').src = window.URL.createObjectURL(this.files[0])")}}</div>
                         <div class="col-md-4">{{ render_field(form.image_2, class="form-control", onchange="document.getElementById('image-2').src = window.URL.createObjectURL(this.files[0])")}}</div>

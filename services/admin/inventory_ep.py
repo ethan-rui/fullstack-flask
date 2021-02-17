@@ -37,13 +37,6 @@ def page_update_brand(uid):
         return redirect(url_for("admin_inventory.page_table_brands"))
     finally:
         db_bc.close()
-
-    """param to query to database"""
-    db_products = TableProduct()
-    affliated_products = db_products.query({"brand": uid})
-    db_products.close()
-    len_affliated_products = len(affliated_products)
-
     return render_template(
         "admin/inventory/update/brands_categories.html",
         target=target,
@@ -62,12 +55,6 @@ def page_update_category(uid):
         return redirect(url_for("admin_inventory.page_table_brands"))
     finally:
         db_bc.close()
-
-    """param to query to database"""
-    db_products = TableProduct()
-    affliated_products = db_products.query({"brand": uid})
-    db_products.close()
-    len_affliated_products = len(affliated_products)
 
     return render_template(
         "admin/inventory/update/brands_categories.html",
@@ -254,15 +241,26 @@ def page_update_products(uid):
                 pass
         return True
 
-    db_products = TableProduct()
-    target = db_products.retrieve(uid)
-    db_products.close()
-
     db_bc = TableBC()
     bc = db_bc.dict()
     db_bc.close()
     brands = [bc[x] for x in bc if bc[x].role == "brand"]
     categories = [bc[x] for x in bc if bc[x].role == "cat"]
+
+    db_products = TableProduct()
+    """check if assigned brand and category exists"""
+
+    target = db_products.retrieve(uid)
+    try:
+        bc[target.brand]
+    except:
+        target.brand = "00000000-0000-0000-0000-000000000000"
+    try:
+        bc[target.cat]
+    except:
+        target.cat = "00000000-0000-0000-0000-000000000001"
+
+    db_products.close()
 
     if request.method == "POST" and form.validate_on_submit():
         db = TableProduct()
