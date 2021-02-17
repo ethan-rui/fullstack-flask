@@ -51,30 +51,40 @@ def page_catalog():
     param_search = request.args.get("search", type=str, default="").replace("-", " ")
 
     db_products = TableProduct()
-    """querying the object based on search params"""
-    if param_search != "":
-        products_by_name = db_products.query({"name": param_search}, mode="similar")
+    if (
+        param_filter_brands == ""
+        and param_filter_categories == ""
+        and param_search == ""
+    ):
+        products = db_products.objects()
     else:
-        products_by_name = db_products.objects()
+        """param filters -> list of uuid """
+        if param_filter_brands != "":
+            filtered_brands = list(param_filter_brands.split(","))
+            print(param_filter_brands)
+            products_by_brand = [
+                i for i in db_products.objects() if i.brand in filtered_brands
+            ]
+        else:
+            products_by_brand = db_products.objects()
 
-    """param filters -> list of uuid """
-    if param_filter_brands != "":
-        filtered_brands = list(param_filter_brands.split(","))
-        print(param_filter_brands)
-        products_by_brand = [i for i in products_by_name if i.brand in filtered_brands]
-    else:
-        products_by_brand = []
+        if param_filter_categories != "":
+            filtered_categories = list(param_filter_categories.split(","))
+            products_by_cat = [
+                i for i in db_products.objects() if i.cat in filtered_categories
+            ]
+        else:
+            products_by_cat = db_products.objects()
 
-    if param_filter_categories != "":
-        filtered_categories = list(param_filter_categories.split(","))
-        products_by_cat = [i for i in products_by_name if i.cat in filtered_categories]
-    else:
-        products_by_cat = []
+        products_before_search = list(
+            set([x for x in products_by_brand if x in products_by_cat])
+        )
 
-    """all the products -> set"""
-    """no duplicates in set"""
-
-    products = list(set(products_by_name + products_by_brand + products_by_cat))
+        """querying the object based on search params"""
+        if param_search != "":
+            products = [i for i in products_before_search if param_search in i.name]
+        else:
+            products = products_before_search
 
     """removed all low stocks"""
     products = [x for x in products if x.stock > 0]
