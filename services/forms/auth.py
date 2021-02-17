@@ -29,7 +29,7 @@ class ProfileForm(Form):
         "Street", [validators.DataRequired(), validators.Length(min=4, max=25)]
     )
     unit_no = StringField(
-        "Unit No.", [validators.DataRequired(), validators.Length(min=4, max=25)]
+        "Unit No.", [validators.DataRequired(), validators.Length(min=3, max=25)]
     )
     pcode = StringField(
         "Postal code", [validators.DataRequired(), validators.Length(min=4, max=25)]

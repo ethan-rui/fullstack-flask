@@ -95,7 +95,7 @@ def page_profile():
         past_history_list=past_history_list,
     )
 
-
+"""Updates adress"""
 @endpoint.route("/profile/edit", methods=["GET", "POST"])
 @login_required
 def page_update_profile():
@@ -110,7 +110,7 @@ def page_update_profile():
         db.insert(user)
         db.close()
         flash("Your address have been updated!")
-        return render_template("auth/profile.html")
+        return redirect(url_for("auth.page_profile"))
     else:
         return render_template("auth/update/address.html", form=form)
 
