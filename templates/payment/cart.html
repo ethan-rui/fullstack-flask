@@ -109,8 +109,6 @@ Products
 </div>
 <script>
     window.onload = function () {
-        var element_table = document.getElementsByName("cart");
-        var element_tableRows = element_table[0].rows;
         var message_array = {{message|safe}};
         var message = "";
         if (message_array.length > 1){
@@ -122,6 +120,10 @@ Products
         }else{
 
         };
+        var element_table = document.getElementsByName("cart");
+        var element_tableRows = element_table[0].rows;
+        
+        
         for (var i = 1; i < (element_tableRows.length - 1); i++) {
             var cell = element_tableRows[i].cells;
             var uuid = cell[3].innerHTML;
