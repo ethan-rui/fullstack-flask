@@ -56,6 +56,45 @@
             </div>
         </div>
     </div>
+    <hr>
+        <h4>Similar Products</h4>
+    <div class="row">
+        {% for product in similar_products %}
+        <div class="col-sm-12 col-lg-3 col-md-3">
+            <div class="card card-product">
+                <div class="img-product">
+                    <a href="/catalog/product/{{product.uuid}}">
+                        <img class="card-img img-fluid" src="{{url_for('static', filename='media/'+product.images[0])}}"
+                            alt="">
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">{{product.name}}</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">{{bc[product.cat].name}}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">{{bc[product.brand].name}}</h6>
+                    <p class="card-text">{{product.desc}}</p>
+                    <div class="buy d-flex justify-content-between">
+                        {% if product.discount > 0 %}
+                        <div class="price text-success">
+                            <h5 class="text-danger"><del>${{"%.2f"|format(product.centprice/100)}}</del></h5>
+                            <h5 class="">${{"%.2f"|format(product.centprice_final/100)}}</h5>
+                        </div>
+                        {% else %}
+                        <div class="price text-success">
+                            <h5 class="">${{"%.2f"|format(product.centprice/100)}}</h5>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="justify-content-center row">
+                        <input type="hidden" name="quantity" id="{{product.uuid}}_quantity" value="1">
+                        <button class="btn btn-success btn-sm col-10" onclick="add_cart(this)" id="{{product.uuid}}"><i
+                                class="fas fa-shopping-cart mr-2"></i>Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
 <script>

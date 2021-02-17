@@ -132,9 +132,21 @@ def page_catalog():
 @endpoint.route("/catalog/product/<uid>")
 def page_info_product(uid):
     db_products = TableProduct()
-    target = db_products.retrieve(uid)
     db_products.close()
-    return render_template("common/info_product.html", target=target)
+    target = db_products.retrieve(uid)
+    similar_products_by_brand = db_products.query({"brand": target.brand})
+    similar_products_by_cat = db_products.query({"cat": target.brand})
+    similar_products = list(set(similar_products_by_brand + similar_products_by_cat))
+    similar_products = [x for x in similar_products if x.uuid != target.uuid]
+    db_bc = TableBC()
+    db_bc.close()
+    bc = db_bc.dict()
+    return render_template(
+        "common/info_product.html",
+        target=target,
+        similar_products=similar_products,
+        bc=bc,
+    )
 
 
 @endpoint.route("/inquiry", methods=["GET", "POST"])
