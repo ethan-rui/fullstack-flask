@@ -140,6 +140,7 @@ def page_info_inquiry(uid):
     db = TableInquiry()
     inquiries = db.retrieve(uid)
     form = ReplyForm(request.form)
+    # Sendgrid email reply below
     if request.method == "POST" and form.validate():
         print(form.reply.data)
         message = Mail(
@@ -147,6 +148,7 @@ def page_info_inquiry(uid):
             to_emails=f"{inquiries.sender_email}",
             subject=f"RE : {inquiries.subject}",
             html_content=f"""<h3> Please do not reply to this email! For more inquiries, please send in another enquiry through our website.</h3>
+            <img src="https://cdn.discordapp.com/attachments/318659727649144833/811440794225344532/main.png" alt="Botania logo" ></img>
             <p>Dear {inquiries.sender_name},</p> 
             <br>
             <p>Good news! We have looked into your inquiry and have came up with a reply. </p>
@@ -156,8 +158,8 @@ def page_info_inquiry(uid):
             <br>
             <p> For any further inquiries, please send in another inquiry through our website and we would be glad to serve you! </p>
             <p> Yours Sincerely, </p>
-            <b> Admin </b>
-            <p> Online Market SG </p>
+            <b> {current_user.username} </b>
+            <p> Botania </p>
             <p> (This is an automatically-generated email, please do not reply)</p>
             <b><i> Disclaimer : You are receiving this email because you have chosen to register for us under this email address. \n If you are not the intended receipient, you may ignore this email. </i></b>""",
         )
