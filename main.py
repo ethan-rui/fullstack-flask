@@ -110,4 +110,4 @@ if __name__ == "__main__":
         superuser.force_password_change("password")
 
     db_users.close()
-    app.run(debug=True)
+    app.run(debug=False)
