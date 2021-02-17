@@ -219,11 +219,10 @@
         type: 'bar',
         data: {
             labels: ['Today'],
-            datasets: [{
-                fill: false,
-                label: 'User Count (Daily)',
-                data: {{ total_users| safe}}
-    },
+    datasets: [{
+        fill: false,
+        label: 'User Count (Daily)',
+        data: {{ usercount| safe}},
         backgroundColor: [
         'rgba(255, 0, 34, 1)',
     ],
@@ -233,7 +232,7 @@
         borderWidth: 1,
         lineTension: 0
     }]
-    },
+},
     options: {
         legend: {
             labels: {
