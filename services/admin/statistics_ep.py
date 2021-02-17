@@ -1,3 +1,4 @@
+from typing import Set
 from flask import render_template, redirect, request, Blueprint, session, url_for
 import os
 from flask_login.utils import login_required, current_user
@@ -73,8 +74,10 @@ def api_user_total():
 
 @endpoint.route("/settings", methods=["GET", "POST"])
 def page_settings():
+    settings = Settings()
+    current_threshold = settings.get_threshold_stock()
     if request.method == "POST":
         settings = Settings()
         settings.set_threshold_stock(int(request.form["stock"]))
         settings.close()
-    return render_template("admin/settings.html")
+    return render_template("admin/settings.html", current_threshold=current_threshold)

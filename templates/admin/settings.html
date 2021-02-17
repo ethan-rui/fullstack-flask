@@ -11,7 +11,7 @@ Settings
             <form method="POST">
                 <div class="form-group">
                     <label for="stock">Stock Threshold</label>
-                    <input type="number" class="form-control" name="stock" id="stock" required pattern="[0-9]*"
+                    <input type="number" class="form-control" name="stock" value="{{current_threshold}}" id="stock" required pattern="[0-9]*"
                         placeholder="Threshold before a notification is sent.">
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
