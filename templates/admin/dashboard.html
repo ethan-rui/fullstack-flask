@@ -25,11 +25,11 @@
         </div>
         <div class="col-12 col-lg-6" style="border:1px solid #cecece;">
             <h3>Recently Added Products (3 Days)</h3>
-            <table id="table" data-show-export="true" data-toolbar="#toolbar" data-toggle="table" data-show-toggle="true"
-            data-search="true" data-click-to-select="true" data-search-align="right" class="table-striped"
-            data-url="/admin/inventory/products/data_table" data-show-columns="true" data-show-columns-toggle-all="true"
-            data-show-refresh="true" data-pagination="true" data-page-list="[10, 25, 50, 100, all]" data-toggle="table"
-            data-id-field="uuid">
+            <table id="table" data-show-export="true" data-toolbar="#toolbar" data-toggle="table"
+                data-show-toggle="true" data-search="true" data-click-to-select="true" data-search-align="right"
+                class="table-striped" data-url="/admin/inventory/products/data_table" data-show-columns="true"
+                data-show-columns-toggle-all="true" data-show-refresh="true" data-pagination="true"
+                data-page-list="[10, 25, 50, 100, all]" data-toggle="table" data-id-field="uuid">
                 <thead>
                     <tr>
                         <th data-field="name" data-sortable="true" data-align="right">Name</th>
@@ -38,7 +38,7 @@
                         <th data-field="price_final" data-sortable="true" data-align="right">Final Price ($)</th>
                     </tr>
                 </thead>
-            </table>         
+            </table>
         </div>
     </div>
 </div>
@@ -219,16 +219,17 @@
         type: 'bar',
         data: {
             labels: ['Today'],
-    datasets: [{
-        fill: false,
-        label: 'User Count (Daily)',
-        data: {{ usercount| safe}},
+            datasets: [{
+                fill: false,
+                label: 'User Count (Daily)',
+                data: {{ total_users| safe}
+    },
         backgroundColor: [
-            'rgba(255, 0, 34, 1)',
-        ],
+        'rgba(255, 0, 34, 1)',
+    ],
         borderColor: [
-            'rgba(255, 0, 34, 1)',
-        ],
+        'rgba(255, 0, 34, 1)',
+    ],
         borderWidth: 1,
         lineTension: 0
     }]
